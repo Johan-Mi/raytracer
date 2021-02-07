@@ -9,7 +9,6 @@ const HEIGHT: usize = 360;
 const ASPECT_RATIO: f32 = WIDTH as f32 / HEIGHT as f32;
 
 pub struct RayTracer {
-    focal_length: f32,
     origin: Point3,
     horizontal: Vec3,
     vertical: Vec3,
@@ -44,7 +43,6 @@ impl RayTracer {
         };
 
         Self {
-            focal_length,
             origin,
             horizontal,
             vertical,
