@@ -16,7 +16,7 @@ pub trait Drawable {
         for y in 0..Self::HEIGHT {
             for x in 0..Self::WIDTH {
                 let color = self.get_color_at(x, y);
-                buf.write(&[color.r, color.g, color.b]).unwrap();
+                buf.write_all(&[color.r, color.g, color.b]).unwrap();
             }
         }
 
