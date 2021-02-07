@@ -1,6 +1,7 @@
 mod checkerboard;
 mod color;
 mod drawable;
+mod math;
 
 use checkerboard::Checkerboard;
 use drawable::Drawable;
