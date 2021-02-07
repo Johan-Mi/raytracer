@@ -1,11 +1,12 @@
 use super::color::Color;
 use super::drawable::Drawable;
+use super::hittable::Hittable;
 use super::math::{Point3, Vec3};
 use super::ray::Ray;
 use super::viewport::Viewport;
 
-const WIDTH: usize = 320;
-const HEIGHT: usize = 180;
+const WIDTH: usize = 640;
+const HEIGHT: usize = 360;
 const ASPECT_RATIO: f32 = WIDTH as f32 / HEIGHT as f32;
 
 pub struct RayTracer {
@@ -15,10 +16,12 @@ pub struct RayTracer {
     horizontal: Vec3,
     vertical: Vec3,
     lower_left_corner: Point3,
+
+    world: Box<dyn Hittable>,
 }
 
 impl RayTracer {
-    pub fn new() -> Self {
+    pub fn new(world: Box<dyn Hittable>) -> Self {
         let viewport = Viewport {
             width: 2.0,
             height: 2.0 * ASPECT_RATIO,
@@ -58,10 +61,11 @@ impl RayTracer {
                     y: 0.0,
                     z: focal_length,
                 },
+            world,
         }
     }
 
-    fn sky_color_at_ray(&self, ray: Ray) -> Color {
+    fn sky_color_at_ray(&self, ray: &Ray) -> Color {
         const SKY_COLOR_TOP: Color = Color {
             r: 0.5,
             g: 0.7,
@@ -76,6 +80,18 @@ impl RayTracer {
         let t = 0.5 * (ray.dir.y / ray.dir.z + 1.0);
 
         Color::lerp(&SKY_COLOR_BOTTOM, &SKY_COLOR_TOP, t)
+    }
+
+    fn color_at_ray(&self, ray: &Ray) -> Color {
+        if let Some(hit_record) = self.world.gets_hit(ray, 0.0, 100.0) {
+            Color {
+                r: 1.0,
+                g: 0.0,
+                b: 0.0,
+            }
+        } else {
+            self.sky_color_at_ray(ray)
+        }
     }
 }
 
@@ -95,6 +111,6 @@ impl Drawable for RayTracer {
                 - self.origin,
         };
 
-        self.sky_color_at_ray(ray)
+        self.color_at_ray(&ray)
     }
 }

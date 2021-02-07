@@ -13,7 +13,7 @@ impl Vec3 {
     }
 
     pub fn len_squared(&self) -> f32 {
-        self.x * self.x + self.y * self.y * self.z * self.z
+        self.x * self.x + self.y * self.y + self.z * self.z
     }
 
     pub fn dot(&self, other: &Self) -> f32 {
