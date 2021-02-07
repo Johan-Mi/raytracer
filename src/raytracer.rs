@@ -38,7 +38,7 @@ impl RayTracer {
     }
 
     fn color_at_ray(&self, ray: &Ray) -> Color {
-        if let Some(hit_record) = self.world.gets_hit(ray, 0.0, 100.0) {
+        if let Some(_hit_record) = self.world.gets_hit(ray, 0.0, 100.0) {
             Color {
                 r: 1.0,
                 g: 0.0,
