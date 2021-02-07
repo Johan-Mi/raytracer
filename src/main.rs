@@ -5,7 +5,6 @@ mod math;
 mod ray;
 mod raytracer;
 mod shapes;
-mod viewport;
 
 use drawable::Drawable;
 use math::Point3;

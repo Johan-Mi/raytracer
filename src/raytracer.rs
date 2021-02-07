@@ -3,14 +3,12 @@ use super::drawable::Drawable;
 use super::hittable::Hittable;
 use super::math::{Point3, Vec3};
 use super::ray::Ray;
-use super::viewport::Viewport;
 
 const WIDTH: usize = 640;
 const HEIGHT: usize = 360;
 const ASPECT_RATIO: f32 = WIDTH as f32 / HEIGHT as f32;
 
 pub struct RayTracer {
-    viewport: Viewport,
     focal_length: f32,
     origin: Point3,
     horizontal: Vec3,
@@ -22,10 +20,8 @@ pub struct RayTracer {
 
 impl RayTracer {
     pub fn new(world: Box<dyn Hittable>) -> Self {
-        let viewport = Viewport {
-            width: 2.0,
-            height: 2.0 * ASPECT_RATIO,
-        };
+        let viewport_width = 2.0;
+        let viewport_height = viewport_width / ASPECT_RATIO;
 
         let focal_length = 1.0;
 
@@ -36,19 +32,18 @@ impl RayTracer {
         };
 
         let horizontal = Vec3 {
-            x: viewport.width,
+            x: viewport_width,
             y: 0.0,
             z: 0.0,
         };
 
         let vertical = Vec3 {
             x: 0.0,
-            y: viewport.height,
+            y: viewport_height,
             z: 0.0,
         };
 
         Self {
-            viewport,
             focal_length,
             origin,
             horizontal,
