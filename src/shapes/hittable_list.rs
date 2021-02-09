@@ -16,16 +16,9 @@ impl Hittable for HittableList {
         self.list
             .iter()
             .filter_map(|h| h.gets_hit(ray, t_min, t_max))
-            .fold(None, |old: Option<HitRecord>, new| {
-                if let Some(old) = old {
-                    if old.t < new.t {
-                        Some(old)
-                    } else {
-                        Some(new)
-                    }
-                } else {
-                    Some(new)
-                }
+            .fold(None, |old: Option<HitRecord>, new| match old {
+                Some(old) if old.t < new.t => Some(old),
+                _ => Some(new),
             })
     }
 }
