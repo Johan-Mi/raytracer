@@ -38,11 +38,11 @@ impl RayTracer {
     }
 
     fn color_at_ray(&self, ray: &Ray) -> Color {
-        if let Some(_hit_record) = self.world.gets_hit(ray, 0.0, 100.0) {
+        if let Some(hit_record) = self.world.gets_hit(ray, 0.0, 100.0) {
             Color {
-                r: 1.0,
-                g: 0.0,
-                b: 0.0,
+                r: hit_record.normal.x,
+                g: hit_record.normal.y,
+                b: hit_record.normal.z,
             }
         } else {
             self.sky_color_at_ray(ray)

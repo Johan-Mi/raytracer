@@ -8,6 +8,10 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
+    pub fn len(&self) -> f32 {
+        self.len_squared().sqrt()
+    }
+
     pub fn len_squared(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
