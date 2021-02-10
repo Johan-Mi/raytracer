@@ -1,6 +1,6 @@
-use std::ops;
+use derive_more::{Add, Div, Mul, Sub};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Add, Sub, Mul, Div)]
 pub struct Vec3 {
     pub x: f32,
     pub y: f32,
@@ -19,54 +19,15 @@ impl Vec3 {
     pub fn dot(&self, other: &Self) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
-}
 
-impl ops::Add for Vec3 {
-    type Output = Vec3;
-
-    fn add(self, rhs: Vec3) -> Self::Output {
+    pub fn lerp(&self, other: &Vec3, t: f32) -> Vec3 {
         Vec3 {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-            z: self.z + rhs.z,
-        }
-    }
-}
-
-impl ops::Sub for Vec3 {
-    type Output = Vec3;
-
-    fn sub(self, rhs: Vec3) -> Self::Output {
-        Vec3 {
-            x: self.x - rhs.x,
-            y: self.y - rhs.y,
-            z: self.z - rhs.z,
-        }
-    }
-}
-
-impl ops::Mul<f32> for Vec3 {
-    type Output = Vec3;
-
-    fn mul(self, rhs: f32) -> Self::Output {
-        Vec3 {
-            x: self.x * rhs,
-            y: self.y * rhs,
-            z: self.z * rhs,
-        }
-    }
-}
-
-impl ops::Div<f32> for Vec3 {
-    type Output = Vec3;
-
-    fn div(self, rhs: f32) -> Self::Output {
-        Vec3 {
-            x: self.x / rhs,
-            y: self.y / rhs,
-            z: self.z / rhs,
+            x: (1.0 - t) * self.x + t * other.x,
+            y: (1.0 - t) * self.y + t * other.y,
+            z: (1.0 - t) * self.z + t * other.z,
         }
     }
 }
 
 pub type Point3 = Vec3;
+pub type Color = Vec3;

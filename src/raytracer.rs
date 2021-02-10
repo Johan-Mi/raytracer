@@ -1,7 +1,7 @@
 use super::camera::Camera;
-use super::color::Color;
 use super::drawable::Drawable;
 use super::hittable::Hittable;
+use super::math::Color;
 use super::ray::Ray;
 use rand::Rng;
 
@@ -24,14 +24,14 @@ impl RayTracer {
 
     fn sky_color_at_ray(&self, ray: &Ray) -> Color {
         const SKY_COLOR_TOP: Color = Color {
-            r: 0.5,
-            g: 0.7,
-            b: 1.0,
+            x: 0.5,
+            y: 0.7,
+            z: 1.0,
         };
         const SKY_COLOR_BOTTOM: Color = Color {
-            r: 1.0,
-            g: 1.0,
-            b: 1.0,
+            x: 1.0,
+            y: 1.0,
+            z: 1.0,
         };
 
         let t = 0.5 * (ray.dir.y / ray.dir.z + 1.0);
@@ -41,11 +41,7 @@ impl RayTracer {
 
     fn color_at_ray(&self, ray: &Ray) -> Color {
         if let Some(hit_record) = self.world.gets_hit(ray, 0.0, 100.0) {
-            Color {
-                r: hit_record.normal.x,
-                g: hit_record.normal.y,
-                b: hit_record.normal.z,
-            }
+            hit_record.normal
         } else {
             self.sky_color_at_ray(ray)
         }
@@ -71,9 +67,9 @@ impl Drawable for RayTracer {
             })
             .fold(
                 Color {
-                    r: 0.0,
-                    g: 0.0,
-                    b: 0.0,
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
                 },
                 |l, r| l + r,
             )

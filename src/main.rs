@@ -1,5 +1,4 @@
 mod camera;
-mod color;
 mod drawable;
 mod hittable;
 mod math;
