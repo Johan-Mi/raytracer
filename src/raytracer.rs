@@ -56,7 +56,7 @@ impl Drawable for RayTracer {
 
     fn get_color_at(&self, x: usize, y: usize) -> Color {
         let u = x as f32 / (WIDTH as f32 - 1.0);
-        let v = y as f32 / (HEIGHT as f32 - 1.0);
+        let v = (HEIGHT - y) as f32 / (HEIGHT as f32 - 1.0);
 
         let ray = self.camera.get_ray(u, v);
         self.color_at_ray(&ray)

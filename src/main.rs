@@ -16,19 +16,19 @@ fn main() {
     let world = Box::new(HittableList::new(vec![
         Box::new(Sphere {
             center: Point3 {
-                x: 0.7,
-                y: 0.5,
+                x: 0.0,
+                y: 0.0,
                 z: -1.0,
             },
             radius: 0.5,
         }),
         Box::new(Sphere {
             center: Point3 {
-                x: -0.3,
-                y: -0.3,
+                x: 0.0,
+                y: -100.5,
                 z: -1.0,
             },
-            radius: 0.5,
+            radius: 100.0,
         }),
     ]));
 
