@@ -3,10 +3,12 @@ use super::color::Color;
 use super::drawable::Drawable;
 use super::hittable::Hittable;
 use super::ray::Ray;
+use rand::Rng;
 
 const WIDTH: usize = 640;
 const HEIGHT: usize = 360;
 const ASPECT_RATIO: f32 = WIDTH as f32 / HEIGHT as f32;
+const SAMPLES_PER_PIXEL: usize = 50;
 
 pub struct RayTracer {
     camera: Camera,
@@ -55,10 +57,26 @@ impl Drawable for RayTracer {
     const HEIGHT: usize = HEIGHT;
 
     fn get_color_at(&self, x: usize, y: usize) -> Color {
-        let u = x as f32 / (WIDTH as f32 - 1.0);
-        let v = (HEIGHT - y) as f32 / (HEIGHT as f32 - 1.0);
+        (0..SAMPLES_PER_PIXEL)
+            .map(|_| {
+                let mut rng = rand::thread_rng();
 
-        let ray = self.camera.get_ray(u, v);
-        self.color_at_ray(&ray)
+                let u =
+                    (x as f32 + rng.gen_range(0.0..1.0)) / (WIDTH as f32 - 1.0);
+                let v = ((HEIGHT - y) as f32 + rng.gen_range(0.0..1.0))
+                    / (HEIGHT as f32 - 1.0);
+
+                let ray = self.camera.get_ray(u, v);
+                self.color_at_ray(&ray)
+            })
+            .fold(
+                Color {
+                    r: 0.0,
+                    g: 0.0,
+                    b: 0.0,
+                },
+                |l, r| l + r,
+            )
+            / SAMPLES_PER_PIXEL as f32
     }
 }
