@@ -16,9 +16,9 @@ pub trait Drawable {
         for y in 0..Self::HEIGHT {
             for x in 0..Self::WIDTH {
                 let color = self.get_color_at(x, y);
-                let x = (color.x * 255.0) as u8;
-                let y = (color.y * 255.0) as u8;
-                let z = (color.z * 255.0) as u8;
+                let x = (color.x.sqrt() * 255.0) as u8;
+                let y = (color.y.sqrt() * 255.0) as u8;
+                let z = (color.z.sqrt() * 255.0) as u8;
                 buf.write_all(&[x, y, z]).unwrap();
             }
         }

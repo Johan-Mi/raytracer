@@ -1,14 +1,16 @@
 use super::camera::Camera;
 use super::drawable::Drawable;
 use super::hittable::Hittable;
-use super::math::Color;
+use super::math::{Color, Vec3};
 use super::ray::Ray;
 use rand::Rng;
+use std::f32;
 
 const WIDTH: usize = 640;
 const HEIGHT: usize = 360;
 const ASPECT_RATIO: f32 = WIDTH as f32 / HEIGHT as f32;
 const SAMPLES_PER_PIXEL: usize = 50;
+const MAX_DEPTH: i32 = 50;
 
 pub struct RayTracer {
     camera: Camera,
@@ -39,9 +41,23 @@ impl RayTracer {
         Color::lerp(&SKY_COLOR_BOTTOM, &SKY_COLOR_TOP, t)
     }
 
-    fn color_at_ray(&self, ray: &Ray) -> Color {
-        if let Some(hit_record) = self.world.gets_hit(ray, 0.0, 100.0) {
-            hit_record.normal
+    fn color_at_ray(&self, ray: &Ray, depth: i32) -> Color {
+        if depth <= 0 {
+            Color {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            }
+        } else if let Some(hit) = self.world.gets_hit(ray, 0.001, f32::INFINITY)
+        {
+            let target = hit.p + hit.normal + Vec3::random_unit();
+            self.color_at_ray(
+                &Ray {
+                    origin: hit.p,
+                    dir: target - hit.p,
+                },
+                depth - 1,
+            ) * 0.5
         } else {
             self.sky_color_at_ray(ray)
         }
@@ -63,7 +79,7 @@ impl Drawable for RayTracer {
                     / (HEIGHT as f32 - 1.0);
 
                 let ray = self.camera.get_ray(u, v);
-                self.color_at_ray(&ray)
+                self.color_at_ray(&ray, MAX_DEPTH)
             })
             .fold(
                 Color {

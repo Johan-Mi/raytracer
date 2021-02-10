@@ -1,4 +1,5 @@
 use derive_more::{Add, Div, Mul, Sub};
+use rand::Rng;
 
 #[derive(Clone, Copy, Add, Sub, Mul, Div)]
 pub struct Vec3 {
@@ -26,6 +27,19 @@ impl Vec3 {
             y: (1.0 - t) * self.y + t * other.y,
             z: (1.0 - t) * self.z + t * other.z,
         }
+    }
+
+    pub fn normalized(&self) -> Vec3 {
+        self.clone() / self.len()
+    }
+
+    pub fn random_unit() -> Self {
+        let mut rng = rand::thread_rng();
+        let x = rng.gen_range(-1.0..1.0);
+        let y = rng.gen_range(-1.0..1.0);
+        let z = rng.gen_range(-1.0..1.0);
+
+        Vec3 { x, y, z }.normalized()
     }
 }
 
