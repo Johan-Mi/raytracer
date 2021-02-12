@@ -36,7 +36,7 @@ impl RayTracer {
             z: 1.0,
         };
 
-        let t = 0.5 * (ray.dir.y / ray.dir.z + 1.0);
+        let t = (0.5 * (ray.dir.y / ray.dir.z + 1.0)).clamp(-1.0, 1.0);
 
         Color::lerp(&SKY_COLOR_TOP, &SKY_COLOR_BOTTOM, t)
     }
