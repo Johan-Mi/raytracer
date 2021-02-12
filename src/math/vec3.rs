@@ -30,7 +30,7 @@ impl Vec3 {
     }
 
     pub fn normalized(&self) -> Vec3 {
-        self.clone() / self.len()
+        *self / self.len()
     }
 
     pub fn random_unit() -> Self {

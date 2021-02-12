@@ -16,6 +16,7 @@ impl Hittable for Sphere {
         let half_b = Vec3::dot(&oc, &ray.dir);
         let c = oc.len_squared() - self.radius * self.radius;
 
+        #[allow(clippy::suspicious_operation_groupings)]
         let discriminant = half_b * half_b - a * c;
         if discriminant < 0.0 {
             return None;
