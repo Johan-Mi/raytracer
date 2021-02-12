@@ -1,4 +1,5 @@
 use super::camera::Camera;
+use super::constants::{HEIGHT, MAX_DEPTH, SAMPLES_PER_PIXEL, WIDTH};
 use super::drawable::Drawable;
 use super::hittable::Hittable;
 use super::math::Color;
@@ -6,21 +7,13 @@ use super::ray::Ray;
 use rand::Rng;
 use std::f32;
 
-const WIDTH: usize = 640;
-const HEIGHT: usize = 360;
-const ASPECT_RATIO: f32 = WIDTH as f32 / HEIGHT as f32;
-const SAMPLES_PER_PIXEL: usize = 50;
-const MAX_DEPTH: i32 = 50;
-
 pub struct RayTracer {
     camera: Camera,
     world: Box<dyn Hittable>,
 }
 
 impl RayTracer {
-    pub fn new(world: Box<dyn Hittable>) -> Self {
-        let camera = Camera::new(90.0, ASPECT_RATIO);
-
+    pub fn new(camera: Camera, world: Box<dyn Hittable>) -> Self {
         Self { camera, world }
     }
 

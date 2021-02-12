@@ -1,4 +1,5 @@
 mod camera;
+mod constants;
 mod drawable;
 mod hittable;
 mod materials;
@@ -7,9 +8,11 @@ mod ray;
 mod raytracer;
 mod shapes;
 
+use camera::Camera;
+use constants::ASPECT_RATIO;
 use drawable::Drawable;
 use materials::{Dielectric, Lambertian, Metal};
-use math::{Color, Point3};
+use math::{Color, Point3, Vec3};
 use raytracer::RayTracer;
 use shapes::{HittableList, Sphere};
 use std::rc::Rc;
@@ -87,6 +90,34 @@ fn main() {
         }),
     ]));
 
-    let tracer = RayTracer::new(world);
+    let lookfrom = Point3 {
+        x: 3.0,
+        y: 3.0,
+        z: 2.0,
+    };
+    let lookat = Point3 {
+        x: 0.0,
+        y: 0.0,
+        z: -1.0,
+    };
+    let vup = Vec3 {
+        x: 0.0,
+        y: 1.0,
+        z: 0.0,
+    };
+    let dist_to_focus = (lookfrom - lookat).len();
+    let aperture = 2.0;
+
+    let camera = Camera::new(
+        lookfrom,
+        lookat,
+        vup,
+        20.0,
+        ASPECT_RATIO,
+        aperture,
+        dist_to_focus,
+    );
+
+    let tracer = RayTracer::new(camera, world);
     tracer.write_ppm("image.ppm");
 }
