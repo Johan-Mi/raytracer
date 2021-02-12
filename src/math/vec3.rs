@@ -1,7 +1,7 @@
-use derive_more::{Add, Div, Mul, Sub};
+use derive_more::{Add, Div, Mul, Neg, Sub};
 use rand::Rng;
 
-#[derive(Clone, Copy, Add, Sub, Mul, Div)]
+#[derive(Clone, Copy, Add, Sub, Mul, Div, Neg)]
 pub struct Vec3 {
     pub x: f32,
     pub y: f32,

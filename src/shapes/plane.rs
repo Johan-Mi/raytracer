@@ -29,11 +29,20 @@ impl Hittable for Plane {
 
         let p = ray.origin - ray.dir * prod3;
 
-        Some(HitRecord {
+        let mut rec = HitRecord {
             p,
-            normal: self.normal,
             t,
+            normal: Vec3 {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            },
             material: self.material.clone(),
-        })
+            front_face: false,
+        };
+
+        rec.set_face_normal(ray, &self.normal);
+
+        Some(rec)
     }
 }

@@ -8,7 +8,7 @@ mod raytracer;
 mod shapes;
 
 use drawable::Drawable;
-use materials::{Lambertian, Metal};
+use materials::{Dielectric, Lambertian, Metal};
 use math::{Color, Point3};
 use raytracer::RayTracer;
 use shapes::{HittableList, Sphere};
@@ -24,26 +24,19 @@ fn main() {
     });
     let material_center = Rc::new(Lambertian {
         albedo: Color {
-            x: 0.7,
-            y: 0.3,
-            z: 0.3,
+            x: 0.1,
+            y: 0.2,
+            z: 0.5,
         },
     });
-    let material_left = Rc::new(Metal {
-        albedo: Color {
-            x: 0.8,
-            y: 0.8,
-            z: 0.8,
-        },
-        fuzz: 0.3,
-    });
+    let material_left = Rc::new(Dielectric { ir: 1.5 });
     let material_right = Rc::new(Metal {
         albedo: Color {
             x: 0.8,
             y: 0.6,
             z: 0.2,
         },
-        fuzz: 1.0,
+        fuzz: 0.0,
     });
 
     let world = Box::new(HittableList::new(vec![
@@ -72,6 +65,15 @@ fn main() {
                 z: -1.0,
             },
             radius: 0.5,
+            material: material_left.clone(),
+        }),
+        Box::new(Sphere {
+            center: Point3 {
+                x: -1.0,
+                y: 0.0,
+                z: -1.0,
+            },
+            radius: -0.4,
             material: material_left,
         }),
         Box::new(Sphere {
