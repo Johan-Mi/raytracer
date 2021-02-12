@@ -41,6 +41,19 @@ impl Vec3 {
 
         Vec3 { x, y, z }.normalized()
     }
+
+    pub fn near_zero(&self) -> bool {
+        const CLOSE: f32 = 1e-8;
+        self.x.abs() < CLOSE && self.y.abs() < CLOSE && self.z.abs() < CLOSE
+    }
+
+    pub fn elementwise_mul(&self, other: &Self) -> Vec3 {
+        Vec3 {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+        }
+    }
 }
 
 pub type Point3 = Vec3;

@@ -1,7 +1,7 @@
 use super::camera::Camera;
 use super::drawable::Drawable;
 use super::hittable::Hittable;
-use super::math::{Color, Vec3};
+use super::math::Color;
 use super::ray::Ray;
 use rand::Rng;
 use std::f32;
@@ -50,14 +50,18 @@ impl RayTracer {
             }
         } else if let Some(hit) = self.world.gets_hit(ray, 0.001, f32::INFINITY)
         {
-            let target = hit.p + hit.normal + Vec3::random_unit();
-            self.color_at_ray(
-                &Ray {
-                    origin: hit.p,
-                    dir: target - hit.p,
-                },
-                depth - 1,
-            ) * 0.5
+            if let Some((scattered, attenuation)) =
+                hit.material.scatter(ray, &hit)
+            {
+                self.color_at_ray(&scattered, depth - 1)
+                    .elementwise_mul(&attenuation)
+            } else {
+                Color {
+                    x: 0.0,
+                    y: 0.0,
+                    z: 0.0,
+                }
+            }
         } else {
             self.sky_color_at_ray(ray)
         }

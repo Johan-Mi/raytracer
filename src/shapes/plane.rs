@@ -1,12 +1,15 @@
 use crate::{
     hittable::{HitRecord, Hittable},
+    materials::Material,
     math::{Point3, Vec3},
     ray::Ray,
 };
+use std::rc::Rc;
 
 pub struct Plane {
     pub pos: Point3,
     pub normal: Vec3,
+    pub material: Rc<dyn Material>,
 }
 
 impl Hittable for Plane {
@@ -30,6 +33,7 @@ impl Hittable for Plane {
             p,
             normal: self.normal,
             t,
+            material: self.material.clone(),
         })
     }
 }

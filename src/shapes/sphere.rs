@@ -1,12 +1,15 @@
 use crate::{
     hittable::{HitRecord, Hittable},
+    materials::Material,
     math::{Point3, Vec3},
     ray::Ray,
 };
+use std::rc::Rc;
 
 pub struct Sphere {
     pub center: Point3,
     pub radius: f32,
+    pub material: Rc<dyn Material>,
 }
 
 impl Hittable for Sphere {
@@ -37,6 +40,7 @@ impl Hittable for Sphere {
             p,
             t: root,
             normal: (p - self.center) / self.radius,
+            material: self.material.clone(),
         })
     }
 }
