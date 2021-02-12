@@ -54,6 +54,10 @@ impl Vec3 {
             z: self.z * other.z,
         }
     }
+
+    pub fn reflect(&self, normal: &Vec3) -> Vec3 {
+        *self - *normal * Vec3::dot(self, normal) * 2.0
+    }
 }
 
 pub type Point3 = Vec3;
