@@ -38,7 +38,7 @@ impl RayTracer {
 
         let t = 0.5 * (ray.dir.y / ray.dir.z + 1.0);
 
-        Color::lerp(&SKY_COLOR_BOTTOM, &SKY_COLOR_TOP, t)
+        Color::lerp(&SKY_COLOR_TOP, &SKY_COLOR_BOTTOM, t)
     }
 
     fn color_at_ray(&self, ray: &Ray, depth: i32) -> Color {
