@@ -11,102 +11,167 @@ mod shapes;
 use camera::Camera;
 use constants::ASPECT_RATIO;
 use drawable::Drawable;
-use materials::{Dielectric, Lambertian, Metal};
+use hittable::Hittable;
+use materials::{Dielectric, Lambertian, Material, Metal};
 use math::{Color, Point3, Vec3};
+use rand::Rng;
 use raytracer::RayTracer;
 use shapes::{HittableList, Sphere};
 use std::rc::Rc;
 
-fn main() {
-    let material_ground = Rc::new(Lambertian {
+fn random_scene() -> HittableList {
+    let mut rng = rand::thread_rng();
+
+    let mut world: Vec<Box<dyn Hittable>> = Vec::new();
+
+    let ground_material = Rc::new(Lambertian {
         albedo: Color {
-            x: 0.8,
-            y: 0.8,
-            z: 0.0,
-        },
-    });
-    let material_center = Rc::new(Lambertian {
-        albedo: Color {
-            x: 0.1,
-            y: 0.2,
+            x: 0.5,
+            y: 0.5,
             z: 0.5,
         },
     });
-    let material_left = Rc::new(Dielectric { ir: 1.5 });
-    let material_right = Rc::new(Metal {
+    world.push(Box::new(Sphere {
+        center: Point3 {
+            x: 0.0,
+            y: -1000.0,
+            z: 0.0,
+        },
+        radius: 1000.0,
+        material: ground_material,
+    }));
+
+    for a in -11..11 {
+        for b in -11..11 {
+            let choose_mat = rng.gen_range(0.0..1.0);
+            let center = Point3 {
+                x: a as f32 + 0.9 * rng.gen_range(0.0..1.0),
+                y: 0.2,
+                z: b as f32 + 0.9 * rng.gen_range(0.0..1.0),
+            };
+
+            if (center
+                - Point3 {
+                    x: 4.0,
+                    y: 0.2,
+                    z: 0.0,
+                })
+            .len()
+                > 0.9
+            {
+                let sphere_material: Rc<dyn Material>;
+
+                if choose_mat < 0.8 {
+                    let albedo = Color {
+                        x: rng.gen_range(0.0..1.0),
+                        y: rng.gen_range(0.0..1.0),
+                        z: rng.gen_range(0.0..1.0),
+                    }
+                    .elementwise_mul(&Color {
+                        x: rng.gen_range(0.0..1.0),
+                        y: rng.gen_range(0.0..1.0),
+                        z: rng.gen_range(0.0..1.0),
+                    });
+                    sphere_material = Rc::new(Lambertian { albedo });
+                    world.push(Box::new(Sphere {
+                        center,
+                        radius: 0.2,
+                        material: sphere_material,
+                    }));
+                } else if choose_mat < 0.95 {
+                    let albedo = Color {
+                        x: rng.gen_range(0.5..1.0),
+                        y: rng.gen_range(0.5..1.0),
+                        z: rng.gen_range(0.5..1.0),
+                    };
+                    let fuzz = rng.gen_range(0.0..0.5);
+                    sphere_material = Rc::new(Metal { albedo, fuzz });
+                    world.push(Box::new(Sphere {
+                        center,
+                        radius: 0.2,
+                        material: sphere_material,
+                    }));
+                } else {
+                    sphere_material = Rc::new(Dielectric { ir: 1.5 });
+                    world.push(Box::new(Sphere {
+                        center,
+                        radius: 0.2,
+                        material: sphere_material,
+                    }));
+                }
+            }
+        }
+    }
+
+    let material1 = Rc::new(Dielectric { ir: 1.5 });
+    world.push(Box::new(Sphere {
+        center: Point3 {
+            x: 0.0,
+            y: 1.0,
+            z: 0.0,
+        },
+        radius: 1.0,
+        material: material1,
+    }));
+
+    let material2 = Rc::new(Lambertian {
         albedo: Color {
-            x: 0.8,
+            x: 0.4,
+            y: 0.2,
+            z: 0.1,
+        },
+    });
+    world.push(Box::new(Sphere {
+        center: Point3 {
+            x: -4.0,
+            y: 1.0,
+            z: 0.0,
+        },
+        radius: 1.0,
+        material: material2,
+    }));
+
+    let material3 = Rc::new(Metal {
+        albedo: Color {
+            x: 0.7,
             y: 0.6,
-            z: 0.2,
+            z: 0.5,
         },
         fuzz: 0.0,
     });
+    world.push(Box::new(Sphere {
+        center: Point3 {
+            x: 4.0,
+            y: 1.0,
+            z: 0.0,
+        },
+        radius: 1.0,
+        material: material3,
+    }));
 
-    let world = Box::new(HittableList::new(vec![
-        Box::new(Sphere {
-            center: Point3 {
-                x: 0.0,
-                y: -100.5,
-                z: -1.0,
-            },
-            radius: 100.0,
-            material: material_ground,
-        }),
-        Box::new(Sphere {
-            center: Point3 {
-                x: 0.0,
-                y: 0.0,
-                z: -1.0,
-            },
-            radius: 0.5,
-            material: material_center,
-        }),
-        Box::new(Sphere {
-            center: Point3 {
-                x: -1.0,
-                y: 0.0,
-                z: -1.0,
-            },
-            radius: 0.5,
-            material: material_left.clone(),
-        }),
-        Box::new(Sphere {
-            center: Point3 {
-                x: -1.0,
-                y: 0.0,
-                z: -1.0,
-            },
-            radius: -0.4,
-            material: material_left,
-        }),
-        Box::new(Sphere {
-            center: Point3 {
-                x: 1.0,
-                y: 0.0,
-                z: -1.0,
-            },
-            radius: 0.5,
-            material: material_right,
-        }),
-    ]));
+    HittableList::new(world)
+}
+
+fn main() {
+    let world = Box::new(random_scene());
 
     let lookfrom = Point3 {
-        x: 3.0,
-        y: 3.0,
-        z: 2.0,
+        x: 13.0,
+        y: 2.0,
+        z: 3.0,
     };
     let lookat = Point3 {
         x: 0.0,
         y: 0.0,
-        z: -1.0,
+        z: 0.0,
     };
     let vup = Vec3 {
         x: 0.0,
         y: 1.0,
         z: 0.0,
     };
-    let dist_to_focus = (lookfrom - lookat).len();
-    let aperture = 2.0;
+    let dist_to_focus = 10.0;
+    let aperture = 0.1;
 
     let camera = Camera::new(
         lookfrom,
