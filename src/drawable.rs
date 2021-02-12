@@ -14,6 +14,7 @@ pub trait Drawable {
 
         writeln!(buf, "P6 {} {} 255", Self::WIDTH, Self::HEIGHT).unwrap();
         for y in 0..Self::HEIGHT {
+            println!("Rows remaining: {}", Self::HEIGHT - y);
             for x in 0..Self::WIDTH {
                 let color = self.get_color_at(x, y);
                 let x = (color.x.sqrt() * 255.0) as u8;
