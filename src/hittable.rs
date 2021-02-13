@@ -3,7 +3,7 @@ use crate::{
     math::{Point3, Vec3},
     ray::Ray,
 };
-use std::rc::Rc;
+use std::sync::Arc;
 
 pub trait Hittable {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord>;
@@ -12,7 +12,7 @@ pub trait Hittable {
 pub struct HitRecord {
     pub p: Point3,
     pub normal: Vec3,
-    pub material: Rc<dyn Material>,
+    pub material: Arc<dyn Material>,
     pub t: f32,
     pub front_face: bool,
 }

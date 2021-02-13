@@ -9,11 +9,11 @@ use std::f32;
 
 pub struct RayTracer {
     camera: Camera,
-    world: Box<dyn Hittable>,
+    world: Box<dyn Hittable + Sync>,
 }
 
 impl RayTracer {
-    pub fn new(camera: Camera, world: Box<dyn Hittable>) -> Self {
+    pub fn new(camera: Camera, world: Box<dyn Hittable + Sync>) -> Self {
         Self { camera, world }
     }
 

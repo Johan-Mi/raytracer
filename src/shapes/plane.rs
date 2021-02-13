@@ -4,12 +4,12 @@ use crate::{
     math::{Point3, Vec3},
     ray::Ray,
 };
-use std::rc::Rc;
+use std::sync::Arc;
 
 pub struct Plane {
     pub pos: Point3,
     pub normal: Vec3,
-    pub material: Rc<dyn Material>,
+    pub material: Arc<dyn Material + Sync + Send>,
 }
 
 impl Hittable for Plane {

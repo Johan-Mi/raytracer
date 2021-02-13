@@ -17,20 +17,21 @@ use math::{Color, Point3, Vec3};
 use rand::Rng;
 use raytracer::RayTracer;
 use shapes::{HittableList, Sphere};
-use std::rc::Rc;
+use std::sync::Arc;
 
 fn random_scene() -> HittableList {
     let mut rng = rand::thread_rng();
 
-    let mut world: Vec<Box<dyn Hittable>> = Vec::new();
+    let mut world: Vec<Box<dyn Hittable + Sync>> = Vec::new();
 
-    let ground_material = Rc::new(Lambertian {
-        albedo: Color {
-            x: 0.5,
-            y: 0.5,
-            z: 0.5,
-        },
-    });
+    let ground_material: Arc<dyn Material + Sync + Send> =
+        Arc::new(Lambertian {
+            albedo: Color {
+                x: 0.5,
+                y: 0.5,
+                z: 0.5,
+            },
+        });
     world.push(Box::new(Sphere {
         center: Point3 {
             x: 0.0,
@@ -59,7 +60,7 @@ fn random_scene() -> HittableList {
             .len()
                 > 0.9
             {
-                let sphere_material: Rc<dyn Material>;
+                let sphere_material: Arc<dyn Material + Sync + Send>;
 
                 if choose_mat < 0.8 {
                     let albedo = Color {
@@ -72,7 +73,7 @@ fn random_scene() -> HittableList {
                         y: rng.gen_range(0.0..1.0),
                         z: rng.gen_range(0.0..1.0),
                     });
-                    sphere_material = Rc::new(Lambertian { albedo });
+                    sphere_material = Arc::new(Lambertian { albedo });
                     world.push(Box::new(Sphere {
                         center,
                         radius: 0.2,
@@ -85,14 +86,14 @@ fn random_scene() -> HittableList {
                         z: rng.gen_range(0.5..1.0),
                     };
                     let fuzz = rng.gen_range(0.0..0.5);
-                    sphere_material = Rc::new(Metal { albedo, fuzz });
+                    sphere_material = Arc::new(Metal { albedo, fuzz });
                     world.push(Box::new(Sphere {
                         center,
                         radius: 0.2,
                         material: sphere_material,
                     }));
                 } else {
-                    sphere_material = Rc::new(Dielectric { ir: 1.5 });
+                    sphere_material = Arc::new(Dielectric { ir: 1.5 });
                     world.push(Box::new(Sphere {
                         center,
                         radius: 0.2,
@@ -103,7 +104,7 @@ fn random_scene() -> HittableList {
         }
     }
 
-    let material1 = Rc::new(Dielectric { ir: 1.5 });
+    let material1 = Arc::new(Dielectric { ir: 1.5 });
     world.push(Box::new(Sphere {
         center: Point3 {
             x: 0.0,
@@ -114,7 +115,7 @@ fn random_scene() -> HittableList {
         material: material1,
     }));
 
-    let material2 = Rc::new(Lambertian {
+    let material2 = Arc::new(Lambertian {
         albedo: Color {
             x: 0.4,
             y: 0.2,
@@ -131,7 +132,7 @@ fn random_scene() -> HittableList {
         material: material2,
     }));
 
-    let material3 = Rc::new(Metal {
+    let material3 = Arc::new(Metal {
         albedo: Color {
             x: 0.7,
             y: 0.6,
