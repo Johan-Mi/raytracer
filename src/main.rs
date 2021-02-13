@@ -1,5 +1,5 @@
+mod args;
 mod camera;
-mod constants;
 mod drawable;
 mod hittable;
 mod materials;
@@ -8,8 +8,8 @@ mod ray;
 mod raytracer;
 mod shapes;
 
+use args::Args;
 use camera::Camera;
-use constants::ASPECT_RATIO;
 use drawable::Drawable;
 use hittable::Hittable;
 use materials::{Dielectric, Lambertian, Material, Metal};
@@ -18,6 +18,7 @@ use rand::Rng;
 use raytracer::RayTracer;
 use shapes::{HittableList, Sphere};
 use std::sync::Arc;
+use structopt::StructOpt;
 
 fn random_scene() -> HittableList {
     let mut rng = rand::thread_rng();
@@ -154,6 +155,8 @@ fn random_scene() -> HittableList {
 }
 
 fn main() {
+    let args = Args::from_args();
+
     let world = Box::new(random_scene());
 
     let lookfrom = Point3 {
@@ -179,11 +182,11 @@ fn main() {
         lookat,
         vup,
         20.0,
-        ASPECT_RATIO,
+        args.width as f32 / args.height as f32,
         aperture,
         dist_to_focus,
     );
 
-    let tracer = RayTracer::new(camera, world);
-    tracer.write_ppm("image.ppm");
+    let tracer = RayTracer::new(camera, world, args);
+    tracer.write_ppm("image.ppm", tracer.args.quiet);
 }

@@ -1,5 +1,5 @@
+use super::args::Args;
 use super::camera::Camera;
-use super::constants::{HEIGHT, MAX_DEPTH, SAMPLES_PER_PIXEL, WIDTH};
 use super::drawable::Drawable;
 use super::hittable::Hittable;
 use super::math::Color;
@@ -7,14 +7,25 @@ use super::ray::Ray;
 use rand::Rng;
 use std::f32;
 
+pub const MAX_DEPTH: i32 = 50;
+
 pub struct RayTracer {
     camera: Camera,
     world: Box<dyn Hittable + Sync>,
+    pub args: Args,
 }
 
 impl RayTracer {
-    pub fn new(camera: Camera, world: Box<dyn Hittable + Sync>) -> Self {
-        Self { camera, world }
+    pub fn new(
+        camera: Camera,
+        world: Box<dyn Hittable + Sync>,
+        args: Args,
+    ) -> Self {
+        Self {
+            camera,
+            world,
+            args,
+        }
     }
 
     fn sky_color_at_ray(&self, ray: &Ray) -> Color {
@@ -63,18 +74,26 @@ impl RayTracer {
 }
 
 impl Drawable for RayTracer {
-    const WIDTH: usize = WIDTH;
-    const HEIGHT: usize = HEIGHT;
+    fn get_width(&self) -> usize {
+        self.args.width
+    }
+
+    fn get_height(&self) -> usize {
+        self.args.height
+    }
 
     fn get_color_at(&self, x: usize, y: usize) -> Color {
-        (0..SAMPLES_PER_PIXEL)
+        let width = self.get_width();
+        let height = self.get_height();
+
+        (0..self.args.samples)
             .map(|_| {
                 let mut rng = rand::thread_rng();
 
                 let u =
-                    (x as f32 + rng.gen_range(0.0..1.0)) / (WIDTH as f32 - 1.0);
-                let v = ((HEIGHT - y) as f32 + rng.gen_range(0.0..1.0))
-                    / (HEIGHT as f32 - 1.0);
+                    (x as f32 + rng.gen_range(0.0..1.0)) / (width as f32 - 1.0);
+                let v = ((height - y) as f32 + rng.gen_range(0.0..1.0))
+                    / (height as f32 - 1.0);
 
                 let ray = self.camera.get_ray(u, v);
                 self.color_at_ray(&ray, MAX_DEPTH)
@@ -87,6 +106,6 @@ impl Drawable for RayTracer {
                 },
                 |l, r| l + r,
             )
-            / SAMPLES_PER_PIXEL as f32
+            / self.args.samples as f32
     }
 }

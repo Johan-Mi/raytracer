@@ -4,25 +4,28 @@ use std::fs;
 use std::io::{BufWriter, Write};
 
 pub trait Drawable {
-    const WIDTH: usize;
-    const HEIGHT: usize;
+    fn get_width(&self) -> usize;
+    fn get_height(&self) -> usize;
 
     fn get_color_at(&self, x: usize, y: usize) -> Color;
 
-    fn write_ppm<P: AsRef<std::path::Path>>(&self, filename: P)
+    fn write_ppm<P: AsRef<std::path::Path>>(&self, filename: P, quiet: bool)
     where
         Self: Sync,
     {
-        let mut buf = Vec::with_capacity(Self::WIDTH * Self::HEIGHT);
+        let width = self.get_width();
+        let height = self.get_height();
 
-        (0..(Self::WIDTH * Self::HEIGHT))
+        let mut buf = Vec::with_capacity(width * height);
+
+        (0..(width * height))
             .into_par_iter()
             .map(|i| {
-                let y = i / Self::WIDTH;
-                let x = i % Self::WIDTH;
+                let y = i / width;
+                let x = i % width;
 
-                if x == 0 {
-                    println!("Current row: {}", Self::HEIGHT - y);
+                if !quiet && x == 0 {
+                    println!("Current row: {}", height - y);
                 }
 
                 let color = self.get_color_at(x, y);
@@ -35,7 +38,7 @@ pub trait Drawable {
 
         let f = fs::File::create(filename).unwrap();
         let mut wbuf = BufWriter::new(f);
-        writeln!(wbuf, "P6 {} {} 255", Self::WIDTH, Self::HEIGHT).unwrap();
+        writeln!(wbuf, "P6 {} {} 255", width, height).unwrap();
         for c in buf {
             wbuf.write_all(&c).unwrap();
         }
