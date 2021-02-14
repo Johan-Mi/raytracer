@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
@@ -16,4 +17,8 @@ pub struct Args {
     /// Don't print anything
     #[structopt(short, long)]
     pub quiet: bool,
+
+    /// The file that the image will be written to
+    #[structopt(short, default_value = "image.ppm")]
+    pub outfile: PathBuf,
 }

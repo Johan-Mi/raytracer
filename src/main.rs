@@ -188,5 +188,5 @@ fn main() {
     );
 
     let tracer = RayTracer::new(camera, world, args);
-    tracer.write_ppm("image.ppm", tracer.args.quiet);
+    tracer.write_ppm(&tracer.args.outfile, tracer.args.quiet);
 }
