@@ -1,25 +1,29 @@
-mod args;
-mod camera;
-mod drawable;
-mod hittable;
-mod materials;
-mod math;
-mod ray;
-mod raytracer;
-mod shapes;
+// mod args;
+// mod camera;
+// mod drawable;
+// mod hittable;
+// mod materials;
+// mod math;
+// mod ray;
+// mod raytracer;
+// mod shapes;
+mod de;
 
-use args::Args;
-use camera::Camera;
-use drawable::Drawable;
-use hittable::Hittable;
-use materials::{Dielectric, Lambertian, Material, Metal};
-use math::{Color, Point3, Vec3};
-use rand::Rng;
-use raytracer::RayTracer;
-use shapes::{HittableList, Sphere};
-use std::sync::Arc;
-use structopt::StructOpt;
+// use args::Args;
+// use camera::Camera;
+// use drawable::Drawable;
+// use hittable::Hittable;
+// use materials::{Dielectric, Lambertian, Material, Metal};
+// use math::{Color, Point3, Vec3};
+// use rand::Rng;
+// use raytracer::RayTracer;
+// use shapes::{HittableList, Sphere};
+// use std::sync::Arc;
+// use structopt::StructOpt;
+use de::scene::Scene;
+use std::fs::File;
 
+/*
 fn random_scene() -> HittableList {
     let mut rng = rand::thread_rng();
 
@@ -153,8 +157,10 @@ fn random_scene() -> HittableList {
 
     HittableList::new(world)
 }
+*/
 
 fn main() {
+    /*
     let args = Args::from_args();
 
     let world = Box::new(random_scene());
@@ -189,4 +195,15 @@ fn main() {
 
     let tracer = RayTracer::new(camera, world, args);
     tracer.write_ppm(&tracer.args.outfile, tracer.args.quiet);
+    */
+
+    let file = File::open("scene.ron").unwrap();
+    match ron::de::from_reader::<_, Scene>(file) {
+        Ok(scene) => {
+            println!("{:#?}", scene);
+        }
+        Err(err) => {
+            eprintln!("{}", err);
+        }
+    }
 }

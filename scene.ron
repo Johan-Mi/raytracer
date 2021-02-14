@@ -1,0 +1,63 @@
+Scene (
+    materials: {
+        "ground": Lambertian (
+            albedo: (0.8, 0.8, 0.0),
+        ),
+
+        "center": Lambertian (
+            albedo: (0.6, 0.3, 0.3),
+        ),
+
+        "left": Metal (
+            albedo: (0.8, 0.8, 0.8),
+            fuzz: 0.3,
+        ),
+
+        "right": Metal (
+            albedo: (0.8, 0.6, 0.2),
+            fuzz: 1.0,
+        ),
+    },
+
+    shapes: [
+        Sphere (
+            center: (
+                x: 0.0,
+                y: -100.5,
+                z: -1.0,
+            ),
+            radius: 100.0,
+            material: "ground",
+        ),
+
+        Sphere (
+            center: (
+                x: 0.0,
+                y: 0.0,
+                z: -1.0,
+            ),
+            radius: 0.5,
+            material: "center",
+        ),
+
+        Sphere (
+            center: (
+                x: -1.0,
+                y: 0.0,
+                z: -1.0,
+            ),
+            radius: 0.5,
+            material: "left",
+        ),
+
+        Sphere (
+            center: (
+                x: 1.0,
+                y: 0.0,
+                z: -1.0,
+            ),
+            radius: 0.5,
+            material: "right",
+        ),
+    ],
+)
