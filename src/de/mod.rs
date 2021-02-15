@@ -1,3 +1,4 @@
+mod camera;
 mod color;
 mod material;
 pub mod scene;
