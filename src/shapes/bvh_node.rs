@@ -9,7 +9,7 @@ use std::{cmp::Ordering, mem};
 
 pub struct BvhNode {
     left: Box<dyn Hittable + Sync>,
-    right: Option<Box<dyn Hittable + Sync>>,
+    right: Box<dyn Hittable + Sync>,
     boundry: AABB,
 }
 
@@ -30,12 +30,8 @@ impl Hittable for BvhNode {
             t_max = rec_left.t;
         }
 
-        if let Some(right) = &self.right {
-            let rec_right = right.gets_hit(ray, t_min, t_max);
-            rec_right.or(rec_left)
-        } else {
-            rec_left
-        }
+        let rec_right = self.right.gets_hit(ray, t_min, t_max);
+        rec_right.or(rec_left)
     }
 
     fn bounding_box(&self) -> Option<AABB> {
@@ -50,22 +46,14 @@ fn box_compare(a: &AABB, b: &AABB, axis: usize) -> bool {
 impl BvhNode {
     pub fn subdivide_objects(
         objects: &mut [Box<dyn Hittable + Sync>],
-    ) -> Option<Self> {
+    ) -> Option<Box<dyn Hittable + Sync>> {
         let mut rng = rand::thread_rng();
         let axis = rng.gen_range(0..3);
 
         match objects {
             [] => None,
 
-            [single] => {
-                let single = mem::replace(single, Box::new(Unhittable));
-                let boundry = single.bounding_box()?;
-                Some(Self {
-                    left: single,
-                    right: None,
-                    boundry,
-                })
-            }
+            [single] => Some(mem::replace(single, Box::new(Unhittable))),
 
             [a, b] => {
                 let a = mem::replace(a, Box::new(Unhittable));
@@ -80,11 +68,11 @@ impl BvhNode {
                     (b, a)
                 };
 
-                Some(Self {
+                Some(Box::new(BvhNode {
                     left,
-                    right: Some(right),
+                    right,
                     boundry: boundry_a.surrounding_box(&boundry_b),
-                })
+                }))
             }
 
             objects => {
@@ -103,17 +91,19 @@ impl BvhNode {
 
                 let left_half = &mut objects[..middle];
                 let left = BvhNode::subdivide_objects(left_half)?;
+                let left_boundry = left.bounding_box()?;
 
                 let right_half = &mut objects[middle..];
                 let right = BvhNode::subdivide_objects(right_half)?;
+                let right_boundry = left.bounding_box()?;
 
-                let boundry = left.boundry.surrounding_box(&right.boundry);
+                let boundry = left_boundry.surrounding_box(&right_boundry);
 
-                Some(Self {
-                    left: Box::new(left),
-                    right: Some(Box::new(right)),
+                Some(Box::new(BvhNode {
+                    left,
+                    right,
                     boundry,
-                })
+                }))
             }
         }
     }
