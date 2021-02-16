@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
 from random import uniform
+from math import sqrt
+
+
+def vec_length(v):
+    return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])
 
 
 def main():
@@ -13,31 +18,29 @@ def main():
     )
     materials["ground"] = ground_material
 
-
     for a in range(-11, 11):
         for b in range(-11, 11):
             choose_mat = uniform(0.0, 1.0)
-            center = {
-                "x": a + uniform(0.0, 0.9),
-                "y": 0.2,
-                "z": b + uniform(0.0, 0.9)
-            }
-            center_str = f"( x: {center['x']}, y: {center['y']}, z: {center['z']} )"
+            center = (a + uniform(0.0, 0.9), 0.2, b + uniform(0.0, 0.9))
 
-            if choose_mat < 0.8:
-                albedo = tuple(
-                    uniform(0.0, 1.0) * uniform(0.0, 1.0) for _ in range(3))
-                sphere_material = f'{{ "Lambertian": ( albedo: {albedo} ) }}'
-            elif choose_mat < 0.95:
-                albedo = tuple(uniform(0.5, 1.0) for _ in range(3))
-                fuzz = uniform(0.0, 0.5)
-                sphere_material = f'{{ "Metal": ( albedo: {albedo}, fuzz: {fuzz} ) }}'
-            else:
-                sphere_material = f'{{ "Dielectric": ( ir: 1.5 ) }}'
+            if vec_length((center[0] - 4.0, center[1] - 0.2, center[2])) > 0.9:
+                center_str = f"( x: {center[0]}, y: {center[1]}, z: {center[2]} )"
 
-            shapes.append(
-                f"Sphere ( center: {center_str}, radius: 0.2, material: {sphere_material} )"
-            )
+                if choose_mat < 0.8:
+                    albedo = tuple(
+                        uniform(0.0, 1.0) * uniform(0.0, 1.0)
+                        for _ in range(3))
+                    sphere_material = f'{{ "Lambertian": ( albedo: {albedo} ) }}'
+                elif choose_mat < 0.95:
+                    albedo = tuple(uniform(0.5, 1.0) for _ in range(3))
+                    fuzz = uniform(0.0, 0.5)
+                    sphere_material = f'{{ "Metal": ( albedo: {albedo}, fuzz: {fuzz} ) }}'
+                else:
+                    sphere_material = f'{{ "Dielectric": ( ir: 1.5 ) }}'
+
+                shapes.append(
+                    f"Sphere ( center: {center_str}, radius: 0.2, material: {sphere_material} )"
+                )
 
     material1 = f'Dielectric ( ir: 1.5 )'
     shapes.append(
