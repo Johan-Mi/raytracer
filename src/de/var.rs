@@ -7,6 +7,7 @@ pub enum Var<T> {
     Value(T),
     Ref(String),
 }
+
 impl<T> Var<T>
 where
     T: Clone,

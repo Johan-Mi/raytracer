@@ -1,5 +1,6 @@
 use derive_more::{Add, Div, Mul, Neg, Sub};
 use rand::Rng;
+use std::ops;
 
 #[derive(Clone, Copy, Default, Add, Sub, Mul, Div, Neg)]
 pub struct Vec3 {
@@ -81,6 +82,19 @@ impl Vec3 {
 
     pub fn reflect(&self, normal: &Vec3) -> Vec3 {
         *self - *normal * Vec3::dot(self, normal) * 2.0
+    }
+}
+
+impl ops::Index<usize> for Vec3 {
+    type Output = f32;
+
+    fn index(&self, i: usize) -> &Self::Output {
+        match i {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => panic!(),
+        }
     }
 }
 

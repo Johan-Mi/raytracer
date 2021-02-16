@@ -1,8 +1,5 @@
 use super::{camera::Camera, material::Material, shape::Shape};
-use crate::{
-    args::Args, camera::Camera as RealCamera, hittable::Hittable,
-    shapes::HittableList,
-};
+use crate::{args::Args, camera::Camera as RealCamera, hittable::Hittable};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -17,7 +14,10 @@ pub struct Scene {
 }
 
 impl Scene {
-    pub fn build(self, args: &Args) -> (Box<dyn Hittable + Sync>, RealCamera) {
+    pub fn build(
+        self,
+        args: &Args,
+    ) -> (Vec<Box<dyn Hittable + Sync>>, RealCamera) {
         let camera = self.camera.build(args);
 
         let materials = self
@@ -27,12 +27,10 @@ impl Scene {
             .collect();
 
         (
-            Box::new(HittableList::new(
-                self.shapes
-                    .into_iter()
-                    .map(|s| s.build(&materials))
-                    .collect(),
-            )),
+            self.shapes
+                .into_iter()
+                .map(|s| s.build(&materials))
+                .collect(),
             camera,
         )
     }

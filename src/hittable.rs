@@ -1,4 +1,5 @@
 use crate::{
+    aabb::AABB,
     materials::Material,
     math::{Point3, Vec3},
     ray::Ray,
@@ -7,6 +8,7 @@ use std::sync::Arc;
 
 pub trait Hittable {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord>;
+    fn bounding_box(&self) -> Option<AABB>;
 }
 
 pub struct HitRecord {

@@ -1,6 +1,8 @@
-mod hittable_list;
+mod bvh_node;
 mod plane;
 mod sphere;
-pub use hittable_list::HittableList;
+mod unhittable;
+pub use bvh_node::BvhNode;
 pub use plane::Plane;
 pub use sphere::Sphere;
+pub use unhittable::Unhittable;

@@ -1,4 +1,5 @@
 use crate::{
+    aabb::AABB,
     hittable::{HitRecord, Hittable},
     materials::Material,
     math::{Point3, Vec3},
@@ -40,5 +41,9 @@ impl Hittable for Plane {
         rec.set_face_normal(ray, &self.normal);
 
         Some(rec)
+    }
+
+    fn bounding_box(&self) -> Option<AABB> {
+        None
     }
 }

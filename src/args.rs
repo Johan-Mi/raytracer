@@ -21,4 +21,8 @@ pub struct Args {
     /// The file that the image will be written to
     #[structopt(short, default_value = "image.ppm")]
     pub outfile: PathBuf,
+
+    /// The file describing the scene to be rendered
+    #[structopt(name = "FILE")]
+    pub infile: PathBuf,
 }
