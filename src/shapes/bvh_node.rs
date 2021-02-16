@@ -95,7 +95,7 @@ impl BvhNode {
 
                 let right_half = &mut objects[middle..];
                 let right = BvhNode::subdivide_objects(right_half)?;
-                let right_boundry = left.bounding_box()?;
+                let right_boundry = right.bounding_box()?;
 
                 let boundry = left_boundry.surrounding_box(&right_boundry);
 
