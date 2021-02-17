@@ -21,7 +21,7 @@ Scene (
     ),
 
     materials: {
-        "red": Lambertian (
+        "green": Lambertian (
             albedo: (0.65, 0.05, 0.05),
         ),
 
@@ -29,7 +29,7 @@ Scene (
             albedo: (0.73, 0.73, 0.73),
         ),
 
-        "green": Lambertian (
+        "red": Lambertian (
             albedo: (0.12, 0.45, 0.15),
         ),
 
