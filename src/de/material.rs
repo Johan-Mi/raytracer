@@ -1,6 +1,6 @@
 use super::color::Color;
 use crate::materials::{
-    Dielectric, Lambertian, Material as DynMaterial, Metal,
+    Dielectric, DiffuseLight, Lambertian, Material as DynMaterial, Metal,
 };
 use serde::Deserialize;
 use std::sync::Arc;
@@ -10,6 +10,7 @@ pub enum Material {
     Lambertian { albedo: Color },
     Metal { albedo: Color, fuzz: f32 },
     Dielectric { ir: f32 },
+    DiffuseLight { color: Color },
 }
 
 impl Into<Arc<dyn DynMaterial + Send + Sync>> for Material {
@@ -23,6 +24,9 @@ impl Into<Arc<dyn DynMaterial + Send + Sync>> for Material {
                 fuzz,
             }),
             Material::Dielectric { ir } => Arc::new(Dielectric { ir }),
+            Material::DiffuseLight { color } => Arc::new(DiffuseLight {
+                color: color.into(),
+            }),
         }
     }
 }

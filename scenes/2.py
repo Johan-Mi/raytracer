@@ -30,7 +30,7 @@ def main():
                     albedo = tuple(
                         uniform(0.0, 1.0) * uniform(0.0, 1.0)
                         for _ in range(3))
-                    sphere_material = f'{{ "Lambertian": ( albedo: {albedo} ) }}'
+                    sphere_material = f'{{ "DiffuseLight": ( color: {albedo} ) }}'
                 elif choose_mat < 0.95:
                     albedo = tuple(uniform(0.5, 1.0) for _ in range(3))
                     fuzz = uniform(0.0, 0.5)

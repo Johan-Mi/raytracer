@@ -30,14 +30,6 @@ impl Vec3 {
         }
     }
 
-    pub fn lerp(&self, other: &Vec3, t: f32) -> Vec3 {
-        Vec3 {
-            x: (1.0 - t) * self.x + t * other.x,
-            y: (1.0 - t) * self.y + t * other.y,
-            z: (1.0 - t) * self.z + t * other.z,
-        }
-    }
-
     pub fn normalized(&self) -> Vec3 {
         *self / self.len()
     }

@@ -28,22 +28,12 @@ impl RayTracer {
         }
     }
 
-    fn sky_color_at_ray(&self, ray: &Ray) -> Color {
-        const SKY_COLOR_TOP: Color = Color {
-            x: 0.5,
-            y: 0.7,
-            z: 1.0,
-        };
-        const SKY_COLOR_BOTTOM: Color = Color {
-            x: 1.0,
-            y: 1.0,
-            z: 1.0,
-        };
-
-        let t = (0.5 * (ray.dir.y / ray.dir.x.hypot(ray.dir.z) + 1.0))
-            .clamp(0.0, 1.0);
-
-        Color::lerp(&SKY_COLOR_TOP, &SKY_COLOR_BOTTOM, t)
+    fn sky_color_at_ray(&self, _ray: &Ray) -> Color {
+        Color {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        }
     }
 
     fn color_at_ray(&self, ray: &Ray, depth: i32) -> Color {
@@ -58,14 +48,13 @@ impl RayTracer {
             if let Some((scattered, attenuation)) =
                 hit.material.scatter(ray, &hit)
             {
+                let emitted = hit.material.emitted();
+
                 self.color_at_ray(&scattered, depth - 1)
                     .elementwise_mul(&attenuation)
+                    + emitted
             } else {
-                Color {
-                    x: 0.0,
-                    y: 0.0,
-                    z: 0.0,
-                }
+                hit.material.emitted()
             }
         } else {
             self.sky_color_at_ray(ray)
