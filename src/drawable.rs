@@ -1,4 +1,4 @@
-use super::math::Color;
+use super::math::{to_rgb, Color};
 use rayon::prelude::*;
 use std::fs;
 use std::io::{BufWriter, Write};
@@ -29,10 +29,7 @@ pub trait Drawable {
                 }
 
                 let color = self.get_color_at(x, y);
-                let x = (color.x.sqrt() * 255.0) as u8;
-                let y = (color.y.sqrt() * 255.0) as u8;
-                let z = (color.z.sqrt() * 255.0) as u8;
-                [x, y, z]
+                to_rgb(color)
             })
             .collect_into_vec(&mut buf);
 

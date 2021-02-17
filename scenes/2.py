@@ -28,7 +28,7 @@ def main():
 
                 if choose_mat < 0.8:
                     albedo = tuple(
-                        uniform(0.0, 1.0) * uniform(0.0, 1.0)
+                        uniform(0.0, 1.0) * uniform(0.0, 2.0)
                         for _ in range(3))
                     sphere_material = f'{{ "DiffuseLight": ( color: {albedo} ) }}'
                 elif choose_mat < 0.95:
