@@ -11,6 +11,7 @@ mod raytracer;
 mod shapes;
 
 use args::Args;
+use bumpalo::Bump;
 use de::scene::Scene;
 use drawable::Drawable;
 use raytracer::RayTracer;
@@ -29,9 +30,12 @@ fn main() {
             return;
         }
     };
-    let (mut world, camera) = scene.build(&args);
 
-    let subdivided = BvhNode::subdivide_objects(&mut world).unwrap();
+    let arena = Bump::new();
+
+    let (mut world, camera) = scene.build(&args, &arena);
+
+    let subdivided = BvhNode::subdivide_objects(&mut world, &arena).unwrap();
 
     let tracer = RayTracer::new(camera, subdivided, args);
     tracer.write_ppm(&tracer.args.outfile, tracer.args.quiet);

@@ -5,15 +5,14 @@ use crate::{
     math::{Point3, Vec3},
     ray::Ray,
 };
-use std::sync::Arc;
 
-pub struct Plane {
+pub struct Plane<'a> {
     pub pos: Point3,
     pub normal: Vec3,
-    pub material: Arc<dyn Material + Sync + Send>,
+    pub material: &'a (dyn Material + Sync + Send),
 }
 
-impl Hittable for Plane {
+impl Hittable for Plane<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let diff = ray.origin - self.pos;
         let prod1 = Vec3::dot(&diff, &self.normal);

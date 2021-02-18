@@ -5,12 +5,12 @@ use crate::{
     ray::Ray,
 };
 
-pub struct Translate {
-    pub inner: Box<dyn Hittable + Sync>,
+pub struct Translate<'a> {
+    pub inner: &'a (dyn Hittable + Sync),
     pub offset: Vec3,
 }
 
-impl Hittable for Translate {
+impl Hittable for Translate<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let moved_ray = Ray {
             origin: ray.origin - self.offset,

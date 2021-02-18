@@ -6,30 +6,31 @@ use crate::{
     ray::Ray,
     shapes::{HittableList, XYRect, XZRect, YZRect},
 };
-use std::sync::Arc;
+use bumpalo::Bump;
 
-pub struct Cuboid {
+pub struct Cuboid<'a> {
     minimum: Point3,
     maximum: Point3,
-    sides: HittableList,
+    sides: HittableList<'a>,
 }
 
-impl Cuboid {
+impl<'a> Cuboid<'a> {
     pub fn new(
         minimum: Point3,
         maximum: Point3,
-        material: Arc<dyn Material + Sync + Send>,
+        material: &'a (dyn Material + Sync + Send),
+        arena: &'a Bump,
     ) -> Self {
-        let sides: Vec<Box<dyn Hittable + Sync>> = vec![
-            Box::new(XYRect {
+        let sides = arena.alloc::<[&(dyn Hittable + Sync); 6]>([
+            arena.alloc(XYRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 y0: minimum.y,
                 y1: maximum.y,
                 k: maximum.z,
-                material: material.clone(),
+                material,
             }),
-            Box::new(XYRect {
+            arena.alloc(XYRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 y0: minimum.y,
@@ -37,7 +38,7 @@ impl Cuboid {
                 k: minimum.z,
                 material: material.clone(),
             }),
-            Box::new(XZRect {
+            arena.alloc(XZRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 z0: minimum.z,
@@ -45,7 +46,7 @@ impl Cuboid {
                 k: maximum.y,
                 material: material.clone(),
             }),
-            Box::new(XZRect {
+            arena.alloc(XZRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 z0: minimum.z,
@@ -53,7 +54,7 @@ impl Cuboid {
                 k: minimum.y,
                 material: material.clone(),
             }),
-            Box::new(YZRect {
+            arena.alloc(YZRect {
                 y0: minimum.y,
                 y1: maximum.y,
                 z0: minimum.z,
@@ -61,7 +62,7 @@ impl Cuboid {
                 k: maximum.x,
                 material: material.clone(),
             }),
-            Box::new(YZRect {
+            arena.alloc(YZRect {
                 y0: minimum.y,
                 y1: maximum.y,
                 z0: minimum.z,
@@ -69,7 +70,7 @@ impl Cuboid {
                 k: minimum.x,
                 material,
             }),
-        ];
+        ]);
 
         Self {
             minimum,
@@ -79,7 +80,7 @@ impl Cuboid {
     }
 }
 
-impl Hittable for Cuboid {
+impl Hittable for Cuboid<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         self.sides.gets_hit(ray, t_min, t_max)
     }

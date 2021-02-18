@@ -5,18 +5,17 @@ use crate::{
     math::{Point3, Vec3},
     ray::Ray,
 };
-use std::sync::Arc;
 
-pub struct XZRect {
+pub struct XZRect<'a> {
     pub x0: f32,
     pub x1: f32,
     pub z0: f32,
     pub z1: f32,
     pub k: f32,
-    pub material: Arc<dyn Material + Sync + Send>,
+    pub material: &'a (dyn Material + Sync + Send),
 }
 
-impl Hittable for XZRect {
+impl Hittable for XZRect<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let t = (self.k - ray.origin.y) / ray.dir.y;
 
