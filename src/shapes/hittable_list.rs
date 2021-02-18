@@ -4,17 +4,17 @@ use crate::{
     ray::Ray,
 };
 
-pub struct HittableList {
-    list: Vec<Box<dyn Hittable + Sync>>,
+pub struct HittableList<'a> {
+    list: &'a [&'a (dyn Hittable + Sync)],
 }
 
-impl HittableList {
-    pub fn new(list: Vec<Box<dyn Hittable + Sync>>) -> Self {
+impl<'a> HittableList<'a> {
+    pub fn new(list: &'a [&'a (dyn Hittable + Sync)]) -> Self {
         Self { list }
     }
 }
 
-impl Hittable for HittableList {
+impl Hittable for HittableList<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         self.list
             .iter()

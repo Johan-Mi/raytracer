@@ -2,8 +2,8 @@ use super::color::Color;
 use crate::materials::{
     Dielectric, DiffuseLight, Lambertian, Material as DynMaterial, Metal,
 };
+use bumpalo::Bump;
 use serde::Deserialize;
-use std::sync::Arc;
 
 #[derive(Debug, Deserialize)]
 pub enum Material {
@@ -13,18 +13,18 @@ pub enum Material {
     DiffuseLight { color: Color },
 }
 
-impl Into<Arc<dyn DynMaterial + Send + Sync>> for Material {
-    fn into(self) -> Arc<dyn DynMaterial + Send + Sync> {
+impl Material {
+    pub fn build(self, arena: &Bump) -> &(dyn DynMaterial + Send + Sync) {
         match self {
-            Material::Lambertian { albedo } => Arc::new(Lambertian {
+            Material::Lambertian { albedo } => arena.alloc(Lambertian {
                 albedo: albedo.into(),
             }),
-            Material::Metal { albedo, fuzz } => Arc::new(Metal {
+            Material::Metal { albedo, fuzz } => arena.alloc(Metal {
                 albedo: albedo.into(),
                 fuzz,
             }),
-            Material::Dielectric { ir } => Arc::new(Dielectric { ir }),
-            Material::DiffuseLight { color } => Arc::new(DiffuseLight {
+            Material::Dielectric { ir } => arena.alloc(Dielectric { ir }),
+            Material::DiffuseLight { color } => arena.alloc(DiffuseLight {
                 color: color.into(),
             }),
         }

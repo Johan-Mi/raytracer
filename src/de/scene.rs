@@ -1,5 +1,6 @@
 use super::{camera::Camera, material::Material, shape::Shape};
 use crate::{args::Args, camera::Camera as RealCamera, hittable::Hittable};
+use bumpalo::Bump;
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -14,22 +15,25 @@ pub struct Scene {
 }
 
 impl Scene {
-    pub fn build(
+    pub fn build<'a>(
         self,
         args: &Args,
-    ) -> (Vec<Box<dyn Hittable + Sync>>, RealCamera) {
+        arena: &'a Bump,
+    ) -> (std::vec::Vec<&'a (dyn Hittable + Sync)>, RealCamera) {
         let camera = self.camera.build(args);
 
         let materials = self
             .materials
             .into_iter()
-            .map(|(k, v)| (k, v.into()))
+            .map(|(k, v)| (k, v.build(arena)))
             .collect();
 
         (
             self.shapes
                 .into_iter()
-                .map(|s| s.build(&materials))
+                .map(|s| -> &'a (dyn Hittable + Sync) {
+                    s.build(&materials, arena)
+                })
                 .collect(),
             camera,
         )

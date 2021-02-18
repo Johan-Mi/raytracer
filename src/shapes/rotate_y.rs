@@ -5,15 +5,15 @@ use crate::{
     ray::Ray,
 };
 
-pub struct RotateY {
-    inner: Box<dyn Hittable + Sync>,
+pub struct RotateY<'a> {
+    inner: &'a (dyn Hittable + Sync),
     sin_theta: f32,
     cos_theta: f32,
     boundry: Option<AABB>,
 }
 
-impl RotateY {
-    pub fn new(inner: Box<dyn Hittable + Sync>, angle: f32) -> Self {
+impl<'a> RotateY<'a> {
+    pub fn new(inner: &'a (dyn Hittable + Sync + 'a), angle: f32) -> Self {
         let radians = angle.to_radians();
         let sin_theta = radians.sin();
         let cos_theta = radians.cos();
@@ -80,7 +80,7 @@ impl RotateY {
     }
 }
 
-impl Hittable for RotateY {
+impl Hittable for RotateY<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let mut origin = ray.origin;
         let mut direction = ray.dir;

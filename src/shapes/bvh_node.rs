@@ -4,16 +4,17 @@ use crate::{
     ray::Ray,
     shapes::Unhittable,
 };
+use bumpalo::Bump;
 use rand::Rng;
 use std::{cmp::Ordering, mem};
 
-pub struct BvhNode {
-    left: Box<dyn Hittable + Sync>,
-    right: Box<dyn Hittable + Sync>,
+pub struct BvhNode<'a> {
+    left: &'a (dyn Hittable + Sync),
+    right: &'a (dyn Hittable + Sync),
     boundry: AABB,
 }
 
-impl Hittable for BvhNode {
+impl Hittable for BvhNode<'_> {
     fn gets_hit(
         &self,
         ray: &Ray,
@@ -43,21 +44,22 @@ fn box_compare(a: &AABB, b: &AABB, axis: usize) -> bool {
     a.minimum[axis] < b.minimum[axis]
 }
 
-impl BvhNode {
+impl<'a> BvhNode<'a> {
     pub fn subdivide_objects(
-        objects: &mut [Box<dyn Hittable + Sync>],
-    ) -> Option<Box<dyn Hittable + Sync>> {
+        objects: &mut [&'a (dyn Hittable + Sync + 'a)],
+        arena: &'a Bump,
+    ) -> Option<&'a (dyn Hittable + Sync)> {
         let mut rng = rand::thread_rng();
         let axis = rng.gen_range(0..3);
 
         match objects {
             [] => None,
 
-            [single] => Some(mem::replace(single, Box::new(Unhittable))),
+            [single] => Some(mem::replace(single, &Unhittable)),
 
             [a, b] => {
-                let a = mem::replace(a, Box::new(Unhittable));
-                let b = mem::replace(b, Box::new(Unhittable));
+                let a = mem::replace(a, &Unhittable);
+                let b = mem::replace(b, &Unhittable);
                 let boundry_a = a.bounding_box()?;
                 let boundry_b = b.bounding_box()?;
 
@@ -68,7 +70,7 @@ impl BvhNode {
                     (b, a)
                 };
 
-                Some(Box::new(BvhNode {
+                Some(arena.alloc(BvhNode {
                     left,
                     right,
                     boundry: boundry_a.surrounding_box(&boundry_b),
@@ -90,16 +92,16 @@ impl BvhNode {
                 let middle = objects.len() / 2;
 
                 let left_half = &mut objects[..middle];
-                let left = BvhNode::subdivide_objects(left_half)?;
+                let left = BvhNode::subdivide_objects(left_half, arena)?;
                 let left_boundry = left.bounding_box()?;
 
                 let right_half = &mut objects[middle..];
-                let right = BvhNode::subdivide_objects(right_half)?;
+                let right = BvhNode::subdivide_objects(right_half, arena)?;
                 let right_boundry = right.bounding_box()?;
 
                 let boundry = left_boundry.surrounding_box(&right_boundry);
 
-                Some(Box::new(BvhNode {
+                Some(arena.alloc(BvhNode {
                     left,
                     right,
                     boundry,

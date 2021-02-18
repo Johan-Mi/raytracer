@@ -9,16 +9,16 @@ use std::f32;
 
 pub const MAX_DEPTH: i32 = 50;
 
-pub struct RayTracer {
+pub struct RayTracer<'a> {
     camera: Camera,
-    world: Box<dyn Hittable + Sync>,
+    world: &'a (dyn Hittable + Sync),
     pub args: Args,
 }
 
-impl RayTracer {
+impl<'a> RayTracer<'a> {
     pub fn new(
         camera: Camera,
-        world: Box<dyn Hittable + Sync>,
+        world: &'a (dyn Hittable + Sync),
         args: Args,
     ) -> Self {
         Self {
@@ -62,7 +62,7 @@ impl RayTracer {
     }
 }
 
-impl Drawable for RayTracer {
+impl Drawable for RayTracer<'_> {
     fn get_width(&self) -> usize {
         self.args.width
     }

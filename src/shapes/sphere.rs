@@ -5,15 +5,14 @@ use crate::{
     math::{Point3, Vec3},
     ray::Ray,
 };
-use std::sync::Arc;
 
-pub struct Sphere {
+pub struct Sphere<'a> {
     pub center: Point3,
     pub radius: f32,
-    pub material: Arc<dyn Material + Sync + Send>,
+    pub material: &'a (dyn Material + Sync + Send),
 }
 
-impl Hittable for Sphere {
+impl Hittable for Sphere<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let oc = ray.origin - self.center;
         let a = ray.dir.len_squared();
@@ -43,7 +42,7 @@ impl Hittable for Sphere {
             p,
             t: root,
             normal: Vec3::default(),
-            material: self.material.clone(),
+            material: self.material,
             front_face: bool::default(),
         };
 

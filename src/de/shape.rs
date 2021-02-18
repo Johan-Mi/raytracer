@@ -10,8 +10,9 @@ use crate::{
         Cuboid, Plane, RotateY, Sphere, Translate, XYRect, XZRect, YZRect,
     },
 };
+use bumpalo::Bump;
 use serde::Deserialize;
-use std::{collections::HashMap, sync::Arc};
+use std::collections::HashMap;
 
 #[derive(Debug, Deserialize)]
 pub enum Shape {
@@ -65,28 +66,29 @@ pub enum Shape {
 }
 
 impl Shape {
-    pub fn build(
+    pub fn build<'a>(
         self,
-        materials: &HashMap<String, Arc<dyn DynMaterial + Send + Sync>>,
-    ) -> Box<dyn Hittable + Sync> {
+        materials: &HashMap<String, &'a (dyn DynMaterial + Send + Sync)>,
+        arena: &'a Bump,
+    ) -> &'a (dyn Hittable + Sync) {
         match self {
             Shape::Sphere {
                 center,
                 radius,
                 material,
-            } => Box::new(Sphere {
+            } => arena.alloc(Sphere {
                 center: center.into(),
                 radius,
-                material: material.map(|m| m.into()).resolve(materials),
+                material: material.map(|m| m.build(arena)).resolve(materials),
             }),
             Shape::Plane {
                 position,
                 normal,
                 material,
-            } => Box::new(Plane {
+            } => arena.alloc(Plane {
                 pos: position.into(),
                 normal: normal.into(),
-                material: material.map(|m| m.into()).resolve(materials),
+                material: material.map(|m| m.build(arena)).resolve(materials),
             }),
             Shape::XYRect {
                 x0,
@@ -95,13 +97,13 @@ impl Shape {
                 y1,
                 k,
                 material,
-            } => Box::new(XYRect {
+            } => arena.alloc(XYRect {
                 x0,
                 x1,
                 y0,
                 y1,
                 k,
-                material: material.map(|m| m.into()).resolve(materials),
+                material: material.map(|m| m.build(arena)).resolve(materials),
             }),
             Shape::XZRect {
                 x0,
@@ -110,13 +112,13 @@ impl Shape {
                 z1,
                 k,
                 material,
-            } => Box::new(XZRect {
+            } => arena.alloc(XZRect {
                 x0,
                 x1,
                 z0,
                 z1,
                 k,
-                material: material.map(|m| m.into()).resolve(materials),
+                material: material.map(|m| m.build(arena)).resolve(materials),
             }),
             Shape::YZRect {
                 y0,
@@ -125,30 +127,31 @@ impl Shape {
                 z1,
                 k,
                 material,
-            } => Box::new(YZRect {
+            } => arena.alloc(YZRect {
                 y0,
                 y1,
                 z0,
                 z1,
                 k,
-                material: material.map(|m| m.into()).resolve(materials),
+                material: material.map(|m| m.build(arena)).resolve(materials),
             }),
             Shape::Cuboid {
                 minimum,
                 maximum,
                 material,
-            } => Box::new(Cuboid::new(
+            } => arena.alloc(Cuboid::new(
                 minimum.into(),
                 maximum.into(),
-                material.map(|m| m.into()).resolve(materials),
+                material.map(|m| m.build(arena)).resolve(materials),
+                arena,
             )),
             Shape::RotateY { inner, angle } => {
-                let inner = inner.build(materials);
-                Box::new(RotateY::new(inner, angle))
+                let inner = inner.build(materials, arena);
+                arena.alloc(RotateY::new(inner, angle))
             }
             Shape::Translate { inner, offset } => {
-                let inner = inner.build(materials);
-                Box::new(Translate {
+                let inner = inner.build(materials, arena);
+                arena.alloc(Translate {
                     inner,
                     offset: offset.into(),
                 })
