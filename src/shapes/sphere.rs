@@ -10,7 +10,7 @@ use crate::{
 pub struct Sphere<'a> {
     pub center: Point3,
     pub radius: f32,
-    pub material: &'a (dyn Material + Sync + Send),
+    pub material: &'a (dyn Material + Sync),
 }
 
 impl Hittable for Sphere<'_> {

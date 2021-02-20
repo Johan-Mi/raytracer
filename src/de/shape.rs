@@ -68,7 +68,7 @@ pub enum Shape {
 impl Shape {
     pub fn build<'a>(
         self,
-        materials: &HashMap<String, &'a (dyn DynMaterial + Send + Sync)>,
+        materials: &HashMap<String, &'a (dyn DynMaterial + Sync)>,
         arena: &'a Bump,
     ) -> &'a (dyn Hittable + Sync) {
         match self {

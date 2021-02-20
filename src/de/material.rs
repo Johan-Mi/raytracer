@@ -14,7 +14,7 @@ pub enum Material {
 }
 
 impl Material {
-    pub fn build(self, arena: &Bump) -> &(dyn DynMaterial + Send + Sync) {
+    pub fn build(self, arena: &Bump) -> &(dyn DynMaterial + Sync) {
         match self {
             Material::Lambertian { albedo } => arena.alloc(Lambertian {
                 albedo: albedo.into(),

@@ -18,7 +18,7 @@ impl<'a> Cuboid<'a> {
     pub fn new(
         minimum: Point3,
         maximum: Point3,
-        material: &'a (dyn Material + Sync + Send),
+        material: &'a (dyn Material + Sync),
         arena: &'a Bump,
     ) -> Self {
         let sides = arena.alloc::<[&(dyn Hittable + Sync); 6]>([

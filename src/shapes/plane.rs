@@ -10,7 +10,7 @@ use crate::{
 pub struct Plane<'a> {
     pub pos: Point3,
     pub normal: Vec3,
-    pub material: &'a (dyn Material + Sync + Send),
+    pub material: &'a (dyn Material + Sync),
 }
 
 impl Hittable for Plane<'_> {

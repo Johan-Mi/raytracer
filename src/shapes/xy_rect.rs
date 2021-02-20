@@ -13,7 +13,7 @@ pub struct XYRect<'a> {
     pub y0: f32,
     pub y1: f32,
     pub k: f32,
-    pub material: &'a (dyn Material + Sync + Send),
+    pub material: &'a (dyn Material + Sync),
 }
 
 impl Hittable for XYRect<'_> {
