@@ -1,14 +1,17 @@
 mod aabb;
 mod args;
 mod camera;
+mod color;
 mod de;
 mod drawable;
 mod hittable;
 mod materials;
 mod math;
+mod point3;
 mod ray;
 mod raytracer;
 mod shapes;
+mod vec3;
 
 use args::Args;
 use bumpalo::Bump;

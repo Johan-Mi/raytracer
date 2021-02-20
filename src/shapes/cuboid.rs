@@ -2,7 +2,7 @@ use crate::{
     aabb::AABB,
     hittable::{HitRecord, Hittable},
     materials::Material,
-    math::Point3,
+    point3::Point3,
     ray::Ray,
     shapes::{HittableList, XYRect, XZRect, YZRect},
 };
@@ -36,7 +36,7 @@ impl<'a> Cuboid<'a> {
                 y0: minimum.y,
                 y1: maximum.y,
                 k: minimum.z,
-                material: material.clone(),
+                material,
             }),
             arena.alloc(XZRect {
                 x0: minimum.x,
@@ -44,7 +44,7 @@ impl<'a> Cuboid<'a> {
                 z0: minimum.z,
                 z1: maximum.z,
                 k: maximum.y,
-                material: material.clone(),
+                material,
             }),
             arena.alloc(XZRect {
                 x0: minimum.x,
@@ -52,7 +52,7 @@ impl<'a> Cuboid<'a> {
                 z0: minimum.z,
                 z1: maximum.z,
                 k: minimum.y,
-                material: material.clone(),
+                material,
             }),
             arena.alloc(YZRect {
                 y0: minimum.y,
@@ -60,7 +60,7 @@ impl<'a> Cuboid<'a> {
                 z0: minimum.z,
                 z1: maximum.z,
                 k: maximum.x,
-                material: material.clone(),
+                material,
             }),
             arena.alloc(YZRect {
                 y0: minimum.y,

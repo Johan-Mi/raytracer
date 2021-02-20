@@ -1,8 +1,5 @@
 use crate::{
-    aabb::AABB,
-    materials::Material,
-    math::{Point3, Vec3},
-    ray::Ray,
+    aabb::AABB, materials::Material, point3::Point3, ray::Ray, vec3::Vec3,
 };
 
 pub trait Hittable {

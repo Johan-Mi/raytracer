@@ -1,8 +1,6 @@
 use crate::{
-    hittable::HitRecord,
-    materials::Material,
-    math::{Color, Vec3},
-    ray::Ray,
+    color::Color, hittable::HitRecord, materials::Material, ray::Ray,
+    vec3::Vec3,
 };
 use rand::Rng;
 

@@ -1,4 +1,4 @@
-use crate::{math::Point3, ray::Ray};
+use crate::{point3::Point3, ray::Ray};
 use std::mem;
 
 #[derive(Clone)]

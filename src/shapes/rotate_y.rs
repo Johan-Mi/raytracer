@@ -1,8 +1,9 @@
 use crate::{
     aabb::AABB,
     hittable::{HitRecord, Hittable},
-    math::{Point3, Vec3},
+    point3::Point3,
     ray::Ray,
+    vec3::Vec3,
 };
 
 pub struct RotateY<'a> {

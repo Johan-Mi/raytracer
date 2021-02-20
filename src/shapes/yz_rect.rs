@@ -2,8 +2,9 @@ use crate::{
     aabb::AABB,
     hittable::{HitRecord, Hittable},
     materials::Material,
-    math::{Point3, Vec3},
+    point3::Point3,
     ray::Ray,
+    vec3::Vec3,
 };
 
 pub struct YZRect<'a> {
@@ -33,7 +34,7 @@ impl Hittable for YZRect<'_> {
         let mut rec = HitRecord {
             p: ray.at(t),
             normal: Vec3::default(),
-            material: self.material.clone(),
+            material: self.material,
             t,
             front_face: bool::default(),
         };

@@ -1,4 +1,4 @@
-use crate::{hittable::HitRecord, materials::Material, math::Color, ray::Ray};
+use crate::{color::Color, hittable::HitRecord, materials::Material, ray::Ray};
 
 pub struct DiffuseLight {
     pub color: Color,

@@ -1,8 +1,8 @@
 use crate::{
     aabb::AABB,
     hittable::{HitRecord, Hittable},
-    math::Vec3,
     ray::Ray,
+    vec3::Vec3,
 };
 
 pub struct Translate<'a> {

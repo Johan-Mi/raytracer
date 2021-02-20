@@ -1,9 +1,7 @@
-use super::args::Args;
-use super::camera::Camera;
-use super::drawable::Drawable;
-use super::hittable::Hittable;
-use super::math::Color;
-use super::ray::Ray;
+use crate::{
+    args::Args, camera::Camera, color::Color, drawable::Drawable,
+    hittable::Hittable, ray::Ray,
+};
 use rand::Rng;
 use std::f32;
 

@@ -1,4 +1,4 @@
-use super::math::{to_rgb, Color};
+use crate::{color::Color, math::to_rgb};
 use rayon::prelude::*;
 use std::fs;
 use std::io::{BufWriter, Write};

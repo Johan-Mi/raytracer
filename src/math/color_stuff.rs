@@ -1,4 +1,4 @@
-use crate::math::Color;
+use crate::color::Color;
 
 /// https://www.youtube.com/watch?v=eXU-6_jmw7Q
 pub fn to_rgb(mut color: Color) -> [u8; 3] {

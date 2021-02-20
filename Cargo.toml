@@ -14,6 +14,7 @@ rayon = "1.5.0"
 ron = "0.6.4"
 serde = { version = "1.0.123", features = ["derive"] }
 structopt = "0.3.21"
+vec3 = { git = "https://github.com/Johan-Mi/vec3" }
 
 [profile.release]
 panic = "abort"
