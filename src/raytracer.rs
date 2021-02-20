@@ -111,7 +111,7 @@ impl<'a> RayTracer<'a> {
                 }
 
                 let color = self.color_at_xy(x, y);
-                to_rgb(color)
+                to_rgb(color, self.args.gamma)
             })
             .collect_into_vec(&mut buf);
 

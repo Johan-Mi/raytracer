@@ -14,6 +14,10 @@ pub struct Args {
     #[structopt(short, long, default_value = "50")]
     pub samples: usize,
 
+    /// Gamma value used for color correction
+    #[structopt(short, long, default_value = "2.2")]
+    pub gamma: f32,
+
     /// Don't print anything
     #[structopt(short, long)]
     pub quiet: bool,

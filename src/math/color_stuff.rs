@@ -1,10 +1,12 @@
 use crate::color::Color;
 
 /// https://www.youtube.com/watch?v=eXU-6_jmw7Q
-pub fn to_rgb(mut color: Color) -> [u8; 3] {
-    color.x = color.x.sqrt();
-    color.y = color.y.sqrt();
-    color.z = color.z.sqrt();
+pub fn to_rgb(mut color: Color, gamma: f32) -> [u8; 3] {
+    let inv_gamma = 1.0 / gamma;
+
+    color.x = color.x.powf(inv_gamma);
+    color.y = color.y.powf(inv_gamma);
+    color.z = color.z.powf(inv_gamma);
 
     let mut sat: f32 = 1.0;
     let luma = color.dot(&Color {
