@@ -1,9 +1,13 @@
 use crate::{
-    args::Args, camera::Camera, color::Color, drawable::Drawable,
-    hittable::Hittable, ray::Ray,
+    args::Args, camera::Camera, color::Color, hittable::Hittable, math::to_rgb,
+    ray::Ray,
 };
 use rand::Rng;
-use std::f32;
+use rayon::prelude::*;
+use std::{
+    f32, fs,
+    io::{BufWriter, Write},
+};
 
 pub const MAX_DEPTH: i32 = 50;
 
@@ -43,35 +47,25 @@ impl<'a> RayTracer<'a> {
             }
         } else if let Some(hit) = self.world.gets_hit(ray, 0.001, f32::INFINITY)
         {
+            let emitted = hit.material.emitted();
+
             if let Some((scattered, attenuation)) =
                 hit.material.scatter(ray, &hit)
             {
-                let emitted = hit.material.emitted();
-
                 self.color_at_ray(&scattered, depth - 1)
                     .elementwise_mul(&attenuation)
                     + emitted
             } else {
-                hit.material.emitted()
+                emitted
             }
         } else {
             self.sky_color_at_ray(ray)
         }
     }
-}
 
-impl Drawable for RayTracer<'_> {
-    fn get_width(&self) -> usize {
-        self.args.width
-    }
-
-    fn get_height(&self) -> usize {
-        self.args.height
-    }
-
-    fn get_color_at(&self, x: usize, y: usize) -> Color {
-        let width = self.get_width();
-        let height = self.get_height();
+    fn color_at_xy(&self, x: usize, y: usize) -> Color {
+        let width = self.args.width;
+        let height = self.args.height;
 
         (0..self.args.samples)
             .map(|_| {
@@ -94,5 +88,39 @@ impl Drawable for RayTracer<'_> {
                 |l, r| l + r,
             )
             / self.args.samples as f32
+    }
+
+    pub fn write_ppm<P: AsRef<std::path::Path>>(
+        &self,
+        filename: P,
+        quiet: bool,
+    ) {
+        let width = self.args.width;
+        let height = self.args.height;
+
+        let mut buf = Vec::with_capacity(width * height);
+
+        (0..(width * height))
+            .into_par_iter()
+            .map(|i| {
+                let y = i / width;
+                let x = i % width;
+
+                if !quiet && x == 0 {
+                    println!("Current row: {}", height - y);
+                }
+
+                let color = self.color_at_xy(x, y);
+                to_rgb(color)
+            })
+            .collect_into_vec(&mut buf);
+
+        let f = fs::File::create(filename).unwrap();
+        let mut wbuf = BufWriter::new(f);
+        writeln!(wbuf, "P6 {} {} 255", width, height).unwrap();
+        for c in buf {
+            wbuf.write_all(&c).unwrap();
+        }
+        wbuf.flush().unwrap();
     }
 }
