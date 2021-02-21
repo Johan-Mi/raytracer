@@ -17,7 +17,7 @@ pub const MAX_DEPTH: i32 = 50;
 pub struct RayTracer<'a> {
     camera: Camera,
     world: &'a (dyn Hittable + Sync),
-    pub args: Args,
+    args: Args,
 }
 
 impl<'a> RayTracer<'a> {
@@ -93,11 +93,7 @@ impl<'a> RayTracer<'a> {
             / self.args.samples as f32
     }
 
-    pub fn write_ppm<P: AsRef<std::path::Path>>(
-        &self,
-        filename: P,
-        quiet: bool,
-    ) {
+    pub fn write_ppm(&self) {
         let width = self.args.width;
         let height = self.args.height;
 
@@ -109,7 +105,7 @@ impl<'a> RayTracer<'a> {
                 let y = i / width;
                 let x = i % width;
 
-                if !quiet && x == 0 {
+                if !self.args.quiet && x == 0 {
                     println!("Current row: {}", height - y);
                 }
 
@@ -118,7 +114,7 @@ impl<'a> RayTracer<'a> {
             })
             .collect_into_vec(&mut buf);
 
-        let f = fs::File::create(filename).unwrap();
+        let f = fs::File::create(&self.args.outfile).unwrap();
         let mut wbuf = BufWriter::new(f);
         writeln!(wbuf, "P6 {} {} 255", width, height).unwrap();
         for c in buf {

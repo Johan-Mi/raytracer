@@ -38,5 +38,5 @@ fn main() {
     let subdivided = BvhNode::subdivide_objects(&mut world, &arena).unwrap();
 
     let tracer = RayTracer::new(camera, subdivided, args);
-    tracer.write_ppm(&tracer.args.outfile, tracer.args.quiet);
+    tracer.write_ppm();
 }
