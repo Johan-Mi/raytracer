@@ -1,5 +1,8 @@
 use crate::{
-    args::Args, camera::Camera, color::Color, hittable::Hittable, math::to_rgb,
+    args::Args,
+    camera::Camera,
+    color::{to_rgb, Color},
+    hittable::Hittable,
     ray::Ray,
 };
 use rand::Rng;

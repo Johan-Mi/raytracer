@@ -5,7 +5,6 @@ mod color;
 mod de;
 mod hittable;
 mod materials;
-mod math;
 mod point3;
 mod ray;
 mod raytracer;
