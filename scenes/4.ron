@@ -1,0 +1,162 @@
+Scene (
+    camera: (
+        look_from: (
+            x: 278.0,
+            y: 278.0,
+            z: -800.0
+        ),
+        look_at: (
+            x: 278.0,
+            y: 278.0,
+            z: 0.0
+        ),
+        vup: (
+            x: 0.0,
+            y: 1.0,
+            z: 0.0
+        ),
+        vfov: 40.0,
+        focus_dist: 1.0,
+        aperture: 0.0,
+    ),
+
+    materials: {
+        "green": Lambertian (
+            albedo: (0.65, 0.05, 0.05),
+        ),
+
+        "white": Lambertian (
+            albedo: (0.73, 0.73, 0.73),
+        ),
+
+        "red": Lambertian (
+            albedo: (0.12, 0.45, 0.15),
+        ),
+
+        "light": DiffuseLight (
+            color: (7.0, 7.0, 7.0),
+        ),
+
+        "box1": Isotropic (
+            albedo: (0.0, 0.0, 0.0),
+        ),
+
+        "box2": Isotropic (
+            albedo: (1.0, 1.0, 1.0),
+        ),
+    },
+
+    shapes: [
+        YZRect (
+            y0: 0.0,
+            y1: 555.0,
+            z0: 0.0,
+            z1: 555.0,
+            k: 555.0,
+            material: "green",
+        ),
+
+        YZRect (
+            y0: 0.0,
+            y1: 555.0,
+            z0: 0.0,
+            z1: 555.0,
+            k: 0.0,
+            material: "red",
+        ),
+
+        XZRect (
+            x0: 113.0,
+            x1: 443.0,
+            z0: 127.0,
+            z1: 432.0,
+            k: 554.0,
+            material: "light",
+        ),
+
+        XZRect (
+            x0: 0.0,
+            x1: 555.0,
+            z0: 0.0,
+            z1: 555.0,
+            k: 0.0,
+            material: "white",
+        ),
+
+        XZRect (
+            x0: 0.0,
+            x1: 555.0,
+            z0: 0.0,
+            z1: 555.0,
+            k: 555.0,
+            material: "white",
+        ),
+
+        XYRect (
+            x0: 0.0,
+            x1: 555.0,
+            y0: 0.0,
+            y1: 555.0,
+            k: 555.0,
+            material: "white",
+        ),
+
+        ConstantMedium (
+            boundry: Translate (
+                inner: RotateY (
+                    inner: Cuboid (
+                        minimum: (
+                            x: 0.0,
+                            y: 0.0,
+                            z: 0.0,
+                        ),
+                        maximum: (
+                            x: 165.0,
+                            y: 330.0,
+                            z: 165.0,
+                        ),
+                        material: "white",
+                    ),
+                    angle: 15.0,
+                ),
+                offset: (
+                    x: 265.0,
+                    y: 0.0,
+                    z: 295.0,
+                ),
+            ),
+
+            phase_function: "box1",
+            density: 0.01,
+        ),
+
+        ConstantMedium (
+            boundry: Translate (
+                inner: RotateY (
+                    inner: Cuboid (
+                        minimum: (
+                            x: 0.0,
+                            y: 0.0,
+                            z: 0.0,
+                        ),
+                        maximum: (
+                            x: 165.0,
+                            y: 165.0,
+                            z: 165.0,
+                        ),
+                        material: "white",
+                    ),
+                    angle: -18.0,
+                ),
+                offset: (
+                    x: 130.0,
+                    y: 0.0,
+                    z: 65.0,
+                ),
+            ),
+
+            phase_function: "box2",
+            density: 0.01,
+        ),
+    ],
+)

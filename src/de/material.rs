@@ -1,6 +1,7 @@
 use super::color::Color;
 use crate::materials::{
-    Dielectric, DiffuseLight, Lambertian, Material as DynMaterial, Metal,
+    Dielectric, DiffuseLight, Isotropic, Lambertian, Material as DynMaterial,
+    Metal,
 };
 use bumpalo::Bump;
 use serde::Deserialize;
@@ -11,6 +12,7 @@ pub enum Material {
     Metal { albedo: Color, fuzz: f32 },
     Dielectric { ir: f32 },
     DiffuseLight { color: Color },
+    Isotropic { albedo: Color },
 }
 
 impl Material {
@@ -26,6 +28,9 @@ impl Material {
             Material::Dielectric { ir } => arena.alloc(Dielectric { ir }),
             Material::DiffuseLight { color } => arena.alloc(DiffuseLight {
                 color: color.into(),
+            }),
+            Material::Isotropic { albedo } => arena.alloc(Isotropic {
+                albedo: albedo.into(),
             }),
         }
     }

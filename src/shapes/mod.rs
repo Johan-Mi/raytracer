@@ -1,4 +1,5 @@
 mod bvh_node;
+mod constant_medium;
 mod cuboid;
 mod hittable_list;
 mod plane;
@@ -10,6 +11,7 @@ mod xy_rect;
 mod xz_rect;
 mod yz_rect;
 pub use bvh_node::BvhNode;
+pub use constant_medium::ConstantMedium;
 pub use cuboid::Cuboid;
 pub use hittable_list::HittableList;
 pub use plane::Plane;

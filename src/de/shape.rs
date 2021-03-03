@@ -7,7 +7,8 @@ use crate::{
     hittable::Hittable,
     materials::Material as DynMaterial,
     shapes::{
-        Cuboid, Plane, RotateY, Sphere, Translate, XYRect, XZRect, YZRect,
+        ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate, XYRect,
+        XZRect, YZRect,
     },
 };
 use bumpalo::Bump;
@@ -62,6 +63,11 @@ pub enum Shape {
     Translate {
         inner: Box<Shape>,
         offset: Direction,
+    },
+    ConstantMedium {
+        boundry: Box<Shape>,
+        phase_function: Var<Material>,
+        density: f32,
     },
 }
 
@@ -156,6 +162,17 @@ impl Shape {
                     offset: offset.into(),
                 })
             }
+            Shape::ConstantMedium {
+                boundry,
+                phase_function,
+                density,
+            } => arena.alloc(ConstantMedium {
+                boundry: boundry.build(materials, arena),
+                phase_function: phase_function
+                    .map(|m| m.build(arena))
+                    .resolve(materials),
+                neg_inv_density: -1.0 / density,
+            }),
         }
     }
 }
