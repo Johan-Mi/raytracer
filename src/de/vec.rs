@@ -15,22 +15,22 @@ pub struct Direction {
     z: f32,
 }
 
-impl Into<Vec3> for Point {
-    fn into(self) -> Vec3 {
+impl From<Point> for Vec3 {
+    fn from(val: Point) -> Self {
         Vec3 {
-            x: self.x,
-            y: self.y,
-            z: self.z,
+            x: val.x,
+            y: val.y,
+            z: val.z,
         }
     }
 }
 
-impl Into<Vec3> for Direction {
-    fn into(self) -> Vec3 {
+impl From<Direction> for Vec3 {
+    fn from(val: Direction) -> Self {
         Vec3 {
-            x: self.x,
-            y: self.y,
-            z: self.z,
+            x: val.x,
+            y: val.y,
+            z: val.z,
         }
     }
 }
