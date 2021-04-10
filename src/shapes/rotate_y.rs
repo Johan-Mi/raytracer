@@ -112,17 +112,10 @@ impl Hittable for RotateY<'_> {
         normal.z = self.sin_theta * inner_rec.normal.x
             + self.cos_theta * inner_rec.normal.z;
 
-        let mut rec = HitRecord {
-            p,
-            normal: Vec3::default(),
-            material: inner_rec.material,
-            t: inner_rec.t,
-            front_face: bool::default(),
-        };
+        let material = inner_rec.material;
+        let t = inner_rec.t;
 
-        rec.set_face_normal(&rotated_ray, &normal);
-
-        Some(rec)
+        Some(HitRecord::new(p, &normal, material, t, &rotated_ray))
     }
 
     fn bounding_box(&self) -> Option<AABB> {

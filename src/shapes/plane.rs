@@ -30,17 +30,7 @@ impl Hittable for Plane<'_> {
 
         let p = ray.origin - ray.dir * prod3;
 
-        let mut rec = HitRecord {
-            p,
-            t,
-            normal: Vec3::default(),
-            material: self.material,
-            front_face: bool::default(),
-        };
-
-        rec.set_face_normal(ray, &self.normal);
-
-        Some(rec)
+        Some(HitRecord::new(p, &self.normal, self.material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<AABB> {

@@ -31,13 +31,7 @@ impl Hittable for XYRect<'_> {
             return None;
         }
 
-        let mut rec = HitRecord {
-            p: ray.at(t),
-            normal: Vec3::default(),
-            material: self.material,
-            t,
-            front_face: bool::default(),
-        };
+        let p = ray.at(t);
 
         let outward_normal = Vec3 {
             x: 0.0,
@@ -45,9 +39,7 @@ impl Hittable for XYRect<'_> {
             z: 1.0,
         };
 
-        rec.set_face_normal(ray, &outward_normal);
-
-        Some(rec)
+        Some(HitRecord::new(p, &outward_normal, self.material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<AABB> {

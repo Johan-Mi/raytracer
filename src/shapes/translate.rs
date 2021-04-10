@@ -17,12 +17,14 @@ impl Hittable for Translate<'_> {
             dir: ray.dir,
         };
 
-        let mut rec = self.inner.gets_hit(&moved_ray, t_min, t_max)?;
-        rec.p += self.offset;
-        let normal = rec.normal;
-        rec.set_face_normal(&moved_ray, &normal);
+        let inner_rec = self.inner.gets_hit(&moved_ray, t_min, t_max)?;
 
-        Some(rec)
+        let p = inner_rec.p + self.offset;
+        let normal = inner_rec.normal;
+        let material = inner_rec.material;
+        let t = inner_rec.t;
+
+        Some(HitRecord::new(p, &normal, material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<AABB> {

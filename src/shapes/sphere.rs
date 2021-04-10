@@ -36,20 +36,10 @@ impl Hittable for Sphere<'_> {
         }
 
         let p = ray.at(root);
+        let t = root;
+        let normal = (p - self.center) / self.radius;
 
-        let outward_normal = (p - self.center) / self.radius;
-
-        let mut rec = HitRecord {
-            p,
-            t: root,
-            normal: Vec3::default(),
-            material: self.material,
-            front_face: bool::default(),
-        };
-
-        rec.set_face_normal(ray, &outward_normal);
-
-        Some(rec)
+        Some(HitRecord::new(p, &normal, self.material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<AABB> {
