@@ -47,7 +47,7 @@ Scene (
     },
 
     shapes: [
-        YZRect (
+        YzRect (
             y0: 0.0,
             y1: 555.0,
             z0: 0.0,
@@ -56,7 +56,7 @@ Scene (
             material: "green",
         ),
 
-        YZRect (
+        YzRect (
             y0: 0.0,
             y1: 555.0,
             z0: 0.0,
@@ -65,7 +65,7 @@ Scene (
             material: "red",
         ),
 
-        XZRect (
+        XzRect (
             x0: 113.0,
             x1: 443.0,
             z0: 127.0,
@@ -74,7 +74,7 @@ Scene (
             material: "light",
         ),
 
-        XZRect (
+        XzRect (
             x0: 0.0,
             x1: 555.0,
             z0: 0.0,
@@ -83,7 +83,7 @@ Scene (
             material: "white",
         ),
 
-        XZRect (
+        XzRect (
             x0: 0.0,
             x1: 555.0,
             z0: 0.0,
@@ -92,7 +92,7 @@ Scene (
             material: "white",
         ),
 
-        XYRect (
+        XyRect (
             x0: 0.0,
             x1: 555.0,
             y0: 0.0,

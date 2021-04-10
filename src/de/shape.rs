@@ -27,7 +27,7 @@ pub enum Shape {
         normal: Direction,
         material: Var<Material>,
     },
-    XYRect {
+    XyRect {
         x0: f32,
         x1: f32,
         y0: f32,
@@ -35,7 +35,7 @@ pub enum Shape {
         k: f32,
         material: Var<Material>,
     },
-    XZRect {
+    XzRect {
         x0: f32,
         x1: f32,
         z0: f32,
@@ -43,7 +43,7 @@ pub enum Shape {
         k: f32,
         material: Var<Material>,
     },
-    YZRect {
+    YzRect {
         y0: f32,
         y1: f32,
         z0: f32,
@@ -96,7 +96,7 @@ impl Shape {
                 normal: normal.into(),
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::XYRect {
+            Shape::XyRect {
                 x0,
                 x1,
                 y0,
@@ -111,7 +111,7 @@ impl Shape {
                 k,
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::XZRect {
+            Shape::XzRect {
                 x0,
                 x1,
                 z0,
@@ -126,7 +126,7 @@ impl Shape {
                 k,
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::YZRect {
+            Shape::YzRect {
                 y0,
                 y1,
                 z0,
