@@ -1,5 +1,5 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hittable::{HitRecord, Hittable},
     ray::Ray,
     shapes::Unhittable,
@@ -11,7 +11,7 @@ use std::{cmp::Ordering, mem};
 pub struct BvhNode<'a> {
     left: &'a (dyn Hittable + Sync),
     right: &'a (dyn Hittable + Sync),
-    boundry: AABB,
+    boundry: Aabb,
 }
 
 impl Hittable for BvhNode<'_> {
@@ -35,12 +35,12 @@ impl Hittable for BvhNode<'_> {
         rec_right.or(rec_left)
     }
 
-    fn bounding_box(&self) -> Option<AABB> {
+    fn bounding_box(&self) -> Option<Aabb> {
         Some(self.boundry.clone())
     }
 }
 
-fn box_compare(a: &AABB, b: &AABB, axis: usize) -> bool {
+fn box_compare(a: &Aabb, b: &Aabb, axis: usize) -> bool {
     a.minimum[axis] < b.minimum[axis]
 }
 

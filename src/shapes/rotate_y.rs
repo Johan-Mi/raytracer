@@ -1,5 +1,5 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hittable::{HitRecord, Hittable},
     point3::Point3,
     ray::Ray,
@@ -10,7 +10,7 @@ pub struct RotateY<'a> {
     inner: &'a (dyn Hittable + Sync),
     sin_theta: f32,
     cos_theta: f32,
-    boundry: Option<AABB>,
+    boundry: Option<Aabb>,
 }
 
 impl<'a> RotateY<'a> {
@@ -64,7 +64,7 @@ impl<'a> RotateY<'a> {
                 }
             }
 
-            Some(AABB {
+            Some(Aabb {
                 minimum: min,
                 maximum: max,
             })
@@ -118,7 +118,7 @@ impl Hittable for RotateY<'_> {
         Some(HitRecord::new(p, &normal, material, t, &rotated_ray))
     }
 
-    fn bounding_box(&self) -> Option<AABB> {
+    fn bounding_box(&self) -> Option<Aabb> {
         self.boundry.clone()
     }
 }

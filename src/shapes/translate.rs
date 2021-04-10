@@ -1,5 +1,5 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hittable::{HitRecord, Hittable},
     ray::Ray,
     vec3::Vec3,
@@ -27,10 +27,10 @@ impl Hittable for Translate<'_> {
         Some(HitRecord::new(p, &normal, material, t, ray))
     }
 
-    fn bounding_box(&self) -> Option<AABB> {
+    fn bounding_box(&self) -> Option<Aabb> {
         let boundry = self.inner.bounding_box()?;
 
-        Some(AABB {
+        Some(Aabb {
             minimum: boundry.minimum + self.offset,
             maximum: boundry.maximum + self.offset,
         })

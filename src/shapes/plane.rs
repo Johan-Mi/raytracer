@@ -1,5 +1,5 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hittable::{HitRecord, Hittable},
     materials::Material,
     point3::Point3,
@@ -33,7 +33,7 @@ impl Hittable for Plane<'_> {
         Some(HitRecord::new(p, &self.normal, self.material, t, ray))
     }
 
-    fn bounding_box(&self) -> Option<AABB> {
+    fn bounding_box(&self) -> Option<Aabb> {
         None
     }
 }

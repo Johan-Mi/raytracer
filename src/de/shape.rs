@@ -7,8 +7,8 @@ use crate::{
     hittable::Hittable,
     materials::Material as DynMaterial,
     shapes::{
-        ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate, XYRect,
-        XZRect, YZRect,
+        ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate, XyRect,
+        XzRect, YzRect,
     },
 };
 use bumpalo::Bump;
@@ -103,7 +103,7 @@ impl Shape {
                 y1,
                 k,
                 material,
-            } => arena.alloc(XYRect {
+            } => arena.alloc(XyRect {
                 x0,
                 x1,
                 y0,
@@ -118,7 +118,7 @@ impl Shape {
                 z1,
                 k,
                 material,
-            } => arena.alloc(XZRect {
+            } => arena.alloc(XzRect {
                 x0,
                 x1,
                 z0,
@@ -133,7 +133,7 @@ impl Shape {
                 z1,
                 k,
                 material,
-            } => arena.alloc(YZRect {
+            } => arena.alloc(YzRect {
                 y0,
                 y1,
                 z0,

@@ -1,5 +1,5 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hittable::{HitRecord, Hittable},
     ray::Ray,
 };
@@ -25,7 +25,7 @@ impl Hittable for HittableList<'_> {
             })
     }
 
-    fn bounding_box(&self) -> Option<AABB> {
+    fn bounding_box(&self) -> Option<Aabb> {
         None // TODO: Actually create a bounding box
              // This isn't actually needed right now because HittableList is
              // currently only used by Cuboid, which generates its own

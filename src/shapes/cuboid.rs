@@ -1,10 +1,10 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hittable::{HitRecord, Hittable},
     materials::Material,
     point3::Point3,
     ray::Ray,
-    shapes::{HittableList, XYRect, XZRect, YZRect},
+    shapes::{HittableList, XyRect, XzRect, YzRect},
 };
 use bumpalo::Bump;
 
@@ -22,7 +22,7 @@ impl<'a> Cuboid<'a> {
         arena: &'a Bump,
     ) -> Self {
         let sides = arena.alloc::<[&(dyn Hittable + Sync); 6]>([
-            arena.alloc(XYRect {
+            arena.alloc(XyRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 y0: minimum.y,
@@ -30,7 +30,7 @@ impl<'a> Cuboid<'a> {
                 k: maximum.z,
                 material,
             }),
-            arena.alloc(XYRect {
+            arena.alloc(XyRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 y0: minimum.y,
@@ -38,7 +38,7 @@ impl<'a> Cuboid<'a> {
                 k: minimum.z,
                 material,
             }),
-            arena.alloc(XZRect {
+            arena.alloc(XzRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 z0: minimum.z,
@@ -46,7 +46,7 @@ impl<'a> Cuboid<'a> {
                 k: maximum.y,
                 material,
             }),
-            arena.alloc(XZRect {
+            arena.alloc(XzRect {
                 x0: minimum.x,
                 x1: maximum.x,
                 z0: minimum.z,
@@ -54,7 +54,7 @@ impl<'a> Cuboid<'a> {
                 k: minimum.y,
                 material,
             }),
-            arena.alloc(YZRect {
+            arena.alloc(YzRect {
                 y0: minimum.y,
                 y1: maximum.y,
                 z0: minimum.z,
@@ -62,7 +62,7 @@ impl<'a> Cuboid<'a> {
                 k: maximum.x,
                 material,
             }),
-            arena.alloc(YZRect {
+            arena.alloc(YzRect {
                 y0: minimum.y,
                 y1: maximum.y,
                 z0: minimum.z,
@@ -85,8 +85,8 @@ impl Hittable for Cuboid<'_> {
         self.sides.gets_hit(ray, t_min, t_max)
     }
 
-    fn bounding_box(&self) -> Option<AABB> {
-        Some(AABB {
+    fn bounding_box(&self) -> Option<Aabb> {
+        Some(Aabb {
             minimum: self.minimum,
             maximum: self.maximum,
         })

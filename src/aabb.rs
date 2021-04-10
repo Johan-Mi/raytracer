@@ -1,12 +1,12 @@
 use crate::{point3::Point3, ray::Ray};
 
 #[derive(Clone)]
-pub struct AABB {
+pub struct Aabb {
     pub minimum: Point3,
     pub maximum: Point3,
 }
 
-impl AABB {
+impl Aabb {
     pub fn collides(&self, ray: &Ray, t_min: f32, t_max: f32) -> bool {
         for i in 0..3 {
             let inv_d = 1.0 / ray.dir[i];
@@ -30,8 +30,8 @@ impl AABB {
         true
     }
 
-    pub fn surrounding_box(&self, other: &Self) -> AABB {
-        AABB {
+    pub fn surrounding_box(&self, other: &Self) -> Aabb {
+        Aabb {
             minimum: Point3 {
                 x: self.minimum.x.min(other.minimum.x),
                 y: self.minimum.y.min(other.minimum.y),

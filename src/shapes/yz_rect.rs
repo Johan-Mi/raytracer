@@ -1,5 +1,5 @@
 use crate::{
-    aabb::AABB,
+    aabb::Aabb,
     hittable::{HitRecord, Hittable},
     materials::Material,
     point3::Point3,
@@ -7,7 +7,7 @@ use crate::{
     vec3::Vec3,
 };
 
-pub struct YZRect<'a> {
+pub struct YzRect<'a> {
     pub y0: f32,
     pub y1: f32,
     pub z0: f32,
@@ -16,7 +16,7 @@ pub struct YZRect<'a> {
     pub material: &'a (dyn Material + Sync),
 }
 
-impl Hittable for YZRect<'_> {
+impl Hittable for YzRect<'_> {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let t = (self.k - ray.origin.x) / ray.dir.x;
 
@@ -42,8 +42,8 @@ impl Hittable for YZRect<'_> {
         Some(HitRecord::new(p, &outward_normal, self.material, t, ray))
     }
 
-    fn bounding_box(&self) -> Option<AABB> {
-        Some(AABB {
+    fn bounding_box(&self) -> Option<Aabb> {
+        Some(Aabb {
             minimum: Point3 {
                 x: self.k - 0.0001,
                 y: self.y0,

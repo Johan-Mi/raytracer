@@ -1,10 +1,10 @@
 use crate::{
-    aabb::AABB, materials::Material, point3::Point3, ray::Ray, vec3::Vec3,
+    aabb::Aabb, materials::Material, point3::Point3, ray::Ray, vec3::Vec3,
 };
 
 pub trait Hittable {
     fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord>;
-    fn bounding_box(&self) -> Option<AABB>;
+    fn bounding_box(&self) -> Option<Aabb>;
 }
 
 pub struct HitRecord<'a> {
