@@ -108,8 +108,8 @@ impl Hittable for RotateY<'_> {
         p.z = -self.sin_theta * inner_rec.p.x + self.cos_theta * inner_rec.p.z;
 
         normal.x = self.cos_theta * inner_rec.normal.x
-            - self.sin_theta * inner_rec.normal.z;
-        normal.z = self.sin_theta * inner_rec.normal.x
+            + self.sin_theta * inner_rec.normal.z;
+        normal.z = -self.sin_theta * inner_rec.normal.x
             + self.cos_theta * inner_rec.normal.z;
 
         let material = inner_rec.material;
