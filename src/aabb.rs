@@ -1,5 +1,4 @@
 use crate::{point3::Point3, ray::Ray};
-use std::mem;
 
 #[derive(Clone)]
 pub struct AABB {
@@ -11,11 +10,15 @@ impl AABB {
     pub fn collides(&self, ray: &Ray, t_min: f32, t_max: f32) -> bool {
         for i in 0..3 {
             let inv_d = 1.0 / ray.dir[i];
-            let mut t0 = (self.minimum[i] - ray.origin[i]) * inv_d;
-            let mut t1 = (self.maximum[i] - ray.origin[i]) * inv_d;
-            if inv_d < 0.0 {
-                mem::swap(&mut t0, &mut t1);
-            }
+
+            let (t0, t1) = if inv_d < 0.0 {
+                (self.maximum[i], self.minimum[i])
+            } else {
+                (self.minimum[i], self.maximum[i])
+            };
+
+            let t0 = (t0 - ray.origin[i]) * inv_d;
+            let t1 = (t1 - ray.origin[i]) * inv_d;
 
             let t_min = t0.max(t_min);
             let t_max = t1.min(t_max);
