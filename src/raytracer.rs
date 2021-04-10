@@ -10,6 +10,8 @@ use rayon::prelude::*;
 use std::{
     f32, fs,
     io::{BufWriter, Write},
+    sync::atomic::{AtomicUsize, Ordering},
+    time::Instant,
 };
 
 pub const MAX_DEPTH: i32 = 50;
@@ -94,10 +96,14 @@ impl<'a> RayTracer<'a> {
     }
 
     pub fn write_ppm(&self) {
+        let start_time = Instant::now();
+
         let width = self.args.width;
         let height = self.args.height;
 
         let mut buf = Vec::with_capacity(width * height);
+
+        let counter = AtomicUsize::new(0);
 
         (0..(width * height))
             .into_par_iter()
@@ -105,8 +111,11 @@ impl<'a> RayTracer<'a> {
                 let y = i / width;
                 let x = i % width;
 
-                if !self.args.quiet && x == 0 {
-                    println!("Current row: {}", height - y);
+                let curr_count = counter.fetch_add(1, Ordering::Relaxed);
+                if !self.args.quiet && i % 2000 == 0 {
+                    let percentage =
+                        curr_count as f32 / (width * height) as f32 * 100.0;
+                    println!("Progress: {:3.3}%", percentage);
                 }
 
                 let color = self.color_at_xy(x, y);
@@ -121,5 +130,18 @@ impl<'a> RayTracer<'a> {
             wbuf.write_all(&c).unwrap();
         }
         wbuf.flush().unwrap();
+
+        let elapsed = start_time.elapsed();
+        let millis = elapsed.as_millis();
+        let (hours, millis) = (millis / 3600000, millis % 3600000);
+        let (minutes, millis) = (millis / 60000, millis % 60000);
+        let (seconds, millis) = (millis / 1000, millis % 1000);
+
+        if !self.args.quiet {
+            println!(
+                "Finished in {}:{:02}:{:02}.{:03}",
+                hours, minutes, seconds, millis
+            )
+        }
     }
 }
