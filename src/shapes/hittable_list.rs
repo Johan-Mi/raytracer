@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use crate::{
     aabb::Aabb,
     hittable::{HitRecord, Hittable},
@@ -19,9 +21,8 @@ impl Hittable for HittableList<'_> {
         self.list
             .iter()
             .filter_map(|h| h.gets_hit(ray, t_min, t_max))
-            .fold(None, |old: Option<HitRecord>, new| match old {
-                Some(old) if old.t < new.t => Some(old),
-                _ => Some(new),
+            .min_by(|old, new| {
+                old.t.partial_cmp(&new.t).unwrap_or(Ordering::Equal)
             })
     }
 
