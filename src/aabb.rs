@@ -1,4 +1,4 @@
-use crate::{point3::Point3, ray::Ray};
+use crate::{point3::Point3, ray::Ray, vec3::Vec3};
 
 #[derive(Clone)]
 pub struct Aabb {
@@ -8,26 +8,52 @@ pub struct Aabb {
 
 impl Aabb {
     pub fn collides(&self, ray: &Ray, t_min: f32, t_max: f32) -> bool {
-        for i in 0..3 {
-            let inv_d = 1.0 / ray.dir[i];
+        let inv_d = Vec3 {
+            x: 1.0 / ray.dir.x,
+            y: 1.0 / ray.dir.y,
+            z: 1.0 / ray.dir.z,
+        };
 
-            let (t0, t1) = if inv_d < 0.0 {
-                (self.maximum[i], self.minimum[i])
-            } else {
-                (self.minimum[i], self.maximum[i])
-            };
+        let (t0, t1) = if inv_d.x < 0.0 {
+            (self.maximum.x, self.minimum.x)
+        } else {
+            (self.minimum.x, self.maximum.x)
+        };
 
-            let t0 = (t0 - ray.origin[i]) * inv_d;
-            let t1 = (t1 - ray.origin[i]) * inv_d;
+        let t0 = (t0 - ray.origin.x) * inv_d.x;
+        let t1 = (t1 - ray.origin.x) * inv_d.x;
 
-            let t_min = t0.max(t_min);
-            let t_max = t1.min(t_max);
-            if t_max <= t_min {
-                return false;
-            }
-        }
+        let t_min = t0.max(t_min);
+        let t_max = t1.min(t_max);
+        let a = t_max > t_min;
 
-        true
+        let (t0, t1) = if inv_d.y < 0.0 {
+            (self.maximum.y, self.minimum.y)
+        } else {
+            (self.minimum.y, self.maximum.y)
+        };
+
+        let t0 = (t0 - ray.origin.y) * inv_d.y;
+        let t1 = (t1 - ray.origin.y) * inv_d.y;
+
+        let t_min = t0.max(t_min);
+        let t_max = t1.min(t_max);
+        let b = t_max > t_min;
+
+        let (t0, t1) = if inv_d.z < 0.0 {
+            (self.maximum.z, self.minimum.z)
+        } else {
+            (self.minimum.z, self.maximum.z)
+        };
+
+        let t0 = (t0 - ray.origin.z) * inv_d.z;
+        let t1 = (t1 - ray.origin.z) * inv_d.z;
+
+        let t_min = t0.max(t_min);
+        let t_max = t1.min(t_max);
+        let c = t_max > t_min;
+
+        a & b & c
     }
 
     pub fn surrounding_box(&self, other: &Self) -> Aabb {
