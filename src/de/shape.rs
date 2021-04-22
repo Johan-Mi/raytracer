@@ -7,8 +7,8 @@ use crate::{
     hittable::Hittable,
     materials::Material as DynMaterial,
     shapes::{
-        ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate, XyRect,
-        XzRect, YzRect,
+        BvhNode, ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate,
+        XyRect, XzRect, YzRect,
     },
 };
 use bumpalo::Bump;
@@ -68,6 +68,9 @@ pub enum Shape {
         boundry: Box<Shape>,
         phase_function: Var<Material>,
         density: f32,
+    },
+    HittableList {
+        shapes: Vec<Shape>,
     },
 }
 
@@ -173,6 +176,13 @@ impl Shape {
                     .resolve(materials),
                 neg_inv_density: -1.0 / density,
             }),
+            Shape::HittableList { shapes } => {
+                let mut shapes = shapes
+                    .into_iter()
+                    .map(|s| s.build(materials, arena))
+                    .collect::<Vec<_>>();
+                BvhNode::subdivide_objects(&mut shapes, arena).unwrap()
+            }
         }
     }
 }
