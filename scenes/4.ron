@@ -53,7 +53,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 555.0,
-            material: "green",
+            material: Ref("green"),
         ),
 
         YzRect (
@@ -62,7 +62,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 0.0,
-            material: "red",
+            material: Ref("red"),
         ),
 
         XzRect (
@@ -71,7 +71,7 @@ Scene (
             z0: 127.0,
             z1: 432.0,
             k: 554.0,
-            material: "light",
+            material: Ref("light"),
         ),
 
         XzRect (
@@ -80,7 +80,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 0.0,
-            material: "white",
+            material: Ref("white"),
         ),
 
         XzRect (
@@ -89,7 +89,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 555.0,
-            material: "white",
+            material: Ref("white"),
         ),
 
         XyRect (
@@ -98,7 +98,7 @@ Scene (
             y0: 0.0,
             y1: 555.0,
             k: 555.0,
-            material: "white",
+            material: Ref("white"),
         ),
 
         ConstantMedium (
@@ -115,7 +115,7 @@ Scene (
                             y: 330.0,
                             z: 165.0,
                         ),
-                        material: "white",
+                        material: Ref("white"),
                     ),
                     angle: 15.0,
                 ),
@@ -126,7 +126,7 @@ Scene (
                 ),
             ),
 
-            phase_function: "box1",
+            phase_function: Ref("box1"),
             density: 0.01,
         ),
 
@@ -144,7 +144,7 @@ Scene (
                             y: 165.0,
                             z: 165.0,
                         ),
-                        material: "white",
+                        material: Ref("white"),
                     ),
                     angle: -18.0,
                 ),
@@ -155,7 +155,7 @@ Scene (
                 ),
             ),
 
-            phase_function: "box2",
+            phase_function: Ref("box2"),
             density: 0.01,
         ),
     ],

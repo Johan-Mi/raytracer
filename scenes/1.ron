@@ -48,7 +48,7 @@ Scene (
                 z: -1.0,
             ),
             radius: 100.0,
-            material: "ground",
+            material: Ref("ground"),
         ),
 
         Sphere (
@@ -58,7 +58,7 @@ Scene (
                 z: -1.0,
             ),
             radius: 0.5,
-            material: "center",
+            material: Ref("center"),
         ),
 
         Sphere (
@@ -68,7 +68,7 @@ Scene (
                 z: -1.0,
             ),
             radius: 0.5,
-            material: "left",
+            material: Ref("left"),
         ),
 
         Sphere (
@@ -78,7 +78,7 @@ Scene (
                 z: -1.0,
             ),
             radius: 0.5,
-            material: "right",
+            material: Ref("right"),
         ),
     ],
 )

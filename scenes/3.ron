@@ -45,7 +45,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 555.0,
-            material: "green",
+            material: Ref("green"),
         ),
 
         YzRect (
@@ -54,7 +54,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 0.0,
-            material: "red",
+            material: Ref("red"),
         ),
 
         XzRect (
@@ -63,7 +63,7 @@ Scene (
             z0: 227.0,
             z1: 332.0,
             k: 554.0,
-            material: "light",
+            material: Ref("light"),
         ),
 
         XzRect (
@@ -72,7 +72,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 0.0,
-            material: "white",
+            material: Ref("white"),
         ),
 
         XzRect (
@@ -81,7 +81,7 @@ Scene (
             z0: 0.0,
             z1: 555.0,
             k: 555.0,
-            material: "white",
+            material: Ref("white"),
         ),
 
         XyRect (
@@ -90,7 +90,7 @@ Scene (
             y0: 0.0,
             y1: 555.0,
             k: 555.0,
-            material: "white",
+            material: Ref("white"),
         ),
 
         Translate (
@@ -106,7 +106,7 @@ Scene (
                         y: 330.0,
                         z: 165.0,
                     ),
-                    material: "white",
+                    material: Ref("white"),
                 ),
                 angle: 15.0,
             ),
@@ -130,7 +130,7 @@ Scene (
                         y: 165.0,
                         z: 165.0,
                     ),
-                    material: "white",
+                    material: Ref("white"),
                 ),
                 angle: -18.0,
             ),
