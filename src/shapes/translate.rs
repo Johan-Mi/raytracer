@@ -28,11 +28,11 @@ impl Hittable for Translate<'_> {
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
-        let boundry = self.inner.bounding_box()?;
+        let boundary = self.inner.bounding_box()?;
 
         Some(Aabb {
-            minimum: boundry.minimum + self.offset,
-            maximum: boundry.maximum + self.offset,
+            minimum: boundary.minimum + self.offset,
+            maximum: boundary.maximum + self.offset,
         })
     }
 }

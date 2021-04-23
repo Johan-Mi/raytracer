@@ -144,7 +144,7 @@ local boundary = Sphere.new {
 }
 table.insert(shapes, boundary)
 table.insert(shapes, ConstantMedium.new {
-	boundry = boundary,
+	boundary = boundary,
 	density = 0.2,
 	phase_function = Isotropic.new {
 		albedo = Color.new(0.2, 0.4, 0.9),
@@ -163,7 +163,7 @@ boundary = Sphere.new {
 	},
 }
 table.insert(shapes, ConstantMedium.new {
-	boundry = boundary,
+	boundary = boundary,
 	density = 0.0001,
 	phase_function = Isotropic.new {
 		albedo = Color.new(1.0, 1.0, 1.0),

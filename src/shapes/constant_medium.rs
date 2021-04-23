@@ -8,7 +8,7 @@ use crate::{
 use rand::Rng;
 
 pub struct ConstantMedium<'a> {
-    pub boundry: &'a (dyn Hittable + Sync),
+    pub boundary: &'a (dyn Hittable + Sync),
     pub phase_function: &'a (dyn Material + Sync),
     pub neg_inv_density: f32,
 }
@@ -18,10 +18,11 @@ impl Hittable for ConstantMedium<'_> {
         let mut rng = rand::thread_rng();
 
         let mut rec1 =
-            self.boundry
+            self.boundary
                 .gets_hit(ray, f32::NEG_INFINITY, f32::INFINITY)?;
         let mut rec2 =
-            self.boundry.gets_hit(ray, rec1.t + 0.0001, f32::INFINITY)?;
+            self.boundary
+                .gets_hit(ray, rec1.t + 0.0001, f32::INFINITY)?;
 
         rec1.t = rec1.t.max(t_min);
         rec2.t = rec2.t.min(t_max);
@@ -33,11 +34,11 @@ impl Hittable for ConstantMedium<'_> {
         rec1.t = rec1.t.max(0.0);
 
         let ray_length = ray.dir.len();
-        let distance_inside_boundry = (rec2.t - rec1.t) * ray_length;
+        let distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
         let hit_distance =
             self.neg_inv_density * rng.gen_range(0.0..1.0f32).ln();
 
-        if hit_distance > distance_inside_boundry {
+        if hit_distance > distance_inside_boundary {
             return None;
         }
 
@@ -58,6 +59,6 @@ impl Hittable for ConstantMedium<'_> {
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
-        self.boundry.bounding_box()
+        self.boundary.bounding_box()
     }
 }

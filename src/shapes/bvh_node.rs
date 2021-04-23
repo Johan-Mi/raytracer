@@ -11,7 +11,7 @@ use std::{cmp::Ordering, mem};
 pub struct BvhNode<'a> {
     left: &'a (dyn Hittable + Sync),
     right: &'a (dyn Hittable + Sync),
-    boundry: Aabb,
+    boundary: Aabb,
 }
 
 impl Hittable for BvhNode<'_> {
@@ -21,7 +21,7 @@ impl Hittable for BvhNode<'_> {
         t_min: f32,
         mut t_max: f32,
     ) -> Option<HitRecord> {
-        if !self.boundry.collides(ray, t_min, t_max) {
+        if !self.boundary.collides(ray, t_min, t_max) {
             return None;
         }
 
@@ -36,7 +36,7 @@ impl Hittable for BvhNode<'_> {
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
-        Some(self.boundry.clone())
+        Some(self.boundary.clone())
     }
 }
 
@@ -60,29 +60,29 @@ impl<'a> BvhNode<'a> {
             [a, b] => {
                 let a = mem::replace(a, &Unhittable);
                 let b = mem::replace(b, &Unhittable);
-                let boundry_a = a.bounding_box()?;
-                let boundry_b = b.bounding_box()?;
+                let boundary_a = a.bounding_box()?;
+                let boundary_b = b.bounding_box()?;
 
-                let (left, right) = if box_compare(&boundry_a, &boundry_b, axis)
-                {
-                    (a, b)
-                } else {
-                    (b, a)
-                };
+                let (left, right) =
+                    if box_compare(&boundary_a, &boundary_b, axis) {
+                        (a, b)
+                    } else {
+                        (b, a)
+                    };
 
                 Some(arena.alloc(BvhNode {
                     left,
                     right,
-                    boundry: boundry_a.surrounding_box(&boundry_b),
+                    boundary: boundary_a.surrounding_box(&boundary_b),
                 }))
             }
 
             objects => {
                 objects.sort_unstable_by(|a, b| {
-                    let boundry_a = a.bounding_box().unwrap();
-                    let boundry_b = b.bounding_box().unwrap();
+                    let boundary_a = a.bounding_box().unwrap();
+                    let boundary_b = b.bounding_box().unwrap();
 
-                    if box_compare(&boundry_a, &boundry_b, axis) {
+                    if box_compare(&boundary_a, &boundary_b, axis) {
                         Ordering::Less
                     } else {
                         Ordering::Greater
@@ -93,18 +93,18 @@ impl<'a> BvhNode<'a> {
 
                 let left_half = &mut objects[..middle];
                 let left = BvhNode::subdivide_objects(left_half, arena)?;
-                let left_boundry = left.bounding_box()?;
+                let left_boundary = left.bounding_box()?;
 
                 let right_half = &mut objects[middle..];
                 let right = BvhNode::subdivide_objects(right_half, arena)?;
-                let right_boundry = right.bounding_box()?;
+                let right_boundary = right.bounding_box()?;
 
-                let boundry = left_boundry.surrounding_box(&right_boundry);
+                let boundary = left_boundary.surrounding_box(&right_boundary);
 
                 Some(arena.alloc(BvhNode {
                     left,
                     right,
-                    boundry,
+                    boundary,
                 }))
             }
         }

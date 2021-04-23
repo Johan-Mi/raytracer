@@ -65,7 +65,7 @@ pub enum Shape {
         offset: Direction,
     },
     ConstantMedium {
-        boundry: Box<Shape>,
+        boundary: Box<Shape>,
         phase_function: Var<Material>,
         density: f32,
     },
@@ -166,11 +166,11 @@ impl Shape {
                 })
             }
             Shape::ConstantMedium {
-                boundry,
+                boundary,
                 phase_function,
                 density,
             } => arena.alloc(ConstantMedium {
-                boundry: boundry.build(materials, arena),
+                boundary: boundary.build(materials, arena),
                 phase_function: phase_function
                     .map(|m| m.build(arena))
                     .resolve(materials),

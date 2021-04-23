@@ -3,7 +3,7 @@ require 'lua.raytracer.materials.utils'
 ConstantMedium = {}
 
 function ConstantMedium.new(obj)
-	assert(obj.boundry ~= nil)
+	assert(obj.boundary ~= nil)
 	assert(obj.density ~= nil)
 	assert(obj.phase_function ~= nil)
 
@@ -14,8 +14,8 @@ end
 
 function ConstantMedium:__tostring()
 	return string.format(
-		'ConstantMedium ( boundry: %s, density: %g, phase_function: %s )',
-		self.boundry,
+		'ConstantMedium ( boundary: %s, density: %g, phase_function: %s )',
+		self.boundary,
 		self.density,
 		material_tostring(self.phase_function)
 	)

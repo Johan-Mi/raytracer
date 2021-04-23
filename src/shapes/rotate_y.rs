@@ -10,7 +10,7 @@ pub struct RotateY<'a> {
     inner: &'a (dyn Hittable + Sync),
     sin_theta: f32,
     cos_theta: f32,
-    boundry: Option<Aabb>,
+    boundary: Option<Aabb>,
 }
 
 impl<'a> RotateY<'a> {
@@ -19,7 +19,7 @@ impl<'a> RotateY<'a> {
         let sin_theta = radians.sin();
         let cos_theta = radians.cos();
 
-        let boundry = if let Some(boundry) = inner.bounding_box() {
+        let boundary = if let Some(boundary) = inner.bounding_box() {
             let mut min = Point3 {
                 x: f32::INFINITY,
                 y: f32::INFINITY,
@@ -38,12 +38,12 @@ impl<'a> RotateY<'a> {
                         let j_float = j as f32;
                         let k_float = k as f32;
 
-                        let x = i_float * boundry.maximum.x
-                            + (1.0 - i_float) * boundry.minimum.x;
-                        let y = j_float * boundry.maximum.x
-                            + (1.0 - j_float) * boundry.minimum.y;
-                        let z = k_float * boundry.maximum.x
-                            + (1.0 - k_float) * boundry.minimum.z;
+                        let x = i_float * boundary.maximum.x
+                            + (1.0 - i_float) * boundary.minimum.x;
+                        let y = j_float * boundary.maximum.x
+                            + (1.0 - j_float) * boundary.minimum.y;
+                        let z = k_float * boundary.maximum.x
+                            + (1.0 - k_float) * boundary.minimum.z;
 
                         let new_x = cos_theta * x + sin_theta * z;
                         let new_z = -sin_theta * x + cos_theta * z;
@@ -76,7 +76,7 @@ impl<'a> RotateY<'a> {
             inner,
             sin_theta,
             cos_theta,
-            boundry,
+            boundary,
         }
     }
 }
@@ -119,6 +119,6 @@ impl Hittable for RotateY<'_> {
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
-        self.boundry.clone()
+        self.boundary.clone()
     }
 }

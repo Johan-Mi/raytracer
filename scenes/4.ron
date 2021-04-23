@@ -102,7 +102,7 @@ Scene (
         ),
 
         ConstantMedium (
-            boundry: Translate (
+            boundary: Translate (
                 inner: RotateY (
                     inner: Cuboid (
                         minimum: (
@@ -131,7 +131,7 @@ Scene (
         ),
 
         ConstantMedium (
-            boundry: Translate (
+            boundary: Translate (
                 inner: RotateY (
                     inner: Cuboid (
                         minimum: (
