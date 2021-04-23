@@ -190,7 +190,7 @@ for i = 0, boxes_per_side - 1 do
 end
 
 local boxes2 = {}
-local ns = 1000
+local ns = 200
 for j = 0, ns do
 	table.insert(boxes2, Sphere.new {
 		center = Point.new {
