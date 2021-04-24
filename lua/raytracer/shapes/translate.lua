@@ -1,18 +1,15 @@
 Translate = {}
 
 function Translate.new(obj)
-	assert(obj.inner ~= nil)
-	assert(obj.offset ~= nil)
+    assert(obj.inner ~= nil)
+    assert(obj.offset ~= nil)
 
-	setmetatable(obj, Translate)
+    setmetatable(obj, Translate)
 
-	return obj
+    return obj
 end
 
 function Translate:__tostring()
-	return string.format(
-		'Translate ( inner: %s, offset: %s )',
-		self.inner,
-		self.offset
-	)
+    return string.format('Translate ( inner: %s, offset: %s )', self.inner,
+                         self.offset)
 end

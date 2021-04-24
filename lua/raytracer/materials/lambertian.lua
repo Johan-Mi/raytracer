@@ -1,13 +1,13 @@
 Lambertian = {}
 
 function Lambertian.new(obj)
-	assert(obj.albedo ~= nil)
+    assert(obj.albedo ~= nil)
 
-	setmetatable(obj, Lambertian)
+    setmetatable(obj, Lambertian)
 
-	return obj
+    return obj
 end
 
 function Lambertian:__tostring()
-	return string.format('Lambertian ( albedo: %s )', self.albedo)
+    return string.format('Lambertian ( albedo: %s )', self.albedo)
 end

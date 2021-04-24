@@ -1,13 +1,13 @@
 Dielectric = {}
 
 function Dielectric.new(obj)
-	assert(obj.ir ~= nil)
+    assert(obj.ir ~= nil)
 
-	setmetatable(obj, Dielectric)
+    setmetatable(obj, Dielectric)
 
-	return obj
+    return obj
 end
 
 function Dielectric:__tostring()
-	return string.format('Dielectric ( ir: %g )', self.ir)
+    return string.format('Dielectric ( ir: %g )', self.ir)
 end

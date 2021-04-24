@@ -1,13 +1,13 @@
 Isotropic = {}
 
 function Isotropic.new(obj)
-	assert(obj.albedo ~= nil)
+    assert(obj.albedo ~= nil)
 
-	setmetatable(obj, Isotropic)
+    setmetatable(obj, Isotropic)
 
-	return obj
+    return obj
 end
 
 function Isotropic:__tostring()
-	return string.format('Isotropic ( albedo: %s )', self.albedo)
+    return string.format('Isotropic ( albedo: %s )', self.albedo)
 end
