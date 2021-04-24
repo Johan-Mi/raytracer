@@ -1,4 +1,4 @@
-#!/usr/bin/lua5.2
+#!/usr/bin/lua
 
 require 'lua.raytracer.scene'
 require 'lua.raytracer.camera'
