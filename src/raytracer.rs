@@ -19,6 +19,7 @@ pub const MAX_DEPTH: i32 = 50;
 pub struct RayTracer<'a> {
     camera: Camera,
     world: &'a (dyn Hittable + Sync),
+    sky_color: Color,
     args: Args,
 }
 
@@ -26,20 +27,14 @@ impl<'a> RayTracer<'a> {
     pub fn new(
         camera: Camera,
         world: &'a (dyn Hittable + Sync),
+        sky_color: Color,
         args: Args,
     ) -> Self {
         Self {
             camera,
             world,
+            sky_color,
             args,
-        }
-    }
-
-    fn sky_color_at_ray(&self, _ray: &Ray) -> Color {
-        Color {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
         }
     }
 
@@ -64,7 +59,7 @@ impl<'a> RayTracer<'a> {
                 emitted
             }
         } else {
-            self.sky_color_at_ray(ray)
+            self.sky_color
         }
     }
 

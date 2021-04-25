@@ -1,5 +1,8 @@
-use super::{camera::Camera, material::Material, shape::Shape};
-use crate::{args::Args, camera::Camera as RealCamera, hittable::Hittable};
+use super::{camera::Camera, color::Color, material::Material, shape::Shape};
+use crate::{
+    args::Args, camera::Camera as RealCamera, color::Color as RealColor,
+    hittable::Hittable,
+};
 use bumpalo::Bump;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -12,6 +15,9 @@ pub struct Scene {
     shapes: Vec<Shape>,
 
     camera: Camera,
+
+    #[serde(default)]
+    sky_color: Color,
 }
 
 impl Scene {
@@ -19,7 +25,11 @@ impl Scene {
         self,
         args: &Args,
         arena: &'a Bump,
-    ) -> (std::vec::Vec<&'a (dyn Hittable + Sync)>, RealCamera) {
+    ) -> (
+        std::vec::Vec<&'a (dyn Hittable + Sync)>,
+        RealCamera,
+        RealColor,
+    ) {
         let camera = self.camera.build(args);
 
         let materials = self
@@ -36,6 +46,7 @@ impl Scene {
                 })
                 .collect(),
             camera,
+            self.sky_color.into(),
         )
     }
 }

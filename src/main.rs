@@ -33,10 +33,10 @@ fn main() {
 
     let arena = Bump::new();
 
-    let (mut world, camera) = scene.build(&args, &arena);
+    let (mut world, camera, sky_color) = scene.build(&args, &arena);
 
     let subdivided = BvhNode::subdivide_objects(&mut world, &arena).unwrap();
 
-    let tracer = RayTracer::new(camera, subdivided, args);
+    let tracer = RayTracer::new(camera, subdivided, sky_color, args);
     tracer.write_ppm();
 }
