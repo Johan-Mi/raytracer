@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use crate::{
     aabb::Aabb,
     hittable::{HitRecord, Hittable},
@@ -81,8 +83,8 @@ impl<'a> Cuboid<'a> {
 }
 
 impl Hittable for Cuboid<'_> {
-    fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
-        self.sides.gets_hit(ray, t_min, t_max)
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
+        self.sides.gets_hit(ray, t_range)
     }
 
     fn bounding_box(&self) -> Option<Aabb> {

@@ -3,16 +3,12 @@ use crate::{
     hittable::{HitRecord, Hittable},
     ray::Ray,
 };
+use std::ops::Range;
 
 pub struct Unhittable;
 
 impl Hittable for Unhittable {
-    fn gets_hit(
-        &self,
-        _ray: &Ray,
-        _t_min: f32,
-        _t_max: f32,
-    ) -> Option<HitRecord> {
+    fn gets_hit(&self, _ray: &Ray, _t_range: Range<f32>) -> Option<HitRecord> {
         None
     }
 

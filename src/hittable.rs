@@ -1,9 +1,10 @@
 use crate::{
     aabb::Aabb, materials::Material, point3::Point3, ray::Ray, vec3::Vec3,
 };
+use std::ops::Range;
 
 pub trait Hittable {
-    fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord>;
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord>;
     fn bounding_box(&self) -> Option<Aabb>;
 }
 

@@ -6,7 +6,7 @@ use crate::{
 };
 use bumpalo::Bump;
 use rand::Rng;
-use std::{cmp::Ordering, mem};
+use std::{cmp::Ordering, mem, ops::Range};
 
 pub struct BvhNode<'a> {
     left: &'a (dyn Hittable + Sync),
@@ -18,20 +18,19 @@ impl Hittable for BvhNode<'_> {
     fn gets_hit(
         &self,
         ray: &Ray,
-        t_min: f32,
-        mut t_max: f32,
+        mut t_range: Range<f32>,
     ) -> Option<HitRecord> {
-        if !self.boundary.collides(ray, t_min, t_max) {
+        if !self.boundary.collides(ray, t_range.clone()) {
             return None;
         }
 
-        let rec_left = self.left.gets_hit(ray, t_min, t_max);
+        let rec_left = self.left.gets_hit(ray, t_range.clone());
 
         if let Some(rec_left) = &rec_left {
-            t_max = rec_left.t;
+            t_range.end = rec_left.t;
         }
 
-        let rec_right = self.right.gets_hit(ray, t_min, t_max);
+        let rec_right = self.right.gets_hit(ray, t_range);
         rec_right.or(rec_left)
     }
 

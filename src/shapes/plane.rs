@@ -6,6 +6,7 @@ use crate::{
     ray::Ray,
     vec3::Vec3,
 };
+use std::ops::Range;
 
 pub struct Plane<'a> {
     pub pos: Point3,
@@ -14,7 +15,7 @@ pub struct Plane<'a> {
 }
 
 impl Hittable for Plane<'_> {
-    fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let diff = ray.origin - self.pos;
         let prod1 = Vec3::dot(&diff, &self.normal);
         let prod2 = Vec3::dot(&ray.dir, &self.normal);
@@ -24,7 +25,7 @@ impl Hittable for Plane<'_> {
         let prod3 = prod1 / prod2;
 
         let t = diff.len();
-        if t < t_min || t_max < t {
+        if !t_range.contains(&t) {
             return None;
         }
 

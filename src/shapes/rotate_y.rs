@@ -5,6 +5,7 @@ use crate::{
     ray::Ray,
     vec3::Vec3,
 };
+use std::ops::Range;
 
 pub struct RotateY<'a> {
     inner: &'a (dyn Hittable + Sync),
@@ -82,7 +83,7 @@ impl<'a> RotateY<'a> {
 }
 
 impl Hittable for RotateY<'_> {
-    fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let mut origin = ray.origin;
         let mut direction = ray.dir;
 
@@ -99,7 +100,7 @@ impl Hittable for RotateY<'_> {
             dir: direction,
         };
 
-        let inner_rec = self.inner.gets_hit(&rotated_ray, t_min, t_max)?;
+        let inner_rec = self.inner.gets_hit(&rotated_ray, t_range)?;
 
         let mut p = inner_rec.p;
         let mut normal = inner_rec.normal;

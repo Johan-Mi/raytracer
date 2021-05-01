@@ -6,6 +6,7 @@ use crate::{
     ray::Ray,
     vec3::Vec3,
 };
+use std::ops::Range;
 
 pub struct YzRect<'a> {
     pub y0: f32,
@@ -17,10 +18,10 @@ pub struct YzRect<'a> {
 }
 
 impl Hittable for YzRect<'_> {
-    fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let t = (self.k - ray.origin.x) / ray.dir.x;
 
-        if t < t_min || t > t_max {
+        if !t_range.contains(&t) {
             return None;
         }
 

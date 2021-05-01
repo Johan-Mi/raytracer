@@ -1,10 +1,9 @@
-use std::cmp::Ordering;
-
 use crate::{
     aabb::Aabb,
     hittable::{HitRecord, Hittable},
     ray::Ray,
 };
+use std::{cmp::Ordering, ops::Range};
 
 pub struct HittableList<'a> {
     list: &'a [&'a (dyn Hittable + Sync)],
@@ -17,10 +16,10 @@ impl<'a> HittableList<'a> {
 }
 
 impl Hittable for HittableList<'_> {
-    fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         self.list
             .iter()
-            .filter_map(|h| h.gets_hit(ray, t_min, t_max))
+            .filter_map(|h| h.gets_hit(ray, t_range.clone()))
             .min_by(|old, new| {
                 old.t.partial_cmp(&new.t).unwrap_or(Ordering::Equal)
             })

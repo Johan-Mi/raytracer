@@ -45,7 +45,7 @@ impl<'a> RayTracer<'a> {
                 y: 0.0,
                 z: 0.0,
             }
-        } else if let Some(hit) = self.world.gets_hit(ray, 0.001, f32::INFINITY)
+        } else if let Some(hit) = self.world.gets_hit(ray, 0.001..f32::INFINITY)
         {
             let emitted = hit.material.emitted();
 

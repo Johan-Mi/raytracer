@@ -1,4 +1,5 @@
 use crate::{point3::Point3, ray::Ray, vec3::Vec3};
+use std::ops::Range;
 
 #[derive(Clone)]
 pub struct Aabb {
@@ -7,7 +8,7 @@ pub struct Aabb {
 }
 
 impl Aabb {
-    pub fn collides(&self, ray: &Ray, t_min: f32, t_max: f32) -> bool {
+    pub fn collides(&self, ray: &Ray, t_range: Range<f32>) -> bool {
         let inv_d = Vec3 {
             x: 1.0 / ray.dir.x,
             y: 1.0 / ray.dir.y,
@@ -41,8 +42,8 @@ impl Aabb {
         let t0_z = (t0_z - ray.origin.z) * inv_d.z;
         let t1_z = (t1_z - ray.origin.z) * inv_d.z;
 
-        let t_min = t0_x.max(t_min);
-        let t_max = t1_x.min(t_max);
+        let t_min = t0_x.max(t_range.start);
+        let t_max = t1_x.min(t_range.end);
         let a = t_max > t_min;
 
         let t_min = t0_y.max(t_min);

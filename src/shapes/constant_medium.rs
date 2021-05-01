@@ -6,6 +6,7 @@ use crate::{
     vec3::Vec3,
 };
 use rand::Rng;
+use std::ops::Range;
 
 pub struct ConstantMedium<'a> {
     pub boundary: &'a (dyn Hittable + Sync),
@@ -14,18 +15,18 @@ pub struct ConstantMedium<'a> {
 }
 
 impl Hittable for ConstantMedium<'_> {
-    fn gets_hit(&self, ray: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let mut rng = rand::thread_rng();
 
-        let mut rec1 =
-            self.boundary
-                .gets_hit(ray, f32::NEG_INFINITY, f32::INFINITY)?;
-        let mut rec2 =
-            self.boundary
-                .gets_hit(ray, rec1.t + 0.0001, f32::INFINITY)?;
+        let mut rec1 = self
+            .boundary
+            .gets_hit(ray, f32::NEG_INFINITY..f32::INFINITY)?;
+        let mut rec2 = self
+            .boundary
+            .gets_hit(ray, (rec1.t + 0.0001)..f32::INFINITY)?;
 
-        rec1.t = rec1.t.max(t_min);
-        rec2.t = rec2.t.min(t_max);
+        rec1.t = rec1.t.max(t_range.start);
+        rec2.t = rec2.t.min(t_range.end);
 
         if rec1.t >= rec2.t {
             return None;
