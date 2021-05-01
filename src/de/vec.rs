@@ -1,7 +1,7 @@
 use crate::vec3::Vec3;
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Point {
     x: f32,
     y: f32,

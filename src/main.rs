@@ -1,5 +1,6 @@
 mod aabb;
 mod args;
+mod bezier;
 mod camera;
 mod color;
 mod de;

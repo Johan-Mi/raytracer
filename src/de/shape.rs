@@ -5,8 +5,10 @@ use super::{
     vec::{Direction, Point},
 };
 use crate::{
+    bezier::build_bezier_patch,
     hittable::Hittable,
     materials::Material as DynMaterial,
+    point3::Point3,
     shapes::{
         BvhNode, ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate,
         Triangle, XyRect, XzRect, YzRect,
@@ -79,6 +81,10 @@ pub enum Shape {
     },
     ObjFile {
         path: PathBuf,
+        material: Var<Material>,
+    },
+    Bezier {
+        points: Vec<Point>,
         material: Var<Material>,
     },
 }
@@ -203,6 +209,29 @@ impl Shape {
                 let material =
                     material.map(|m| m.build(arena)).resolve(materials);
                 parse_obj_file(path, material, arena)
+            }
+            Shape::Bezier { points, material } => {
+                let material =
+                    material.map(|m| m.build(arena)).resolve(materials);
+
+                let mut patches = Vec::with_capacity(points.len() / 16);
+                let mut control_points = [[Point3::default(); 4]; 4];
+
+                for (i, p) in
+                    points.into_iter().map(|p| Point3::from(p)).enumerate()
+                {
+                    control_points[(i % 16) / 4][i % 4] = p;
+
+                    if i % 16 == 15 {
+                        patches.push(build_bezier_patch(
+                            &control_points,
+                            material,
+                            arena,
+                        ));
+                    }
+                }
+
+                BvhNode::subdivide_objects(&mut patches, arena).unwrap()
             }
         }
     }
