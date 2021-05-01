@@ -1,5 +1,6 @@
 use super::{
     material::Material,
+    obj::parse_obj_file,
     var::Var,
     vec::{Direction, Point},
 };
@@ -8,12 +9,12 @@ use crate::{
     materials::Material as DynMaterial,
     shapes::{
         BvhNode, ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate,
-        XyRect, XzRect, YzRect,
+        Triangle, XyRect, XzRect, YzRect,
     },
 };
 use bumpalo::Bump;
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::{collections::HashMap, path::PathBuf};
 
 #[derive(Debug, Deserialize)]
 pub enum Shape {
@@ -56,6 +57,10 @@ pub enum Shape {
         maximum: Point,
         material: Var<Material>,
     },
+    Triangle {
+        points: [Point; 3],
+        material: Var<Material>,
+    },
     RotateY {
         inner: Box<Shape>,
         angle: f32,
@@ -71,6 +76,10 @@ pub enum Shape {
     },
     HittableList {
         shapes: Vec<Shape>,
+    },
+    ObjFile {
+        path: PathBuf,
+        material: Var<Material>,
     },
 }
 
@@ -154,6 +163,13 @@ impl Shape {
                 material.map(|m| m.build(arena)).resolve(materials),
                 arena,
             )),
+            Shape::Triangle {
+                points: [p0, p1, p2],
+                material,
+            } => arena.alloc(Triangle {
+                points: [p0.into(), p1.into(), p2.into()],
+                material: material.map(|m| m.build(arena)).resolve(materials),
+            }),
             Shape::RotateY { inner, angle } => {
                 let inner = inner.build(materials, arena);
                 arena.alloc(RotateY::new(inner, angle))
@@ -182,6 +198,11 @@ impl Shape {
                     .map(|s| s.build(materials, arena))
                     .collect::<Vec<_>>();
                 BvhNode::subdivide_objects(&mut shapes, arena).unwrap()
+            }
+            Shape::ObjFile { path, material } => {
+                let material =
+                    material.map(|m| m.build(arena)).resolve(materials);
+                parse_obj_file(path, material, arena)
             }
         }
     }
