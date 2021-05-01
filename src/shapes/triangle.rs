@@ -43,6 +43,8 @@ impl Hittable for Triangle<'_> {
         if t_range.contains(&t) {
             let hit_point = ray.at(t);
             let normal = edge_2.cross(&edge_1);
+            // let normal = normal / (normal.x + normal.y + normal.z);
+            let normal = normal.normalized();
 
             Some(HitRecord::new(hit_point, &normal, self.material, t, ray))
         } else {

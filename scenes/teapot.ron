@@ -23,8 +23,9 @@ Scene (
     sky_color: (1.0, 1.0, 1.0),
 
     materials: {
-        "white": Lambertian (
+        "white": Metal (
             albedo: (0.7, 0.7, 0.8),
+            fuzz: 0.5,
         ),
     },
 
