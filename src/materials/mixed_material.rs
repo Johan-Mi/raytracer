@@ -18,4 +18,15 @@ impl Material for MixedMaterial<'_> {
         }
         .scatter(r_in, rec)
     }
+
+    fn emitted(&self) -> Color {
+        let mut rng = rand::thread_rng();
+
+        if rng.gen::<f32>() < self.chance {
+            self.secondary
+        } else {
+            self.primary
+        }
+        .emitted()
+    }
 }
