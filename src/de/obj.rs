@@ -42,7 +42,7 @@ where
 
             Some((&"f", verts)) => {
                 let verts = verts
-                    .into_iter()
+                    .iter()
                     .map(|s| match s.find('/') {
                         Some(first_slash) => &s[..first_slash],
                         None => s,
@@ -50,8 +50,8 @@ where
                     .map(|s| s.parse::<usize>().unwrap() - 1)
                     .collect::<Vec<_>>();
 
-                match &verts[..] {
-                    &[p0, p1, p2] => {
+                match verts[..] {
+                    [p0, p1, p2] => {
                         // 3 points make a triangle
 
                         triangles.push(arena.alloc(Triangle {
@@ -60,7 +60,7 @@ where
                         }));
                     }
 
-                    &[p0, p1, p2, p3] => {
+                    [p0, p1, p2, p3] => {
                         // 4 points, subdivide a quad into 2 triangles
 
                         triangles.push(arena.alloc(Triangle {

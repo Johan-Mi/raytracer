@@ -217,9 +217,7 @@ impl Shape {
                 let mut patches = Vec::with_capacity(points.len() / 16);
                 let mut control_points = [[Point3::default(); 4]; 4];
 
-                for (i, p) in
-                    points.into_iter().map(|p| Point3::from(p)).enumerate()
-                {
+                for (i, p) in points.into_iter().map(Point3::from).enumerate() {
                     control_points[(i % 16) / 4][i % 4] = p;
 
                     if i % 16 == 15 {
