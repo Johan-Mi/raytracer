@@ -15,7 +15,12 @@ pub struct Sphere<'a> {
 }
 
 impl Hittable for Sphere<'_> {
-    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
+    fn gets_hit(
+        &self,
+        ray: &Ray,
+        t_range: Range<f32>,
+        _rng: &mut crate::rng::Rng,
+    ) -> Option<HitRecord> {
         let oc = ray.origin - self.center;
         let a = ray.dir.len_squared();
         let half_b = Vec3::dot(&oc, &ray.dir);

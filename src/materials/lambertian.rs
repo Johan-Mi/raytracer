@@ -8,10 +8,13 @@ pub struct Lambertian {
 }
 
 impl Material for Lambertian {
-    fn scatter(&self, _r_in: &Ray, rec: &HitRecord) -> Option<(Ray, Color)> {
-        let mut rng = rand::thread_rng();
-
-        let mut scatter_direction = rec.normal + Vec3::random_unit(&mut rng);
+    fn scatter(
+        &self,
+        _r_in: &Ray,
+        rec: &HitRecord,
+        rng: &mut crate::rng::Rng,
+    ) -> Option<(Ray, Color)> {
+        let mut scatter_direction = rec.normal + Vec3::random_unit(rng);
 
         if scatter_direction.near_zero() {
             scatter_direction = rec.normal;

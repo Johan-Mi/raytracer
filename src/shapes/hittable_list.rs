@@ -16,10 +16,15 @@ impl<'a> HittableList<'a> {
 }
 
 impl Hittable for HittableList<'_> {
-    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
+    fn gets_hit(
+        &self,
+        ray: &Ray,
+        t_range: Range<f32>,
+        rng: &mut crate::rng::Rng,
+    ) -> Option<HitRecord> {
         self.list
             .iter()
-            .filter_map(|h| h.gets_hit(ray, t_range.clone()))
+            .filter_map(|h| h.gets_hit(ray, t_range.clone(), rng))
             .min_by(|old, new| {
                 old.t.partial_cmp(&new.t).unwrap_or(Ordering::Equal)
             })

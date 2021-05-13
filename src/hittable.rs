@@ -4,7 +4,12 @@ use crate::{
 use std::ops::Range;
 
 pub trait Hittable {
-    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord>;
+    fn gets_hit(
+        &self,
+        ray: &Ray,
+        t_range: Range<f32>,
+        rng: &mut crate::rng::Rng,
+    ) -> Option<HitRecord>;
     fn bounding_box(&self) -> Option<Aabb>;
 }
 

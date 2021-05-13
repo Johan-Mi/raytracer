@@ -8,25 +8,26 @@ pub struct MixedMaterial<'a> {
 }
 
 impl Material for MixedMaterial<'_> {
-    fn scatter(&self, r_in: &Ray, rec: &HitRecord) -> Option<(Ray, Color)> {
-        let mut rng = rand::thread_rng();
-
+    fn scatter(
+        &self,
+        r_in: &Ray,
+        rec: &HitRecord,
+        rng: &mut crate::rng::Rng,
+    ) -> Option<(Ray, Color)> {
         if rng.gen::<f32>() < self.chance {
             self.secondary
         } else {
             self.primary
         }
-        .scatter(r_in, rec)
+        .scatter(r_in, rec, rng)
     }
 
-    fn emitted(&self) -> Color {
-        let mut rng = rand::thread_rng();
-
+    fn emitted(&self, rng: &mut crate::rng::Rng) -> Color {
         if rng.gen::<f32>() < self.chance {
             self.secondary
         } else {
             self.primary
         }
-        .emitted()
+        .emitted(rng)
     }
 }
