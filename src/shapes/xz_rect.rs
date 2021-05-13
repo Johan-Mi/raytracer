@@ -18,12 +18,7 @@ pub struct XzRect<'a> {
 }
 
 impl Hittable for XzRect<'_> {
-    fn gets_hit(
-        &self,
-        ray: &Ray,
-        t_range: Range<f32>,
-        _rng: &mut crate::rng::Rng,
-    ) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let t = (self.k - ray.origin.y) / ray.dir.y;
 
         if !t_range.contains(&t) {

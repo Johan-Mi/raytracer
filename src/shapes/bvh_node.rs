@@ -19,19 +19,18 @@ impl Hittable for BvhNode<'_> {
         &self,
         ray: &Ray,
         mut t_range: Range<f32>,
-        rng: &mut crate::rng::Rng,
     ) -> Option<HitRecord> {
         if !self.boundary.collides(ray, t_range.clone()) {
             return None;
         }
 
-        let rec_left = self.left.gets_hit(ray, t_range.clone(), rng);
+        let rec_left = self.left.gets_hit(ray, t_range.clone());
 
         if let Some(rec_left) = &rec_left {
             t_range.end = rec_left.t;
         }
 
-        let rec_right = self.right.gets_hit(ray, t_range, rng);
+        let rec_right = self.right.gets_hit(ray, t_range);
         rec_right.or(rec_left)
     }
 

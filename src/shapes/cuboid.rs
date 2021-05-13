@@ -83,13 +83,8 @@ impl<'a> Cuboid<'a> {
 }
 
 impl Hittable for Cuboid<'_> {
-    fn gets_hit(
-        &self,
-        ray: &Ray,
-        t_range: Range<f32>,
-        rng: &mut crate::rng::Rng,
-    ) -> Option<HitRecord> {
-        self.sides.gets_hit(ray, t_range, rng)
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
+        self.sides.gets_hit(ray, t_range)
     }
 
     fn bounding_box(&self) -> Option<Aabb> {

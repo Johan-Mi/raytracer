@@ -9,7 +9,6 @@ mod materials;
 mod point3;
 mod ray;
 mod raytracer;
-mod rng;
 mod shapes;
 mod vec3;
 

@@ -8,16 +8,13 @@ pub struct Isotropic {
 }
 
 impl Material for Isotropic {
-    fn scatter(
-        &self,
-        _r_in: &Ray,
-        rec: &HitRecord,
-        rng: &mut crate::rng::Rng,
-    ) -> Option<(Ray, Color)> {
+    fn scatter(&self, _r_in: &Ray, rec: &HitRecord) -> Option<(Ray, Color)> {
+        let mut rng = rand::thread_rng();
+
         Some((
             Ray {
                 origin: rec.p,
-                dir: Vec3::random_unit(rng),
+                dir: Vec3::random_unit(&mut rng),
             },
             self.albedo,
         ))

@@ -83,12 +83,7 @@ impl<'a> RotateY<'a> {
 }
 
 impl Hittable for RotateY<'_> {
-    fn gets_hit(
-        &self,
-        ray: &Ray,
-        t_range: Range<f32>,
-        rng: &mut crate::rng::Rng,
-    ) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let mut origin = ray.origin;
         let mut direction = ray.dir;
 
@@ -105,7 +100,7 @@ impl Hittable for RotateY<'_> {
             dir: direction,
         };
 
-        let inner_rec = self.inner.gets_hit(&rotated_ray, t_range, rng)?;
+        let inner_rec = self.inner.gets_hit(&rotated_ray, t_range)?;
 
         let mut p = inner_rec.p;
         let mut normal = inner_rec.normal;

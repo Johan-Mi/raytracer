@@ -38,27 +38,21 @@ impl<'a> RayTracer<'a> {
         }
     }
 
-    fn color_at_ray(
-        &self,
-        ray: &Ray,
-        depth: i32,
-        rng: &mut crate::rng::Rng,
-    ) -> Color {
+    fn color_at_ray(&self, ray: &Ray, depth: i32) -> Color {
         if depth <= 0 {
             Color {
                 x: 0.0,
                 y: 0.0,
                 z: 0.0,
             }
-        } else if let Some(hit) =
-            self.world.gets_hit(ray, 0.001..f32::INFINITY, rng)
+        } else if let Some(hit) = self.world.gets_hit(ray, 0.001..f32::INFINITY)
         {
-            let emitted = hit.material.emitted(rng);
+            let emitted = hit.material.emitted();
 
             if let Some((scattered, attenuation)) =
-                hit.material.scatter(ray, &hit, rng)
+                hit.material.scatter(ray, &hit)
             {
-                self.color_at_ray(&scattered, depth - 1, rng)
+                self.color_at_ray(&scattered, depth - 1)
                     .elementwise_mul(&attenuation)
                     + emitted
             } else {
@@ -73,17 +67,17 @@ impl<'a> RayTracer<'a> {
         let width = self.args.width;
         let height = self.args.height;
 
-        let mut rng = rand::thread_rng();
-
         (0..self.args.samples)
             .map(|_| {
+                let mut rng = rand::thread_rng();
+
                 let u =
                     (x as f32 + rng.gen_range(0.0..1.0)) / (width as f32 - 1.0);
                 let v = ((height - y) as f32 + rng.gen_range(0.0..1.0))
                     / (height as f32 - 1.0);
 
-                let ray = self.camera.get_ray(u, v, &mut rng);
-                self.color_at_ray(&ray, MAX_DEPTH, &mut rng)
+                let ray = self.camera.get_ray(u, v);
+                self.color_at_ray(&ray, MAX_DEPTH)
             })
             .fold(
                 Color {

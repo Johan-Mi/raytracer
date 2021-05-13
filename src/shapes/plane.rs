@@ -15,12 +15,7 @@ pub struct Plane<'a> {
 }
 
 impl Hittable for Plane<'_> {
-    fn gets_hit(
-        &self,
-        ray: &Ray,
-        t_range: Range<f32>,
-        _rng: &mut crate::rng::Rng,
-    ) -> Option<HitRecord> {
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let diff = ray.origin - self.pos;
         let prod1 = Vec3::dot(&diff, &self.normal);
         let prod2 = Vec3::dot(&ray.dir, &self.normal);

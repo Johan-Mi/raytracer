@@ -9,12 +9,7 @@ pub struct Dielectric {
 }
 
 impl Material for Dielectric {
-    fn scatter(
-        &self,
-        r_in: &Ray,
-        rec: &HitRecord,
-        rng: &mut crate::rng::Rng,
-    ) -> Option<(Ray, Color)> {
+    fn scatter(&self, r_in: &Ray, rec: &HitRecord) -> Option<(Ray, Color)> {
         let refraction_ratio = if rec.front_face {
             1.0 / self.ir
         } else {
@@ -29,7 +24,7 @@ impl Material for Dielectric {
 
         let direction = if cannot_refract
             || reflectance(cos_theta, refraction_ratio)
-                > rng.gen_range(0.0..1.0)
+                > rand::thread_rng().gen_range(0.0..1.0)
         {
             Vec3::reflect(&unit_direction, &rec.normal)
         } else {

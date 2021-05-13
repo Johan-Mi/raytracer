@@ -15,22 +15,15 @@ pub struct ConstantMedium<'a> {
 }
 
 impl Hittable for ConstantMedium<'_> {
-    fn gets_hit(
-        &self,
-        ray: &Ray,
-        t_range: Range<f32>,
-        rng: &mut crate::rng::Rng,
-    ) -> Option<HitRecord> {
-        let mut rec1 = self.boundary.gets_hit(
-            ray,
-            f32::NEG_INFINITY..f32::INFINITY,
-            rng,
-        )?;
-        let mut rec2 = self.boundary.gets_hit(
-            ray,
-            (rec1.t + 0.0001)..f32::INFINITY,
-            rng,
-        )?;
+    fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
+        let mut rng = rand::thread_rng();
+
+        let mut rec1 = self
+            .boundary
+            .gets_hit(ray, f32::NEG_INFINITY..f32::INFINITY)?;
+        let mut rec2 = self
+            .boundary
+            .gets_hit(ray, (rec1.t + 0.0001)..f32::INFINITY)?;
 
         rec1.t = rec1.t.max(t_range.start);
         rec2.t = rec2.t.min(t_range.end);
