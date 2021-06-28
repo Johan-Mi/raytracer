@@ -8,7 +8,6 @@ edition = "2018"
 
 [dependencies]
 bumpalo = "3.6.0"
-derive_more = "0.99.11"
 rand = "0.8.3"
 rayon = "1.5.0"
 ron = "0.6.4"

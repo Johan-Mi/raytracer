@@ -314,7 +314,6 @@ name = "raytracer"
 version = "0.1.0"
 dependencies = [
  "bumpalo",
- "derive_more",
  "rand",
  "rayon",
  "ron",
