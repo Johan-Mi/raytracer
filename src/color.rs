@@ -2,7 +2,7 @@ use vec3::Vec3;
 
 pub type Color = Vec3<f32>;
 
-/// https://www.youtube.com/watch?v=eXU-6_jmw7Q
+/// <https://www.youtube.com/watch?v=eXU-6_jmw7Q>
 pub fn to_rgb(mut color: Color, gamma: f32) -> [u8; 3] {
     let inv_gamma = 1.0 / gamma;
 
