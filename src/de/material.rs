@@ -24,7 +24,8 @@ pub enum Material {
     Isotropic {
         albedo: Color,
     },
-    MixedMaterial {
+    #[serde(rename = "MixedMaterial")]
+    Mixed {
         primary: Box<Material>,
         secondary: Box<Material>,
         chance: f32,
@@ -48,7 +49,7 @@ impl Material {
             Material::Isotropic { albedo } => arena.alloc(Isotropic {
                 albedo: albedo.into(),
             }),
-            Material::MixedMaterial {
+            Material::Mixed {
                 primary,
                 secondary,
                 chance,
