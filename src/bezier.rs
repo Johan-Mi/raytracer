@@ -24,11 +24,9 @@ pub fn build_bezier_patch<'a>(
 
     let mut vertices = [[Point3::default(); DIVISIONS + 1]; DIVISIONS + 1];
     for (u, row) in vertices.iter_mut().enumerate() {
-        let mut curve = [Point3::default(); 4];
-        for i in 0..4 {
-            curve[i] =
-                eval_bezier_curve(&points[i], u as f32 / DIVISIONS as f32);
-        }
+        let curve = [0, 1, 2, 3].map(|i| {
+            eval_bezier_curve(&points[i], u as f32 / DIVISIONS as f32)
+        });
 
         for (v, vert) in row.iter_mut().enumerate() {
             *vert = eval_bezier_curve(&curve, v as f32 / DIVISIONS as f32);
