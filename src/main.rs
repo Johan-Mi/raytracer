@@ -103,7 +103,7 @@ fn main() {
     let scene = match ron::de::from_reader::<_, Scene>(file) {
         Ok(scene) => scene,
         Err(err) => {
-            eprintln!("{}", err);
+            eprintln!("{err}");
             return;
         }
     };

@@ -110,7 +110,7 @@ impl<'a> RayTracer<'a> {
                 if !self.args.quiet && i % 2000 == 0 {
                     let percentage =
                         curr_count as f32 / (width * height) as f32 * 100.0;
-                    println!("Progress: {:3.3}%", percentage);
+                    println!("Progress: {percentage:3.3}%");
                 }
 
                 let color = self.color_at_xy(x, y);
@@ -134,8 +134,7 @@ impl<'a> RayTracer<'a> {
 
         if !self.args.quiet {
             println!(
-                "Finished in {}:{:02}:{:02}.{:03}",
-                hours, minutes, seconds, millis
+                "Finished in {hours}:{minutes:02}:{seconds:02}.{millis:03}"
             )
         }
     }
