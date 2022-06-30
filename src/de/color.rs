@@ -12,7 +12,7 @@ impl Default for Color {
 
 impl From<Color> for Vec3 {
     fn from(val: Color) -> Self {
-        Vec3 {
+        Self {
             x: val.0,
             y: val.1,
             z: val.2,

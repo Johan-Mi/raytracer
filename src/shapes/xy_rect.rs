@@ -25,8 +25,8 @@ impl Hittable for XyRect<'_> {
             return None;
         }
 
-        let x = ray.origin.x + t * ray.dir.x;
-        let y = ray.origin.y + t * ray.dir.y;
+        let x = t.mul_add(ray.dir.x, ray.origin.x);
+        let y = t.mul_add(ray.dir.y, ray.origin.y);
 
         if x < self.x0 || x > self.x1 || y < self.y0 || y > self.y1 {
             return None;

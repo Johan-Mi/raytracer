@@ -17,7 +17,7 @@ pub struct Direction {
 
 impl From<Point> for Vec3 {
     fn from(val: Point) -> Self {
-        Vec3 {
+        Self {
             x: val.x,
             y: val.y,
             z: val.z,
@@ -27,7 +27,7 @@ impl From<Point> for Vec3 {
 
 impl From<Direction> for Vec3 {
     fn from(val: Direction) -> Self {
-        Vec3 {
+        Self {
             x: val.x,
             y: val.y,
             z: val.z,

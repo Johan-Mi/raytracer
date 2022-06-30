@@ -20,7 +20,7 @@ impl<'a> RotateY<'a> {
         let sin_theta = radians.sin();
         let cos_theta = radians.cos();
 
-        let boundary = if let Some(boundary) = inner.bounding_box() {
+        let boundary = inner.bounding_box().map(|boundary| {
             let mut min = Point3 {
                 x: f32::INFINITY,
                 y: f32::INFINITY,
@@ -39,15 +39,21 @@ impl<'a> RotateY<'a> {
                         let j_float = j as f32;
                         let k_float = k as f32;
 
-                        let x = i_float * boundary.maximum.x
-                            + (1.0 - i_float) * boundary.minimum.x;
-                        let y = j_float * boundary.maximum.x
-                            + (1.0 - j_float) * boundary.minimum.y;
-                        let z = k_float * boundary.maximum.x
-                            + (1.0 - k_float) * boundary.minimum.z;
+                        let x = i_float.mul_add(
+                            boundary.maximum.x,
+                            (1.0 - i_float) * boundary.minimum.x,
+                        );
+                        let y = j_float.mul_add(
+                            boundary.maximum.x,
+                            (1.0 - j_float) * boundary.minimum.y,
+                        );
+                        let z = k_float.mul_add(
+                            boundary.maximum.x,
+                            (1.0 - k_float) * boundary.minimum.z,
+                        );
 
-                        let new_x = cos_theta * x + sin_theta * z;
-                        let new_z = -sin_theta * x + cos_theta * z;
+                        let new_x = cos_theta.mul_add(x, sin_theta * z);
+                        let new_z = (-sin_theta).mul_add(x, cos_theta * z);
 
                         let tester = Vec3 {
                             x: new_x,
@@ -65,13 +71,11 @@ impl<'a> RotateY<'a> {
                 }
             }
 
-            Some(Aabb {
+            Aabb {
                 minimum: min,
                 maximum: max,
-            })
-        } else {
-            None
-        };
+            }
+        });
 
         Self {
             inner,
@@ -89,11 +93,14 @@ impl Hittable for RotateY<'_> {
 
         origin.x =
             self.cos_theta * ray.origin.x - self.sin_theta * ray.origin.z;
-        origin.z =
-            self.sin_theta * ray.origin.x + self.cos_theta * ray.origin.z;
+        origin.z = self
+            .sin_theta
+            .mul_add(ray.origin.x, self.cos_theta * ray.origin.z);
 
         direction.x = self.cos_theta * ray.dir.x - self.sin_theta * ray.dir.z;
-        direction.z = self.sin_theta * ray.dir.x + self.cos_theta * ray.dir.z;
+        direction.z = self
+            .sin_theta
+            .mul_add(ray.dir.x, self.cos_theta * ray.dir.z);
 
         let rotated_ray = Ray {
             origin,
@@ -105,13 +112,17 @@ impl Hittable for RotateY<'_> {
         let mut p = inner_rec.p;
         let mut normal = inner_rec.normal;
 
-        p.x = self.cos_theta * inner_rec.p.x + self.sin_theta * inner_rec.p.z;
-        p.z = -self.sin_theta * inner_rec.p.x + self.cos_theta * inner_rec.p.z;
+        p.x = self
+            .cos_theta
+            .mul_add(inner_rec.p.x, self.sin_theta * inner_rec.p.z);
+        p.z = (-self.sin_theta)
+            .mul_add(inner_rec.p.x, self.cos_theta * inner_rec.p.z);
 
-        normal.x = self.cos_theta * inner_rec.normal.x
-            + self.sin_theta * inner_rec.normal.z;
-        normal.z = -self.sin_theta * inner_rec.normal.x
-            + self.cos_theta * inner_rec.normal.z;
+        normal.x = self
+            .cos_theta
+            .mul_add(inner_rec.normal.x, self.sin_theta * inner_rec.normal.z);
+        normal.z = (-self.sin_theta)
+            .mul_add(inner_rec.normal.x, self.cos_theta * inner_rec.normal.z);
 
         let material = inner_rec.material;
         let t = inner_rec.t;

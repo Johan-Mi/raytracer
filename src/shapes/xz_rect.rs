@@ -25,8 +25,8 @@ impl Hittable for XzRect<'_> {
             return None;
         }
 
-        let x = ray.origin.x + t * ray.dir.x;
-        let z = ray.origin.z + t * ray.dir.z;
+        let x = t.mul_add(ray.dir.x, ray.origin.x);
+        let z = t.mul_add(ray.dir.z, ray.origin.z);
 
         if x < self.x0 || x > self.x1 || z < self.z0 || z > self.z1 {
             return None;

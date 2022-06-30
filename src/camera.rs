@@ -38,7 +38,7 @@ impl Camera {
 
         let lens_radius = aperture * 0.5;
 
-        Camera {
+        Self {
             origin,
             lower_left_corner,
             horizontal,

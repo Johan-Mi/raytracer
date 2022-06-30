@@ -56,5 +56,5 @@ fn refract(uv: &Vec3, n: &Vec3, etai_over_etat: f32) -> Vec3 {
 fn reflectance(cosine: f32, ref_idx: f32) -> f32 {
     let r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
     let r0 = r0 * r0;
-    r0 + (1.0 - r0) * (1.0 - cosine).powi(5)
+    (1.0 - r0).mul_add((1.0 - cosine).powi(5), r0)
 }

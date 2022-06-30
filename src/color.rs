@@ -25,7 +25,7 @@ pub fn to_rgb(mut color: Color, gamma: f32) -> [u8; 3] {
 
     sat = sat.clamp(0.0, 1.0);
 
-    color = color.map(|chan| ((chan - luma) * sat + luma).clamp(0.0, 1.0));
+    color = color.map(|chan| (chan - luma).mul_add(sat, luma).clamp(0.0, 1.0));
 
     let rgb = color.map(|chan| (chan * (256.0 - 1e-5)) as u8);
 

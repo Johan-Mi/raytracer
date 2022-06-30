@@ -57,8 +57,8 @@ impl Aabb {
         a & b & c
     }
 
-    pub fn surrounding_box(&self, other: &Self) -> Aabb {
-        Aabb {
+    pub fn surrounding_box(&self, other: &Self) -> Self {
+        Self {
             minimum: Point3 {
                 x: self.minimum.x.min(other.minimum.x),
                 y: self.minimum.y.min(other.minimum.y),
