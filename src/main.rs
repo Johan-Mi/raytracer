@@ -90,14 +90,14 @@ mod vec3;
 
 use args::Args;
 use bumpalo::Bump;
+use clap::Parser;
 use de::scene::Scene;
 use raytracer::RayTracer;
 use shapes::BvhNode;
 use std::fs::File;
-use structopt::StructOpt;
 
 fn main() {
-    let args = Args::from_args();
+    let args = Args::parse();
 
     let file = File::open(&args.infile).unwrap();
     let scene = match ron::de::from_reader::<_, Scene>(file) {

@@ -12,7 +12,7 @@ rand = "0.8.3"
 rayon = "1.5.0"
 ron = "0.6.4"
 serde = { version = "1.0.123", features = ["derive"] }
-structopt = "0.3.21"
+clap = { version = "3.2.7", default-features = false, features = ["std", "derive"] }
 vec3 = { git = "https://github.com/Johan-Mi/vec3" }
 
 [profile.release]
