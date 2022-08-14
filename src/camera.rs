@@ -1,5 +1,4 @@
 use crate::{point3::Point3, ray::Ray, vec3::Vec3};
-use std::f32;
 
 pub struct Camera {
     origin: Point3,
