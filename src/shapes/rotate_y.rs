@@ -1,9 +1,8 @@
 use crate::{
     aabb::Aabb,
     hittable::{HitRecord, Hittable},
-    point3::Point3,
     ray::Ray,
-    vec3::Vec3,
+    Point3, Vec3,
 };
 use std::ops::Range;
 

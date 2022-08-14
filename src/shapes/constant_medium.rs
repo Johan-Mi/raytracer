@@ -3,7 +3,7 @@ use crate::{
     hittable::{HitRecord, Hittable},
     materials::Material,
     ray::Ray,
-    vec3::Vec3,
+    Vec3,
 };
 use rand::Rng;
 use std::ops::Range;

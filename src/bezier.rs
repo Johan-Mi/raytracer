@@ -1,8 +1,8 @@
 use crate::{
     hittable::Hittable,
     materials::Material,
-    point3::Point3,
     shapes::{BvhNode, Triangle},
+    Point3,
 };
 use bumpalo::Bump;
 

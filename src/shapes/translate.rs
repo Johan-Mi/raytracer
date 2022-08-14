@@ -2,7 +2,7 @@ use crate::{
     aabb::Aabb,
     hittable::{HitRecord, Hittable},
     ray::Ray,
-    vec3::Vec3,
+    Vec3,
 };
 use std::ops::Range;
 

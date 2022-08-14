@@ -1,6 +1,5 @@
 use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray,
-    vec3::Vec3,
+    color::Color, hittable::HitRecord, materials::Material, ray::Ray, Vec3,
 };
 
 pub struct Isotropic {

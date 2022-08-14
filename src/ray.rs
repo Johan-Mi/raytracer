@@ -1,4 +1,4 @@
-use crate::point3::Point3;
+use crate::Point3;
 use vec3::Vec3;
 
 pub struct Ray {

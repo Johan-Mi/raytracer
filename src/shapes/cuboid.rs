@@ -4,9 +4,9 @@ use crate::{
     aabb::Aabb,
     hittable::{HitRecord, Hittable},
     materials::Material,
-    point3::Point3,
     ray::Ray,
     shapes::{HittableList, XyRect, XzRect, YzRect},
+    Point3,
 };
 use bumpalo::Bump;
 

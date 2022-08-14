@@ -1,6 +1,4 @@
-use crate::{
-    aabb::Aabb, materials::Material, point3::Point3, ray::Ray, vec3::Vec3,
-};
+use crate::{aabb::Aabb, materials::Material, ray::Ray, Point3, Vec3};
 use std::ops::Range;
 
 pub trait Hittable {

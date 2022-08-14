@@ -2,8 +2,8 @@ use crate::{
     aabb::Aabb,
     hittable::{HitRecord, Hittable},
     materials::Material,
-    point3::Point3,
     ray::Ray,
+    Point3,
 };
 use std::ops::Range;
 

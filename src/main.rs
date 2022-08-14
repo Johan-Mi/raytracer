@@ -82,11 +82,9 @@ mod color;
 mod de;
 mod hittable;
 mod materials;
-mod point3;
 mod ray;
 mod raytracer;
 mod shapes;
-mod vec3;
 
 use args::Args;
 use bumpalo::Bump;
@@ -95,6 +93,9 @@ use de::scene::Scene;
 use raytracer::RayTracer;
 use shapes::BvhNode;
 use std::fs::File;
+
+type Vec3 = vec3::Vec3<f32>;
+type Point3 = vec3::Vec3<f32>;
 
 fn main() {
     let args = Args::parse();

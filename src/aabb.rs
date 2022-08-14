@@ -1,4 +1,4 @@
-use crate::{point3::Point3, ray::Ray, vec3::Vec3};
+use crate::{ray::Ray, Point3, Vec3};
 use std::ops::Range;
 
 #[derive(Clone)]

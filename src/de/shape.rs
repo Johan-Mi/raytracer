@@ -8,11 +8,11 @@ use crate::{
     bezier::build_bezier_patch,
     hittable::Hittable,
     materials::Material as DynMaterial,
-    point3::Point3,
     shapes::{
         BvhNode, ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate,
         Triangle, XyRect, XzRect, YzRect,
     },
+    Point3,
 };
 use bumpalo::Bump;
 use serde::Deserialize;
