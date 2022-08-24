@@ -39,7 +39,7 @@ impl Hittable for XyRect<'_> {
             z: 1.0,
         };
 
-        Some(HitRecord::new(p, &outward_normal, self.material, t, ray))
+        Some(HitRecord::new(p, outward_normal, self.material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<Aabb> {

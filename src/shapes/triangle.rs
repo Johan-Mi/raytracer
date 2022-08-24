@@ -44,7 +44,7 @@ impl Hittable for Triangle<'_> {
             let hit_point = ray.at(t);
             let normal = edge_2.cross(&edge_1).normalized();
 
-            Some(HitRecord::new(hit_point, &normal, self.material, t, ray))
+            Some(HitRecord::new(hit_point, normal, self.material, t, ray))
         } else {
             None
         }

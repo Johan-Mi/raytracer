@@ -25,7 +25,7 @@ impl Hittable for Translate<'_> {
         let material = inner_rec.material;
         let t = inner_rec.t;
 
-        Some(HitRecord::new(p, &normal, material, t, ray))
+        Some(HitRecord::new(p, normal, material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<Aabb> {

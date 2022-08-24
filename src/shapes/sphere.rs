@@ -39,7 +39,7 @@ impl Hittable for Sphere<'_> {
         let t = root;
         let normal = (p - self.center) / self.radius;
 
-        Some(HitRecord::new(p, &normal, self.material, t, ray))
+        Some(HitRecord::new(p, normal, self.material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<Aabb> {

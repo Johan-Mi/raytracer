@@ -126,7 +126,7 @@ impl Hittable for RotateY<'_> {
         let material = inner_rec.material;
         let t = inner_rec.t;
 
-        Some(HitRecord::new(p, &normal, material, t, &rotated_ray))
+        Some(HitRecord::new(p, normal, material, t, &rotated_ray))
     }
 
     fn bounding_box(&self) -> Option<Aabb> {

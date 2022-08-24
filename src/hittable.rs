@@ -17,16 +17,16 @@ pub struct HitRecord<'a> {
 impl<'a> HitRecord<'a> {
     pub fn new(
         p: Point3,
-        outward_normal: &Vec3,
+        outward_normal: Vec3,
         material: &'a (dyn Material),
         t: f32,
         r: &Ray,
     ) -> Self {
-        let front_face = r.dir.dot(outward_normal) < 0.0;
+        let front_face = r.dir.dot(&outward_normal) < 0.0;
         let normal = if front_face {
-            *outward_normal
+            outward_normal
         } else {
-            -*outward_normal
+            -outward_normal
         };
 
         Self {

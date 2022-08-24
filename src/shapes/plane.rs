@@ -30,7 +30,7 @@ impl Hittable for Plane<'_> {
 
         let p = ray.origin - ray.dir * prod3;
 
-        Some(HitRecord::new(p, &self.normal, self.material, t, ray))
+        Some(HitRecord::new(p, self.normal, self.material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<Aabb> {

@@ -27,7 +27,7 @@ impl Material for Dielectric {
         {
             Vec3::reflect(&unit_direction, &rec.normal)
         } else {
-            refract(&unit_direction, &rec.normal, refraction_ratio)
+            refract(unit_direction, rec.normal, refraction_ratio)
         };
 
         Some((
@@ -44,11 +44,10 @@ impl Material for Dielectric {
     }
 }
 
-fn refract(uv: &Vec3, n: &Vec3, etai_over_etat: f32) -> Vec3 {
-    let cos_theta = (-*uv).dot(n).min(1.0);
-    let r_out_perp = (*uv + *n * cos_theta) * etai_over_etat;
-    let r_out_parallel =
-        *n * -(((1.0 - r_out_perp.len_squared()).abs()).sqrt());
+fn refract(uv: Vec3, n: Vec3, etai_over_etat: f32) -> Vec3 {
+    let cos_theta = (-uv).dot(&n).min(1.0);
+    let r_out_perp = (uv + n * cos_theta) * etai_over_etat;
+    let r_out_parallel = n * -(((1.0 - r_out_perp.len_squared()).abs()).sqrt());
     r_out_perp + r_out_parallel
 }
 
