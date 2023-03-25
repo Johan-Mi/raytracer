@@ -14,7 +14,7 @@ pub struct Triangle<'a> {
 
 impl Hittable for Triangle<'_> {
     fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
-        const EPSILON: f32 = 0.0000001;
+        const EPSILON: f32 = 0.000_000_1;
 
         let [p0, p1, p2] = self.points;
 

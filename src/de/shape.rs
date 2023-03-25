@@ -96,7 +96,7 @@ impl Shape {
         arena: &'a Bump,
     ) -> &'a (dyn Hittable + Sync) {
         match self {
-            Shape::Sphere {
+            Self::Sphere {
                 center,
                 radius,
                 material,
@@ -105,7 +105,7 @@ impl Shape {
                 radius,
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::Plane {
+            Self::Plane {
                 position,
                 normal,
                 material,
@@ -114,7 +114,7 @@ impl Shape {
                 normal: normal.into(),
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::XyRect {
+            Self::XyRect {
                 x0,
                 x1,
                 y0,
@@ -129,7 +129,7 @@ impl Shape {
                 k,
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::XzRect {
+            Self::XzRect {
                 x0,
                 x1,
                 z0,
@@ -144,7 +144,7 @@ impl Shape {
                 k,
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::YzRect {
+            Self::YzRect {
                 y0,
                 y1,
                 z0,
@@ -159,7 +159,7 @@ impl Shape {
                 k,
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::Cuboid {
+            Self::Cuboid {
                 minimum,
                 maximum,
                 material,
@@ -169,25 +169,25 @@ impl Shape {
                 material.map(|m| m.build(arena)).resolve(materials),
                 arena,
             )),
-            Shape::Triangle {
+            Self::Triangle {
                 points: [p0, p1, p2],
                 material,
             } => arena.alloc(Triangle {
                 points: [p0.into(), p1.into(), p2.into()],
                 material: material.map(|m| m.build(arena)).resolve(materials),
             }),
-            Shape::RotateY { inner, angle } => {
+            Self::RotateY { inner, angle } => {
                 let inner = inner.build(materials, arena);
                 arena.alloc(RotateY::new(inner, angle))
             }
-            Shape::Translate { inner, offset } => {
+            Self::Translate { inner, offset } => {
                 let inner = inner.build(materials, arena);
                 arena.alloc(Translate {
                     inner,
                     offset: offset.into(),
                 })
             }
-            Shape::ConstantMedium {
+            Self::ConstantMedium {
                 boundary,
                 phase_function,
                 density,
@@ -198,19 +198,19 @@ impl Shape {
                     .resolve(materials),
                 neg_inv_density: -1.0 / density,
             }),
-            Shape::HittableList { shapes } => {
+            Self::HittableList { shapes } => {
                 let mut shapes = shapes
                     .into_iter()
                     .map(|s| s.build(materials, arena))
                     .collect::<Vec<_>>();
                 BvhNode::subdivide_objects(&mut shapes, arena).unwrap()
             }
-            Shape::ObjFile { path, material } => {
+            Self::ObjFile { path, material } => {
                 let material =
                     material.map(|m| m.build(arena)).resolve(materials);
                 parse_obj_file(path, material, arena)
             }
-            Shape::Bezier { points, material } => {
+            Self::Bezier { points, material } => {
                 let material =
                     material.map(|m| m.build(arena)).resolve(materials);
 

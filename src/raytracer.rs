@@ -120,7 +120,7 @@ impl<'a> RayTracer<'a> {
 
         let f = fs::File::create(&self.args.outfile).unwrap();
         let mut wbuf = BufWriter::new(f);
-        writeln!(wbuf, "P6 {} {} 255", width, height).unwrap();
+        writeln!(wbuf, "P6 {width} {height} 255").unwrap();
         for c in buf {
             wbuf.write_all(&c).unwrap();
         }
@@ -128,14 +128,14 @@ impl<'a> RayTracer<'a> {
 
         let elapsed = start_time.elapsed();
         let millis = elapsed.as_millis();
-        let (hours, millis) = (millis / 3600000, millis % 3600000);
+        let (hours, millis) = (millis / 3_600_000, millis % 3_600_000);
         let (minutes, millis) = (millis / 60000, millis % 60000);
         let (seconds, millis) = (millis / 1000, millis % 1000);
 
         if !self.args.quiet {
             println!(
                 "Finished in {hours}:{minutes:02}:{seconds:02}.{millis:03}"
-            )
+            );
         }
     }
 }

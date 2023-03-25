@@ -43,11 +43,13 @@ where
             Some((&"f", verts)) => {
                 let verts = verts
                     .iter()
-                    .map(|s| match s.find('/') {
-                        Some(first_slash) => &s[..first_slash],
-                        None => s,
+                    .map(|s| {
+                        s.find('/')
+                            .map_or(*s, |first_slash| &s[..first_slash])
+                            .parse::<usize>()
+                            .unwrap()
+                            - 1
                     })
-                    .map(|s| s.parse::<usize>().unwrap() - 1)
                     .collect::<Vec<_>>();
 
                 match verts[..] {

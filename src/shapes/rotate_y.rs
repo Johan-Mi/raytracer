@@ -91,12 +91,12 @@ impl Hittable for RotateY<'_> {
         let mut direction = ray.dir;
 
         origin.x =
-            self.cos_theta * ray.origin.x - self.sin_theta * ray.origin.z;
+            self.cos_theta.mul_add(ray.origin.x, -self.sin_theta * ray.origin.z);
         origin.z = self
             .sin_theta
             .mul_add(ray.origin.x, self.cos_theta * ray.origin.z);
 
-        direction.x = self.cos_theta * ray.dir.x - self.sin_theta * ray.dir.z;
+        direction.x = self.cos_theta.mul_add(ray.dir.x, -self.sin_theta * ray.dir.z);
         direction.z = self
             .sin_theta
             .mul_add(ray.dir.x, self.cos_theta * ray.dir.z);

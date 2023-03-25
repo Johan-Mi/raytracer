@@ -13,8 +13,8 @@ where
 {
     pub fn resolve(self, env: &HashMap<String, T>) -> T {
         match self {
-            Var::Value(t) => t,
-            Var::Ref(var_name) => env.get(&var_name).unwrap().clone(),
+            Self::Value(t) => t,
+            Self::Ref(var_name) => env.get(&var_name).unwrap().clone(),
         }
     }
 }
@@ -25,8 +25,8 @@ impl<T> Var<T> {
         F: FnOnce(T) -> U,
     {
         match self {
-            Var::Value(t) => Var::Value(f(t)),
-            Var::Ref(var_name) => Var::Ref(var_name),
+            Self::Value(t) => Var::Value(f(t)),
+            Self::Ref(var_name) => Var::Ref(var_name),
         }
     }
 }

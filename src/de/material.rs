@@ -35,21 +35,21 @@ pub enum Material {
 impl Material {
     pub fn build(self, arena: &Bump) -> &(dyn DynMaterial + Sync) {
         match self {
-            Material::Lambertian { albedo } => arena.alloc(Lambertian {
+            Self::Lambertian { albedo } => arena.alloc(Lambertian {
                 albedo: albedo.into(),
             }),
-            Material::Metal { albedo, fuzz } => arena.alloc(Metal {
+            Self::Metal { albedo, fuzz } => arena.alloc(Metal {
                 albedo: albedo.into(),
                 fuzz,
             }),
-            Material::Dielectric { ir } => arena.alloc(Dielectric { ir }),
-            Material::DiffuseLight { color } => arena.alloc(DiffuseLight {
+            Self::Dielectric { ir } => arena.alloc(Dielectric { ir }),
+            Self::DiffuseLight { color } => arena.alloc(DiffuseLight {
                 color: color.into(),
             }),
-            Material::Isotropic { albedo } => arena.alloc(Isotropic {
+            Self::Isotropic { albedo } => arena.alloc(Isotropic {
                 albedo: albedo.into(),
             }),
-            Material::Mixed {
+            Self::Mixed {
                 primary,
                 secondary,
                 chance,

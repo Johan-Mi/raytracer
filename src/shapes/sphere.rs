@@ -18,10 +18,10 @@ impl Hittable for Sphere<'_> {
         let oc = ray.origin - self.center;
         let a = ray.dir.len_squared();
         let half_b = Vec3::dot(&oc, &ray.dir);
-        let c = oc.len_squared() - self.radius * self.radius;
+        let c = self.radius.mul_add(-self.radius, oc.len_squared());
 
         #[allow(clippy::suspicious_operation_groupings)]
-        let discriminant = half_b * half_b - a * c;
+        let discriminant = half_b.mul_add(half_b, -a * c);
         if discriminant < 0.0 {
             return None;
         }
