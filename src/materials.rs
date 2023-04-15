@@ -29,10 +29,10 @@ impl Material<'_> {
         rng: &Rng,
     ) -> Option<(Ray, Color)> {
         match self {
-            Material::Dielectric(m) => m.scatter(r_in, rec, rng),
+            Material::Dielectric(m) => Some(m.scatter(r_in, rec, rng)),
             Material::DiffuseLight(_) => None,
-            Material::Isotropic(m) => m.scatter(rec, rng),
-            Material::Lambertian(m) => m.scatter(rec, rng),
+            Material::Isotropic(m) => Some(m.scatter(rec, rng)),
+            Material::Lambertian(m) => Some(m.scatter(rec, rng)),
             Material::Metal(m) => m.scatter(r_in, rec, rng),
             Material::MixedMaterial(m) => m.scatter(r_in, rec, rng),
         }

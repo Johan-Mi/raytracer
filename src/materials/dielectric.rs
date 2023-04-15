@@ -13,7 +13,7 @@ impl Dielectric {
         r_in: &Ray,
         rec: &HitRecord,
         rng: &Rng,
-    ) -> Option<(Ray, Color)> {
+    ) -> (Ray, Color) {
         let refraction_ratio = if rec.front_face {
             1.0 / self.ir
         } else {
@@ -34,13 +34,13 @@ impl Dielectric {
             refract(unit_direction, rec.normal, refraction_ratio)
         };
 
-        Some((
+        (
             Ray {
                 origin: rec.p,
                 dir: direction,
             },
             Color::ONE,
-        ))
+        )
     }
 }
 

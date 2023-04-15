@@ -6,17 +6,13 @@ pub struct Isotropic {
 }
 
 impl Isotropic {
-    pub(super) fn scatter(
-        &self,
-        rec: &HitRecord,
-        rng: &Rng,
-    ) -> Option<(Ray, Color)> {
-        Some((
+    pub(super) fn scatter(&self, rec: &HitRecord, rng: &Rng) -> (Ray, Color) {
+        (
             Ray {
                 origin: rec.p,
                 dir: crate::random::unit(rng),
             },
             self.albedo,
-        ))
+        )
     }
 }
