@@ -6,7 +6,6 @@ use crate::{
 };
 use bumpalo::Bump;
 use std::{
-    convert::TryInto,
     fs::File,
     io::{BufRead, BufReader},
     path::Path,
@@ -32,12 +31,11 @@ where
         let parts = line.split_whitespace().collect::<Vec<_>>();
         match parts.split_first() {
             Some((&"v", coords)) => {
-                let [x, y, z]: [&str; 3] = coords.try_into().unwrap();
-                let x = x.parse().unwrap();
-                let y = y.parse().unwrap();
-                let z = z.parse().unwrap();
-
-                vertices.push(Point3 { x, y, z });
+                vertices.push(Point3::from_array(
+                    <[&str; 3]>::try_from(coords)
+                        .unwrap()
+                        .map(|axis| axis.parse().unwrap()),
+                ));
             }
 
             Some((&"f", verts)) => {

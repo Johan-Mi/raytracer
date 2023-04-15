@@ -16,14 +16,14 @@ pub struct Plane<'a> {
 impl Hittable for Plane<'_> {
     fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let diff = ray.origin - self.pos;
-        let prod1 = Vec3::dot(&diff, &self.normal);
-        let prod2 = Vec3::dot(&ray.dir, &self.normal);
+        let prod1 = diff.dot(self.normal);
+        let prod2 = ray.dir.dot(self.normal);
         if prod2 == 0.0 {
             return None;
         }
         let prod3 = prod1 / prod2;
 
-        let t = diff.len();
+        let t = diff.length();
         if !t_range.contains(&t) {
             return None;
         }

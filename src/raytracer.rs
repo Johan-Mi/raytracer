@@ -4,6 +4,7 @@ use crate::{
     color::{to_rgb, Color},
     hittable::Hittable,
     ray::Ray,
+    Vec3,
 };
 use rand::Rng;
 use rayon::prelude::*;
@@ -40,11 +41,7 @@ impl<'a> RayTracer<'a> {
 
     fn color_at_ray(&self, ray: &Ray, depth: i32) -> Color {
         if depth <= 0 {
-            Color {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            }
+            Color::ZERO
         } else if let Some(hit) = self.world.gets_hit(ray, 0.001..f32::INFINITY)
         {
             let emitted = hit.material.emitted();
@@ -52,9 +49,7 @@ impl<'a> RayTracer<'a> {
             if let Some((scattered, attenuation)) =
                 hit.material.scatter(ray, &hit)
             {
-                self.color_at_ray(&scattered, depth - 1)
-                    .elementwise_mul(&attenuation)
-                    + emitted
+                self.color_at_ray(&scattered, depth - 1) * attenuation + emitted
             } else {
                 emitted
             }
@@ -79,14 +74,7 @@ impl<'a> RayTracer<'a> {
                 let ray = self.camera.get_ray(u, v);
                 self.color_at_ray(&ray, MAX_DEPTH)
             })
-            .fold(
-                Color {
-                    x: 0.0,
-                    y: 0.0,
-                    z: 0.0,
-                },
-                |l, r| l + r,
-            )
+            .sum::<Color>()
             / self.args.samples as f32
     }
 
@@ -138,4 +126,8 @@ impl<'a> RayTracer<'a> {
             );
         }
     }
+}
+
+pub fn reflect(dir: Vec3, normal: Vec3) -> Vec3 {
+    dir - normal * dir.dot(normal) * 2.0
 }

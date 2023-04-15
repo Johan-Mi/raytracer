@@ -20,16 +20,8 @@ impl<'a> RotateY<'a> {
         let cos_theta = radians.cos();
 
         let boundary = inner.bounding_box().map(|boundary| {
-            let mut min = Point3 {
-                x: f32::INFINITY,
-                y: f32::INFINITY,
-                z: f32::INFINITY,
-            };
-            let mut max = Point3 {
-                x: f32::NEG_INFINITY,
-                y: f32::NEG_INFINITY,
-                z: f32::NEG_INFINITY,
-            };
+            let mut min = Point3::splat(f32::INFINITY);
+            let mut max = Point3::splat(f32::NEG_INFINITY);
 
             for i in 0..2 {
                 for j in 0..2 {
@@ -54,11 +46,7 @@ impl<'a> RotateY<'a> {
                         let new_x = cos_theta.mul_add(x, sin_theta * z);
                         let new_z = (-sin_theta).mul_add(x, cos_theta * z);
 
-                        let tester = Vec3 {
-                            x: new_x,
-                            y,
-                            z: new_z,
-                        };
+                        let tester = Vec3::new(new_x, y, new_z);
 
                         min.x = min.x.min(tester.x);
                         max.x = max.x.max(tester.x);
@@ -90,13 +78,16 @@ impl Hittable for RotateY<'_> {
         let mut origin = ray.origin;
         let mut direction = ray.dir;
 
-        origin.x =
-            self.cos_theta.mul_add(ray.origin.x, -self.sin_theta * ray.origin.z);
+        origin.x = self
+            .cos_theta
+            .mul_add(ray.origin.x, -self.sin_theta * ray.origin.z);
         origin.z = self
             .sin_theta
             .mul_add(ray.origin.x, self.cos_theta * ray.origin.z);
 
-        direction.x = self.cos_theta.mul_add(ray.dir.x, -self.sin_theta * ray.dir.z);
+        direction.x = self
+            .cos_theta
+            .mul_add(ray.dir.x, -self.sin_theta * ray.dir.z);
         direction.z = self
             .sin_theta
             .mul_add(ray.dir.x, self.cos_theta * ray.dir.z);

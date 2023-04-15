@@ -17,20 +17,12 @@ pub struct Direction {
 
 impl From<Point> for Vec3 {
     fn from(val: Point) -> Self {
-        Self {
-            x: val.x,
-            y: val.y,
-            z: val.z,
-        }
+        Self::new(val.x, val.y, val.z)
     }
 }
 
 impl From<Direction> for Vec3 {
     fn from(val: Direction) -> Self {
-        Self {
-            x: val.x,
-            y: val.y,
-            z: val.z,
-        }
+        Self::new(val.x, val.y, val.z)
     }
 }

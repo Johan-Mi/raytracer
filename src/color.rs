@@ -1,21 +1,15 @@
-use vec3::Vec3;
-
-pub type Color = Vec3<f32>;
+pub type Color = glam::Vec3A;
 
 /// <https://www.youtube.com/watch?v=eXU-6_jmw7Q>
 pub fn to_rgb(mut color: Color, gamma: f32) -> [u8; 3] {
     let inv_gamma = 1.0 / gamma;
 
-    color = color.map(|chan| chan.powf(inv_gamma));
+    color = color.powf(inv_gamma);
 
     let mut sat: f32 = 1.0;
-    let luma = color.dot(&Color {
-        x: 0.299,
-        y: 0.587,
-        z: 0.114,
-    });
+    let luma = color.dot(Color::new(0.299, 0.587, 0.114));
 
-    for chan in color {
+    for chan in color.to_array() {
         if chan > 1.0 {
             sat = sat.min((luma - 1.0) / (luma - chan));
         } else if chan < 0.0 {
@@ -25,9 +19,7 @@ pub fn to_rgb(mut color: Color, gamma: f32) -> [u8; 3] {
 
     sat = sat.clamp(0.0, 1.0);
 
-    color = color.map(|chan| (chan - luma).mul_add(sat, luma).clamp(0.0, 1.0));
+    color = ((color - luma) * sat + luma).clamp(Color::ZERO, Color::ONE);
 
-    let rgb = color.map(|chan| (chan * (256.0 - 1e-5)) as u8);
-
-    [rgb.x, rgb.y, rgb.z]
+    (color * (256.0 - 1e-5)).to_array().map(|chan| chan as u8)
 }

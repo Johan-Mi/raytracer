@@ -34,7 +34,7 @@ impl Hittable for ConstantMedium<'_> {
 
         rec1.t = rec1.t.max(0.0);
 
-        let ray_length = ray.dir.len();
+        let ray_length = ray.dir.length();
         let distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
         let hit_distance =
             self.neg_inv_density * rng.gen_range(0.0..1.0f32).ln();
@@ -49,11 +49,7 @@ impl Hittable for ConstantMedium<'_> {
         Some(HitRecord {
             t,
             p,
-            normal: Vec3 {
-                x: 1.0,
-                y: 0.0,
-                z: 0.0,
-            },
+            normal: Vec3::X,
             front_face: true,
             material: self.phase_function,
         })

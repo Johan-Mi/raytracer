@@ -13,7 +13,7 @@ rayon = "1.5.0"
 ron = "0.6.4"
 serde = { version = "1.0.123", features = ["derive"] }
 clap = { version = "3.2.7", default-features = false, features = ["std", "derive"] }
-vec3 = { git = "https://github.com/Johan-Mi/vec3" }
+glam = "0.23.0"
 
 [profile.release]
 panic = "abort"

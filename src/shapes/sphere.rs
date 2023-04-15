@@ -16,9 +16,9 @@ pub struct Sphere<'a> {
 impl Hittable for Sphere<'_> {
     fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
         let oc = ray.origin - self.center;
-        let a = ray.dir.len_squared();
-        let half_b = Vec3::dot(&oc, &ray.dir);
-        let c = self.radius.mul_add(-self.radius, oc.len_squared());
+        let a = ray.dir.length_squared();
+        let half_b = oc.dot(ray.dir);
+        let c = self.radius.mul_add(-self.radius, oc.length_squared());
 
         #[allow(clippy::suspicious_operation_groupings)]
         let discriminant = half_b.mul_add(half_b, -a * c);
@@ -44,18 +44,8 @@ impl Hittable for Sphere<'_> {
 
     fn bounding_box(&self) -> Option<Aabb> {
         Some(Aabb {
-            minimum: self.center
-                - Vec3 {
-                    x: self.radius,
-                    y: self.radius,
-                    z: self.radius,
-                },
-            maximum: self.center
-                + Vec3 {
-                    x: self.radius,
-                    y: self.radius,
-                    z: self.radius,
-                },
+            minimum: self.center - Vec3::splat(self.radius),
+            maximum: self.center + Vec3::splat(self.radius),
         })
     }
 }

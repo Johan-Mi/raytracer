@@ -1,5 +1,6 @@
 use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray, Vec3,
+    color::Color, hittable::HitRecord, materials::Material, ray::Ray,
+    raytracer::reflect, Vec3,
 };
 use rand::Rng;
 
@@ -15,8 +16,8 @@ impl Material for Dielectric {
             self.ir
         };
 
-        let unit_direction = r_in.dir.normalized();
-        let cos_theta = (-unit_direction).dot(&rec.normal).min(1.0);
+        let unit_direction = r_in.dir.normalize();
+        let cos_theta = (-unit_direction).dot(rec.normal).min(1.0);
         let sin_theta = cos_theta.mul_add(-cos_theta, 1.0).sqrt();
 
         let cannot_refract = refraction_ratio * sin_theta > 1.0;
@@ -25,7 +26,7 @@ impl Material for Dielectric {
             || reflectance(cos_theta, refraction_ratio)
                 > rand::thread_rng().gen_range(0.0..1.0)
         {
-            Vec3::reflect(&unit_direction, &rec.normal)
+            reflect(unit_direction, rec.normal)
         } else {
             refract(unit_direction, rec.normal, refraction_ratio)
         };
@@ -35,19 +36,16 @@ impl Material for Dielectric {
                 origin: rec.p,
                 dir: direction,
             },
-            Color {
-                x: 1.0,
-                y: 1.0,
-                z: 1.0,
-            },
+            Color::ONE,
         ))
     }
 }
 
 fn refract(uv: Vec3, n: Vec3, etai_over_etat: f32) -> Vec3 {
-    let cos_theta = (-uv).dot(&n).min(1.0);
+    let cos_theta = (-uv).dot(n).min(1.0);
     let r_out_perp = (uv + n * cos_theta) * etai_over_etat;
-    let r_out_parallel = n * -(((1.0 - r_out_perp.len_squared()).abs()).sqrt());
+    let r_out_parallel =
+        n * -(((1.0 - r_out_perp.length_squared()).abs()).sqrt());
     r_out_perp + r_out_parallel
 }
 

@@ -33,27 +33,15 @@ impl Hittable for XyRect<'_> {
 
         let p = ray.at(t);
 
-        let outward_normal = Vec3 {
-            x: 0.0,
-            y: 0.0,
-            z: 1.0,
-        };
+        let outward_normal = Vec3::Z;
 
         Some(HitRecord::new(p, outward_normal, self.material, t, ray))
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
         Some(Aabb {
-            minimum: Point3 {
-                x: self.x0,
-                y: self.y0,
-                z: self.k - 0.0001,
-            },
-            maximum: Point3 {
-                x: self.x1,
-                y: self.y1,
-                z: self.k + 0.0001,
-            },
+            minimum: Point3::new(self.x0, self.y0, self.k - 0.0001),
+            maximum: Point3::new(self.x1, self.y1, self.k + 0.0001),
         })
     }
 }

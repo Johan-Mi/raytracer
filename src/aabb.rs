@@ -1,4 +1,4 @@
-use crate::{ray::Ray, Point3, Vec3};
+use crate::{ray::Ray, Point3};
 use std::ops::Range;
 
 #[derive(Clone)]
@@ -9,11 +9,7 @@ pub struct Aabb {
 
 impl Aabb {
     pub fn collides(&self, ray: &Ray, t_range: Range<f32>) -> bool {
-        let inv_d = Vec3 {
-            x: 1.0 / ray.dir.x,
-            y: 1.0 / ray.dir.y,
-            z: 1.0 / ray.dir.z,
-        };
+        let inv_d = 1.0 / ray.dir;
 
         let (t0_x, t1_x) = if inv_d.x < 0.0 {
             (self.maximum.x, self.minimum.x)
@@ -59,16 +55,8 @@ impl Aabb {
 
     pub fn surrounding_box(&self, other: &Self) -> Self {
         Self {
-            minimum: Point3 {
-                x: self.minimum.x.min(other.minimum.x),
-                y: self.minimum.y.min(other.minimum.y),
-                z: self.minimum.z.min(other.minimum.z),
-            },
-            maximum: Point3 {
-                x: self.maximum.x.max(other.maximum.x),
-                y: self.maximum.y.max(other.maximum.y),
-                z: self.maximum.z.max(other.maximum.z),
-            },
+            minimum: self.minimum.min(other.minimum),
+            maximum: self.maximum.max(other.maximum),
         }
     }
 }

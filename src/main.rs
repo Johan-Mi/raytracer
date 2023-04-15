@@ -95,8 +95,8 @@ use raytracer::RayTracer;
 use shapes::BvhNode;
 use std::fs::File;
 
-type Vec3 = vec3::Vec3<f32>;
-type Point3 = vec3::Vec3<f32>;
+type Vec3 = glam::Vec3A;
+type Point3 = glam::Vec3A;
 
 fn main() {
     let args = Args::parse();

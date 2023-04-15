@@ -22,7 +22,7 @@ impl<'a> HitRecord<'a> {
         t: f32,
         r: &Ray,
     ) -> Self {
-        let front_face = r.dir.dot(&outward_normal) < 0.0;
+        let front_face = r.dir.dot(outward_normal) < 0.0;
         let normal = if front_face {
             outward_normal
         } else {
