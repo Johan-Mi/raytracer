@@ -17,7 +17,11 @@ pub fn in_unit_sphere(rng: &Rng) -> Vec3 {
 
 pub fn in_unit_disk(rng: &Rng) -> Vec3 {
     loop {
-        let p = Vec3::new(rng.f32() * 2.0 - 1.0, rng.f32() * 2.0 - 1.0, 0.0);
+        let p = Vec3::new(
+            rng.f32().mul_add(2.0, -1.0),
+            rng.f32().mul_add(2.0, -1.0),
+            0.0,
+        );
 
         if p.length_squared() < 1.0 {
             break p;
