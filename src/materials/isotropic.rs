@@ -1,6 +1,4 @@
-use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray, Vec3,
-};
+use crate::{color::Color, hittable::HitRecord, materials::Material, ray::Ray};
 
 pub struct Isotropic {
     pub albedo: Color,
@@ -13,7 +11,7 @@ impl Material for Isotropic {
         Some((
             Ray {
                 origin: rec.p,
-                dir: Vec3::random_unit(&mut rng),
+                dir: crate::random::unit(&mut rng),
             },
             self.albedo,
         ))

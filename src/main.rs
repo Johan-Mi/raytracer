@@ -82,6 +82,7 @@ mod color;
 mod de;
 mod hittable;
 mod materials;
+mod random;
 mod ray;
 mod raytracer;
 mod shapes;

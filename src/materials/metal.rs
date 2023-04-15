@@ -1,6 +1,4 @@
-use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray, Vec3,
-};
+use crate::{color::Color, hittable::HitRecord, materials::Material, ray::Ray};
 
 pub struct Metal {
     pub albedo: Color,
@@ -17,7 +15,7 @@ impl Material for Metal {
             Some((
                 Ray {
                     origin: rec.p,
-                    dir: reflected + Vec3::random_unit(&mut rng) * self.fuzz,
+                    dir: reflected + crate::random::unit(&mut rng) * self.fuzz,
                 },
                 self.albedo,
             ))

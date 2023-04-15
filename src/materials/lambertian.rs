@@ -1,6 +1,4 @@
-use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray, Vec3,
-};
+use crate::{color::Color, hittable::HitRecord, materials::Material, ray::Ray};
 
 pub struct Lambertian {
     pub albedo: Color,
@@ -10,7 +8,7 @@ impl Material for Lambertian {
     fn scatter(&self, _r_in: &Ray, rec: &HitRecord) -> Option<(Ray, Color)> {
         let mut rng = rand::thread_rng();
 
-        let mut scatter_direction = rec.normal + Vec3::random_unit(&mut rng);
+        let mut scatter_direction = rec.normal + crate::random::unit(&mut rng);
 
         if scatter_direction.near_zero() {
             scatter_direction = rec.normal;
