@@ -6,7 +6,7 @@ use crate::{
     ray::Ray,
     Vec3,
 };
-use rand::{rngs::ThreadRng, Rng};
+use fastrand::Rng;
 use rayon::prelude::*;
 use std::{
     f32, fs,
@@ -39,12 +39,7 @@ impl<'a> RayTracer<'a> {
         }
     }
 
-    fn color_at_ray(
-        &self,
-        ray: &Ray,
-        depth: i32,
-        rng: &mut ThreadRng,
-    ) -> Color {
+    fn color_at_ray(&self, ray: &Ray, depth: i32, rng: &Rng) -> Color {
         if depth <= 0 {
             Color::ZERO
         } else if let Some(hit) = self.world.gets_hit(ray, 0.001..f32::INFINITY)
@@ -70,15 +65,14 @@ impl<'a> RayTracer<'a> {
 
         (0..self.args.samples)
             .map(|_| {
-                let mut rng = rand::thread_rng();
+                let rng = Rng::new();
 
-                let u =
-                    (x as f32 + rng.gen_range(0.0..1.0)) / (width as f32 - 1.0);
-                let v = ((height - y) as f32 + rng.gen_range(0.0..1.0))
-                    / (height as f32 - 1.0);
+                let u = (x as f32 + rng.f32()) / (width as f32 - 1.0);
+                let v =
+                    ((height - y) as f32 + rng.f32()) / (height as f32 - 1.0);
 
-                let ray = self.camera.get_ray(u, v);
-                self.color_at_ray(&ray, MAX_DEPTH, &mut rng)
+                let ray = self.camera.get_ray(u, v, &rng);
+                self.color_at_ray(&ray, MAX_DEPTH, &rng)
             })
             .sum::<Color>()
             / self.args.samples as f32

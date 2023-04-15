@@ -5,7 +5,6 @@ use crate::{
     shapes::Unhittable,
 };
 use bumpalo::Bump;
-use rand::Rng;
 use std::{cmp::Ordering, mem, ops::Range};
 
 pub struct BvhNode<'a> {
@@ -48,8 +47,8 @@ impl<'a> BvhNode<'a> {
         objects: &mut [&'a (dyn Hittable + Sync + 'a)],
         arena: &'a Bump,
     ) -> Option<&'a (dyn Hittable + Sync)> {
-        let mut rng = rand::thread_rng();
-        let axis = rng.gen_range(0..3);
+        let rng = fastrand::Rng::new();
+        let axis = rng.usize(0..3);
 
         match objects {
             [] => None,

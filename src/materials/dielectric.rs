@@ -2,7 +2,7 @@ use crate::{
     color::Color, hittable::HitRecord, materials::Material, ray::Ray,
     raytracer::reflect, Vec3,
 };
-use rand::{rngs::ThreadRng, Rng};
+use fastrand::Rng;
 
 pub struct Dielectric {
     pub ir: f32,
@@ -13,7 +13,7 @@ impl Material for Dielectric {
         &self,
         r_in: &Ray,
         rec: &HitRecord,
-        rng: &mut ThreadRng,
+        rng: &Rng,
     ) -> Option<(Ray, Color)> {
         let refraction_ratio = if rec.front_face {
             1.0 / self.ir
@@ -28,8 +28,7 @@ impl Material for Dielectric {
         let cannot_refract = refraction_ratio * sin_theta > 1.0;
 
         let direction = if cannot_refract
-            || reflectance(cos_theta, refraction_ratio)
-                > rng.gen_range(0.0..1.0)
+            || reflectance(cos_theta, refraction_ratio) > rng.f32()
         {
             reflect(unit_direction, rec.normal)
         } else {

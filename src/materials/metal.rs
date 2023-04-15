@@ -2,7 +2,7 @@ use crate::{
     color::Color, hittable::HitRecord, materials::Material, ray::Ray,
     raytracer::reflect,
 };
-use rand::rngs::ThreadRng;
+use fastrand::Rng;
 
 pub struct Metal {
     pub albedo: Color,
@@ -14,7 +14,7 @@ impl Material for Metal {
         &self,
         r_in: &Ray,
         rec: &HitRecord,
-        rng: &mut ThreadRng,
+        rng: &Rng,
     ) -> Option<(Ray, Color)> {
         let reflected = reflect(r_in.dir.normalize(), rec.normal);
 

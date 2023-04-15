@@ -1,7 +1,7 @@
 use crate::{
     color::Color, hittable::HitRecord, materials::Material, ray::Ray, Vec3,
 };
-use rand::rngs::ThreadRng;
+use fastrand::Rng;
 
 pub struct Lambertian {
     pub albedo: Color,
@@ -12,7 +12,7 @@ impl Material for Lambertian {
         &self,
         _r_in: &Ray,
         rec: &HitRecord,
-        rng: &mut ThreadRng,
+        rng: &Rng,
     ) -> Option<(Ray, Color)> {
         let mut scatter_direction = rec.normal + crate::random::unit(rng);
 

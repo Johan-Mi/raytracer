@@ -5,7 +5,6 @@ use crate::{
     ray::Ray,
     Vec3,
 };
-use rand::Rng;
 use std::ops::Range;
 
 pub struct ConstantMedium<'a> {
@@ -16,7 +15,7 @@ pub struct ConstantMedium<'a> {
 
 impl Hittable for ConstantMedium<'_> {
     fn gets_hit(&self, ray: &Ray, t_range: Range<f32>) -> Option<HitRecord> {
-        let mut rng = rand::thread_rng();
+        let rng = fastrand::Rng::new();
 
         let mut rec1 = self
             .boundary
@@ -36,8 +35,7 @@ impl Hittable for ConstantMedium<'_> {
 
         let ray_length = ray.dir.length();
         let distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
-        let hit_distance =
-            self.neg_inv_density * rng.gen_range(0.0..1.0f32).ln();
+        let hit_distance = self.neg_inv_density * rng.f32().ln();
 
         if hit_distance > distance_inside_boundary {
             return None;

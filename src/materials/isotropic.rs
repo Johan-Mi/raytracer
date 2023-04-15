@@ -1,5 +1,5 @@
 use crate::{color::Color, hittable::HitRecord, materials::Material, ray::Ray};
-use rand::rngs::ThreadRng;
+use fastrand::Rng;
 
 pub struct Isotropic {
     pub albedo: Color,
@@ -10,7 +10,7 @@ impl Material for Isotropic {
         &self,
         _r_in: &Ray,
         rec: &HitRecord,
-        rng: &mut ThreadRng,
+        rng: &Rng,
     ) -> Option<(Ray, Color)> {
         Some((
             Ray {
