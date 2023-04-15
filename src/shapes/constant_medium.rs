@@ -9,7 +9,7 @@ use std::ops::Range;
 
 pub struct ConstantMedium<'a> {
     pub boundary: &'a (dyn Hittable + Sync),
-    pub phase_function: &'a (dyn Material + Sync),
+    pub phase_function: &'a Material<'a>,
     pub neg_inv_density: f32,
 }
 

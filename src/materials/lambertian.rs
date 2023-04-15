@@ -1,16 +1,13 @@
-use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray, Vec3,
-};
+use crate::{color::Color, hittable::HitRecord, ray::Ray, Vec3};
 use fastrand::Rng;
 
 pub struct Lambertian {
     pub albedo: Color,
 }
 
-impl Material for Lambertian {
-    fn scatter(
+impl Lambertian {
+    pub(super) fn scatter(
         &self,
-        _r_in: &Ray,
         rec: &HitRecord,
         rng: &Rng,
     ) -> Option<(Ray, Color)> {

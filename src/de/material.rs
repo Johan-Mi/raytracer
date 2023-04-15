@@ -1,7 +1,7 @@
 use super::color::Color;
 use crate::materials::{
-    Dielectric, DiffuseLight, Isotropic, Lambertian, Material as DynMaterial,
-    Metal, MixedMaterial,
+    Dielectric, Isotropic, Lambertian, Material as RealMaterial, Metal,
+    MixedMaterial,
 };
 use bumpalo::Bump;
 use serde::Deserialize;
@@ -33,31 +33,39 @@ pub enum Material {
 }
 
 impl Material {
-    pub fn build(self, arena: &Bump) -> &(dyn DynMaterial + Sync) {
+    pub fn build(self, arena: &Bump) -> &RealMaterial {
         match self {
-            Self::Lambertian { albedo } => arena.alloc(Lambertian {
-                albedo: albedo.into(),
-            }),
-            Self::Metal { albedo, fuzz } => arena.alloc(Metal {
-                albedo: albedo.into(),
-                fuzz,
-            }),
-            Self::Dielectric { ir } => arena.alloc(Dielectric { ir }),
-            Self::DiffuseLight { color } => arena.alloc(DiffuseLight {
-                color: color.into(),
-            }),
-            Self::Isotropic { albedo } => arena.alloc(Isotropic {
-                albedo: albedo.into(),
-            }),
+            Self::Lambertian { albedo } => {
+                arena.alloc(RealMaterial::Lambertian(Lambertian {
+                    albedo: albedo.into(),
+                }))
+            }
+            Self::Metal { albedo, fuzz } => {
+                arena.alloc(RealMaterial::Metal(Metal {
+                    albedo: albedo.into(),
+                    fuzz,
+                }))
+            }
+            Self::Dielectric { ir } => {
+                arena.alloc(RealMaterial::Dielectric(Dielectric { ir }))
+            }
+            Self::DiffuseLight { color } => {
+                arena.alloc(RealMaterial::DiffuseLight(color.into()))
+            }
+            Self::Isotropic { albedo } => {
+                arena.alloc(RealMaterial::Isotropic(Isotropic {
+                    albedo: albedo.into(),
+                }))
+            }
             Self::Mixed {
                 primary,
                 secondary,
                 chance,
-            } => arena.alloc(MixedMaterial {
+            } => arena.alloc(RealMaterial::MixedMaterial(MixedMaterial {
                 primary: primary.build(arena),
                 secondary: secondary.build(arena),
                 chance,
-            }),
+            })),
         }
     }
 }

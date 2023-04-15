@@ -2,13 +2,13 @@ use crate::{color::Color, hittable::HitRecord, materials::Material, ray::Ray};
 use fastrand::Rng;
 
 pub struct MixedMaterial<'a> {
-    pub primary: &'a (dyn Material + Sync),
-    pub secondary: &'a (dyn Material + Sync),
+    pub primary: &'a Material<'a>,
+    pub secondary: &'a Material<'a>,
     pub chance: f32,
 }
 
-impl Material for MixedMaterial<'_> {
-    fn scatter(
+impl MixedMaterial<'_> {
+    pub(super) fn scatter(
         &self,
         r_in: &Ray,
         rec: &HitRecord,
@@ -22,7 +22,7 @@ impl Material for MixedMaterial<'_> {
         .scatter(r_in, rec, rng)
     }
 
-    fn emitted(&self, rng: &Rng) -> Color {
+    pub(super) fn emitted(&self, rng: &Rng) -> Color {
         if rng.f32() < self.chance {
             self.secondary
         } else {

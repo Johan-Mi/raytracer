@@ -9,7 +9,7 @@ use std::ops::Range;
 
 pub struct Triangle<'a> {
     pub points: [Point3; 3],
-    pub material: &'a (dyn Material + Sync),
+    pub material: &'a Material<'a>,
 }
 
 impl Hittable for Triangle<'_> {

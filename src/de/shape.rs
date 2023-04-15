@@ -7,7 +7,6 @@ use super::{
 use crate::{
     bezier::build_bezier_patch,
     hittable::Hittable,
-    materials::Material as DynMaterial,
     shapes::{
         BvhNode, ConstantMedium, Cuboid, Plane, RotateY, Sphere, Translate,
         Triangle, XyRect, XzRect, YzRect,
@@ -92,7 +91,7 @@ pub enum Shape {
 impl Shape {
     pub fn build<'a>(
         self,
-        materials: &HashMap<String, &'a (dyn DynMaterial + Sync)>,
+        materials: &HashMap<String, &'a crate::materials::Material>,
         arena: &'a Bump,
     ) -> &'a (dyn Hittable + Sync) {
         match self {

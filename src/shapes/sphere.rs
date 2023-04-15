@@ -10,7 +10,7 @@ use std::ops::Range;
 pub struct Sphere<'a> {
     pub center: Point3,
     pub radius: f32,
-    pub material: &'a (dyn Material + Sync),
+    pub material: &'a Material<'a>,
 }
 
 impl Hittable for Sphere<'_> {

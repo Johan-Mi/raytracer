@@ -9,7 +9,7 @@ pub trait Hittable {
 pub struct HitRecord<'a> {
     pub p: Point3,
     pub normal: Vec3,
-    pub material: &'a (dyn Material),
+    pub material: &'a Material<'a>,
     pub t: f32,
     pub front_face: bool,
 }
@@ -18,7 +18,7 @@ impl<'a> HitRecord<'a> {
     pub fn new(
         p: Point3,
         outward_normal: Vec3,
-        material: &'a (dyn Material),
+        material: &'a Material<'a>,
         t: f32,
         r: &Ray,
     ) -> Self {

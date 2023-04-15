@@ -13,7 +13,7 @@ pub struct YzRect<'a> {
     pub z0: f32,
     pub z1: f32,
     pub k: f32,
-    pub material: &'a (dyn Material + Sync),
+    pub material: &'a Material<'a>,
 }
 
 impl Hittable for YzRect<'_> {

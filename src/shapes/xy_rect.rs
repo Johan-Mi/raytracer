@@ -13,7 +13,7 @@ pub struct XyRect<'a> {
     pub y0: f32,
     pub y1: f32,
     pub k: f32,
-    pub material: &'a (dyn Material + Sync),
+    pub material: &'a Material<'a>,
 }
 
 impl Hittable for XyRect<'_> {

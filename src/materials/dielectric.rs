@@ -1,6 +1,5 @@
 use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray,
-    raytracer::reflect, Vec3,
+    color::Color, hittable::HitRecord, ray::Ray, raytracer::reflect, Vec3,
 };
 use fastrand::Rng;
 
@@ -8,8 +7,8 @@ pub struct Dielectric {
     pub ir: f32,
 }
 
-impl Material for Dielectric {
-    fn scatter(
+impl Dielectric {
+    pub(super) fn scatter(
         &self,
         r_in: &Ray,
         rec: &HitRecord,

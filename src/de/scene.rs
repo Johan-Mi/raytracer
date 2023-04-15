@@ -41,9 +41,7 @@ impl Scene {
         (
             self.shapes
                 .into_iter()
-                .map(|s| -> &'a (dyn Hittable + Sync) {
-                    s.build(&materials, arena)
-                })
+                .map(|s| s.build(&materials, arena))
                 .collect(),
             camera,
             self.sky_color.into(),

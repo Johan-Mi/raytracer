@@ -1,7 +1,4 @@
-use crate::{
-    color::Color, hittable::HitRecord, materials::Material, ray::Ray,
-    raytracer::reflect,
-};
+use crate::{color::Color, hittable::HitRecord, ray::Ray, raytracer::reflect};
 use fastrand::Rng;
 
 pub struct Metal {
@@ -9,8 +6,8 @@ pub struct Metal {
     pub fuzz: f32,
 }
 
-impl Material for Metal {
-    fn scatter(
+impl Metal {
+    pub(super) fn scatter(
         &self,
         r_in: &Ray,
         rec: &HitRecord,

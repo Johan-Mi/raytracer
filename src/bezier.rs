@@ -17,7 +17,7 @@ fn eval_bezier_curve(points: &[Point3; 4], t: f32) -> Point3 {
 
 pub fn build_bezier_patch<'a>(
     points: &[[Point3; 4]; 4],
-    material: &'a (dyn Material + Sync),
+    material: &'a Material,
     arena: &'a Bump,
 ) -> &'a (dyn Hittable + Sync) {
     const DIVISIONS: usize = 24;

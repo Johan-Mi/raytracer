@@ -13,7 +13,7 @@ use std::{
 
 pub fn parse_obj_file<'a, P>(
     path: P,
-    material: &'a (dyn Material + Sync),
+    material: &'a Material,
     arena: &'a Bump,
 ) -> &'a (dyn Hittable + Sync)
 where

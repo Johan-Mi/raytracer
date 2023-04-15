@@ -10,7 +10,7 @@ use std::ops::Range;
 pub struct Plane<'a> {
     pub pos: Point3,
     pub normal: Vec3,
-    pub material: &'a (dyn Material + Sync),
+    pub material: &'a Material<'a>,
 }
 
 impl Hittable for Plane<'_> {
